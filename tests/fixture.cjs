@@ -1,0 +1,2 @@
+'use strict';
+module.exports=()=>({quota:{status:'live',at:Date.now(),fiveHour:{remaining:60,resetsAt:Date.now()+13740000},weekly:{remaining:82,resetsAt:Date.now()+6*86400000},plan:'plus'},usage:{weekTokens:34400000,todayTokens:34384000,lastTurnTokens:6731300,runtimeSeconds:6420,files:3,partial:false,model:{name:'gpt-6.1-sol',effort:'low',at:Date.now()}},weather:{label:'广东 · 中山',temperature:33.7,text:'晴',at:Date.now()},issues:[],refreshing:false});

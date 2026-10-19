@@ -1,0 +1,5 @@
+@font-face{font-family:Xiaolai;src:url('../assets/fonts/Xiaolai-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Marker;src:url('../assets/fonts/LXGWMarkerGothic-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Yozai;src:url('../assets/fonts/Yozai-Medium.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:Yuan;src:url('../assets/fonts/LXGW975YuanSC-400W.ttf') format('truetype');font-weight:400;font-display:swap}
+:root{--font-label:Xiaolai,'Microsoft YaHei UI',sans-serif;--font-title:Marker,Xiaolai,sans-serif;--font-note:Yozai,Xiaolai,sans-serif;--font-value:Yuan,'Microsoft YaHei UI',sans-serif;font-synthesis:none}

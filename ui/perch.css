@@ -1,0 +1,8 @@
+/* Xingyue rests her hands over the inset top-right paper rim. */
+#journal:before{clip-path:none}
+#portrait{z-index:3;filter:drop-shadow(0 3px 1.5px #58446d35);transform:translateY(0);object-fit:contain}
+#header:after{content:"";position:absolute;right:2px;top:87px;width:125px;height:9px;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 36% 50%,#65507840,transparent 20%),radial-gradient(ellipse at 65% 50%,#65507840,transparent 20%);filter:blur(1px)}
+#content-frame{position:absolute;left:15px;right:15px;top:113px;bottom:14px;z-index:0;pointer-events:none}
+#content-frame path{fill:none;stroke:var(--line);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+#journal>.quota-row,#journal>.weekly,#journal>.statistics,#journal>.token-note,#journal>.actions{position:relative;z-index:1}
+#header{z-index:2}

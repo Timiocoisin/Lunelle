@@ -1,0 +1,11 @@
+node_modules/
+dist/
+installers/
+artifacts/
+.local/
+*.log
+.finesse/
+.env
+.env.*
+*.pem
+*.key

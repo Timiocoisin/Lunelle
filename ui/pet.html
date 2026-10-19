@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>星月 · 额度手账</title><link rel="stylesheet" href="pet.css"></head>
+<body><main id="stage">
+  <section id="journal" aria-label="Codex 额度手账" aria-hidden="true" inert>
+    <svg class="page-edge" viewBox="0 0 500 730" preserveAspectRatio="none" aria-hidden="true"><path d="M35 5C85 2 117 8 165 5S260 8 310 5 406 7 465 5Q495 3 495 35C497 140 493 175 495 235S492 345 495 398 492 550 495 595L495 695Q497 725 465 725C370 728 331 722 273 725S160 722 110 725L35 725Q4 727 5 695C2 615 8 565 5 490S8 355 5 300 8 160 5 110L5 35Q3 5 35 5Z"/><path d="M36 11C87 8 121 14 166 11S260 14 309 11 408 13 463 11Q489 9 489 36C491 141 487 176 489 236S486 345 489 398 486 549 489 595L489 694Q491 719 464 719C370 722 330 716 273 719S160 716 109 719L36 719Q10 721 11 694C8 616 14 564 11 489S14 355 11 300 14 161 11 110L11 36Q9 11 36 11Z"/></svg>
+    <svg id="content-frame" viewBox="0 0 470 603" preserveAspectRatio="none" width="470" height="603" aria-hidden="true"><path d="M22 2Q119 0 230 2T448 2Q468 1 468 22Q466 170 468 302T468 580Q469 601 448 601Q320 599 230 601T22 601Q2 602 2 580Q4 440 2 302T2 22Q1 2 22 2Z"/></svg>
+    <header id="header"><div class="heading"><span data-icon="moon"></span><h1>Codex 使用额度</h1><span class="live-dot" id="live-dot"></span></div><p class="timestamp"><span data-icon="clock"></span><time id="clock">—</time><em id="preview-mark" hidden>预览数据</em></p><img id="portrait" src="../assets/characters/portrait-perch.png" alt="" aria-hidden="true"></header>
+    <div class="quota-row">
+      <div class="quota-circle" role="meter" aria-label="5小时额度剩余" aria-valuemin="0" aria-valuemax="100" id="quota-meter"><svg viewBox="0 0 250 250" aria-hidden="true"><defs><linearGradient id="ink-gradient"><stop stop-color="#a8bde2"/><stop offset="1" stop-color="#c59ac5"/></linearGradient></defs><path class="ring-track" d="M125 15C186 14 235 62 235 125S187 235 125 235 15 187 15 125 64 15 125 15Z"/><path id="ring-fill" pathLength="100" d="M125 15C186 14 235 62 235 125S187 235 125 235 15 187 15 125 64 15 125 15Z"/></svg><div class="circle-copy"><span>5h 额度剩余</span><div class="large-percent"><b id="quota-value">—</b><span>%</span></div><small id="used-label">等待同步</small><small id="reset-relative">距重置 —</small></div></div>
+      <div class="details">
+        <article data-paper><span data-icon="skull"></span><div><span>当前模型</span><b id="model-value">未提供</b><small id="model-note">最近活动会话</small></div></article>
+        <article data-paper><span data-icon="crown"></span><div><span>套餐类型</span><b id="plan-value">—</b></div></article>
+        <article data-paper><span data-icon="calendar"></span><div><span>5h 重置时间</span><b id="reset-value">—</b><small id="reset-countdown">—</small></div></article>
+        <article data-paper><span data-icon="weather"></span><div><span id="weather-city">广东 · 中山</span><b id="weather-value">—</b><small id="weather-note">等待天气</small></div></article>
+      </div>
+    </div>
+    <section class="weekly" data-paper aria-label="每周额度"><div><span>每周剩余 <b id="week-value">—</b><b>%</b></span><small id="week-reset">重置 —</small></div><div class="week-track"><i id="week-fill"></i></div></section>
+    <section class="statistics" aria-label="本机使用概览">
+      <article data-paper title="本机日志统计，涵盖本机可读账号；不是完整账号账单"><span><i data-icon="chart"></i>本周总使用</span><b id="week-tokens">—</b><small>tokens · 本机</small></article>
+      <article data-paper title="最近活动会话元数据，不保证为前台会话"><span><i data-icon="brain"></i>推理强度</span><b id="effort-value">—</b><small>最近活动会话</small></article>
+      <article data-paper title="本周已完成任务时间区间的并集，非纯推理耗时"><span><i data-icon="clock"></i>本周运行</span><b id="runtime-value">—</b><small>已完成任务</small></article>
+      <article data-paper><span><i data-icon="star"></i>同步状态</span><b id="sync-value">读取中</b><small id="sync-note">本机 Codex</small></article>
+    </section>
+    <p class="token-note">今日 <b id="today-tokens">—</b> tokens <span>最近一轮 <b id="turn-tokens">—</b> tokens</span></p>
+    <nav class="actions" aria-label="面板操作"><button id="refresh" class="paper-button" data-paper><span data-icon="refresh"></span><span>刷新</span></button><button id="settings" class="paper-button" data-paper><span data-icon="settings"></span>设置</button><button id="hide" class="paper-button" data-paper><span data-icon="hide"></span>隐藏</button></nav>
+    <div class="doodle d1" data-icon="star"></div><div class="doodle d2" data-icon="cloud"></div><div class="doodle d3" data-icon="heart"></div><div id="notice" role="status" hidden></div>
+  </section>
+  <div id="bridge" hidden></div>
+  <button id="pet" aria-label="星月：点击展开或收起额度，拖动移动，右键设置" title="星月"><img src="../assets/characters/pet.png" id="pet-image" alt="星月"></button>
+</main><script src="illustrations.js"></script><script src="pet.js"></script></body></html>
