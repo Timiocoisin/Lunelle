@@ -43,7 +43,7 @@ The six `assets/characters/motion-*.png` poses were generated with the built-in
 image generation tool using `pet.png` as the character identity/style reference,
 then exported as equal-size transparent frames. They depict seated idle, closed
 eyes, a raised waving hand, lifted pose, and two walking poses. The selected
-source atlas is `docs/design/xingyue-motion-atlas-v1.png`; the direction sheet is
+source atlas is `docs/design/xingyue-motion-atlas-soft-v2.png`; the direction sheet is
 `docs/design/xingyue-motion-concepts-v1.png`. The same separate artwork rights
 and redistribution terms above apply. Neither design sheet is a runtime sprite.
 
@@ -60,3 +60,4 @@ layers, generated from the existing pet references. Source sheet:
 `walk-leg-left.png` and `walk-leg-right.png` share a registered 512px canvas;
 complete upper thighs overlap under the opaque skirt. These replace the
 runtime clipped full-sprite legs. The same artwork terms apply.
+
