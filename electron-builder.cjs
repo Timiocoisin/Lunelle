@@ -1,10 +1,10 @@
 'use strict';
 module.exports = {
   appId: 'io.xingyue.desktop',
-  productName: 'Xingyue',
-  copyright: 'Copyright © 2026 Xingyue contributors',
+  productName: 'Lunelle',
+  copyright: 'Copyright © 2026 Lunelle contributors',
   directories: { output: 'installers', buildResources: 'assets' },
-  artifactName: 'Xingyue-Setup-${version}-${arch}.${ext}',
+  artifactName: 'Lunelle-Setup-${version}-${arch}.${ext}',
   publish: null,
   win: {
     target: [{ target: 'nsis', arch: ['x64'] }],
@@ -12,7 +12,7 @@ module.exports = {
     // The prepackaged EXE already contains our icon/version metadata.
     // No signing identity is configured; do not pretend the installer is signed.
     signAndEditExecutable: false,
-    executableName: 'Xingyue'
+    executableName: 'Lunelle'
   },
   nsis: {
     oneClick: false,
@@ -22,8 +22,8 @@ module.exports = {
     packElevateHelper: false,
     createDesktopShortcut: 'always',
     createStartMenuShortcut: true,
-    shortcutName: 'Xingyue',
-    uninstallDisplayName: 'Xingyue ${version}',
+    shortcutName: 'Lunelle',
+    uninstallDisplayName: 'Lunelle ${version}',
     installerIcon: 'assets/icon.ico',
     uninstallerIcon: 'assets/icon.ico',
     displayLanguageSelector: false,

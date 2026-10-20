@@ -64,7 +64,7 @@ class ReadOnlyRpc {
     });
   }
   async start() {
-    await this.call('initialize', { clientInfo: { name: 'xingyue_desktop', title: 'Xingyue', version: '0.1.0' } });
+    await this.call('initialize', { clientInfo: { name: 'lunelle_desktop', title: 'Lunelle', version: '0.1.0' } });
     this.child.stdin.write(JSON.stringify({ method: 'initialized', params: {} }) + '\n');
   }
   close() { this.fail('读取完成'); this.lines.close(); this.child.kill(); }

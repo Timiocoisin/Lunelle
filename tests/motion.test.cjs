@@ -1,6 +1,6 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict');
-const {PetMotion,facingFor}=require('../app/motion.cjs');
+const {PetMotion}=require('../app/motion.cjs');
 function rig(area={x:0,y:0,width:1920,height:1040},scale=.88){
  let bounds={...area},pointer={x:500,y:500},writes=0,saves=[],events=[];
  const window={getBounds:()=>({...bounds}),setBounds:b=>{writes++;bounds={...b};},setPosition:()=>assert.fail('native position changed during drag'),setIgnoreMouseEvents:()=>{}};
@@ -8,8 +8,9 @@ function rig(area={x:0,y:0,width:1920,height:1040},scale=.88){
  motion.configure(scale,{x:400+area.x,y:300+area.y});
  return {motion,events,saves,area,scale,get writes(){return writes;},get bounds(){return bounds;},pointer:p=>{pointer=p;}};
 }
-test('pet faces inward with center hysteresis',()=>{
- const a={x:0,y:0,width:1920,height:1040};assert.equal(facingFor({x:0,width:200},a),'right');assert.equal(facingFor({x:1700,width:200},a),'left');assert.equal(facingFor({x:860,width:200},a,'left'),'left');
+test('screen halves and walking direction never mirror the character',()=>{
+ const r=rig();for(const x of [0,900,1700,50]){r.motion.place({x,y:300});assert.equal(r.motion.facing,'right');}
+ r.motion.setActivity('walk','left');assert.equal(r.motion.facing,'right');r.motion.setActivity('idle');assert.equal(r.motion.facing,'right');
 });
 test('downward and rightward moves are monotonic over repeated gestures',()=>{
  const r=rig();
@@ -32,12 +33,12 @@ test('all four edges work at different DPI scales and negative screen origins',(
 test('unchanged cursor produces no repeated notifications; release keeps sprite in place',()=>{
  const r=rig();r.motion.begin();const count=r.events.length;
  for(let i=0;i<500;i++)r.motion.move();assert.equal(r.events.length,count);
- const p={...r.motion.position};r.motion.end(true);assert.deepEqual(r.motion.position,p);assert.equal(r.events.at(-1).togglePanel,true);assert.equal(r.saves.at(-1).positionVersion,3);
+ const p={...r.motion.position};r.motion.end(true);assert.deepEqual(r.motion.position,p);assert.equal(r.events.at(-1).togglePanel,true);assert.equal(r.saves.length,0,'click does not persist a temporary autonomous position');
 });
 test('500 move frames leave native window bounds fixed and facing does not flicker',()=>{
  const r=rig(),bounds={...r.bounds};r.motion.begin();const face=r.motion.facing;
  for(let i=0;i<500;i++){r.pointer({x:500+i*2,y:500+i});r.motion.move();assert.deepEqual(r.bounds,bounds);assert.equal(r.motion.facing,face);}
- r.motion.end(true);assert.equal(r.events.at(-1).togglePanel,false);assert.equal(r.motion.facing,'left');assert.equal(r.writes,1);
+ r.motion.end(true);assert.equal(r.events.at(-1).togglePanel,false);assert.equal(r.motion.facing,'right');assert.equal(r.writes,1);
 });
 test('display switch changes host once, preserving cursor deltas',()=>{
  let pointer={x:500,y:500},bounds={x:0,y:0,width:1920,height:1040},writes=0;

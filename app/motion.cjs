@@ -1,15 +1,11 @@
 'use strict';
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
-function facingFor(bounds,area,previous='right'){
-  const delta=bounds.x+bounds.width/2-area.x-area.width/2;
-  return delta < -32 ? 'right' : delta > 32 ? 'left' : previous;
-}
 // All positions are screen DIPs. The transparent host stays stationary while
 // the sprite moves in its compositor layer; native and DOM offsets never mix.
 class PetMotion {
   constructor({window,cursor,display,notify=()=>{},save=()=>{},scale=.88,autoTick=true}){
     Object.assign(this,{window,cursor,display,notify,save,scale,autoTick});
-    this.start=null;this.facing='right';this.position=null;this.timer=null;this.last=null;
+    this.start=null;this.activity='idle';this.facing='right';this.position=null;this.timer=null;this.last=null;
   }
   get active(){return this.start!==null;}
   configure(scale,position=this.position){
@@ -28,17 +24,18 @@ class PetMotion {
   updateFacing(extra={}){
     if(!this.position)return;
     const a=this.area,b=this.window.getBounds(),s=this.scale,p=this.position,w=500*s,h=730*s,gap=12*s;
-    if(!this.active)this.facing=facingFor({x:p.x,width:240*s},a,this.facing);
+    // Keep the original orientation everywhere; screen halves never mirror the pet.
     let x=p.x-130*s,y=p.y-h-gap;
     if(y<a.y+4){
       if(p.y+232*s+gap+h<=a.y+a.height-4)y=p.y+232*s+gap;
       else {x=p.x+240*s+gap+w<=a.x+a.width-4?p.x+240*s+gap:p.x-w-gap;y=p.y+(232*s-h)/2;}
     }
     x=clamp(x,a.x+4,a.x+a.width-w-4);y=clamp(y,a.y+4,a.y+a.height-h-4);
-    const value={dragging:this.active,facing:this.facing,scale:s,petLeft:(p.x-b.x)/s,petTop:(p.y-b.y)/s,panelLeft:(x-b.x)/s,panelTop:(y-b.y)/s,...extra};
+    const value={activity:this.activity,dragMoved:!!this.moved&&this.active,dragging:this.active,facing:this.facing,scale:s,petLeft:(p.x-b.x)/s,petTop:(p.y-b.y)/s,panelLeft:(x-b.x)/s,panelTop:(y-b.y)/s,...extra};
     const serialized=JSON.stringify(value);
     if(serialized!==this.last){this.last=serialized;this.notify(value);}
   }
+  setActivity(name){this.activity=name;this.updateFacing();}
   settle(){this.updateFacing();}
   begin(){
     if(this.active||!this.position)return;
@@ -56,8 +53,8 @@ class PetMotion {
   end(activate=false){
     if(!this.active)return;
     this.move();clearInterval(this.timer);this.timer=null;
-    const togglePanel=activate&&!this.moved;this.start=null;this.updateFacing({togglePanel});
-    this.save({...this.position,petOffset:0,positionVersion:3});
+    const togglePanel=activate&&!this.moved,landed=!!this.moved;this.start=null;this.updateFacing({togglePanel,landed});
+    if(this.moved)this.save({...this.position,petOffset:0,positionVersion:3});
   }
 }
-module.exports={facingFor,PetMotion};
+module.exports={PetMotion};

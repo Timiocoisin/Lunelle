@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Xingyue · 设置手册</title><link rel="stylesheet" href="settings.css"></head><body>
-<main class="notebook"><header class="settings-heading"><img src="../assets/characters/portrait.png" id="settings-portrait" alt="Xingyue"><div><h1>Xingyue的设置手册</h1><p class="note">把额度、天气和日常，轻轻放在桌边。</p></div><span class="version">v0.1.0</span></header>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>Lunelle · 设置手册</title><link rel="stylesheet" href="settings.css"></head><body>
+<main class="notebook"><header class="settings-heading"><img src="../assets/characters/portrait.png" id="settings-portrait" alt="Lunelle"><div><h1>Lunelle的设置手册</h1><p class="note">把额度、天气和日常，轻轻放在桌边。</p></div><span class="version">v0.1.0</span></header>
 <section class="connection" data-paper><div><span class="connection-dot"></span><span id="connection-label">正在读取 Codex</span><button class="paper-button" id="settings-refresh" data-paper><span data-icon="refresh"></span>刷新</button></div><div class="settings-quotas"><span>5h 剩余 <b id="settings-five">—</b></span><span>每周剩余 <b id="settings-week">—</b></span></div><p class="note" id="connection-note">额度来自当前登录账号；token 来自本机可读日志。</p></section>
 <nav class="tabs" aria-label="设置分类" role="tablist"><button id="tab-look" role="tab" aria-selected="true" aria-controls="page-look">外观与气泡</button><button id="tab-data" role="tab" aria-selected="false" aria-controls="page-data" tabindex="-1">数据与天气</button><button id="tab-behavior" role="tab" aria-selected="false" aria-controls="page-behavior" tabindex="-1">交互与说明</button></nav>
-<section id="page-look" role="tabpanel" aria-labelledby="tab-look" class="page" data-paper><h2><span data-icon="star"></span>外观与气泡</h2><p class="callout note">点击Xingyue展开面板，再点一次收起；移开鼠标不会关闭。按住拖动只移动宠物，不切换面板。</p>
-<label class="slider-label" for="scale">整体大小 <output id="scale-output">100%</output></label><input id="scale" type="range" min="0.65" max="1.4" step="0.05"><small>空间不足时自动适配屏幕，不裁切Xingyue和面板。</small>
+<section id="page-look" role="tabpanel" aria-labelledby="tab-look" class="page" data-paper><h2><span data-icon="star"></span>外观与气泡</h2><p class="callout note">点击Lunelle展开面板，再点一次收起；移开鼠标不会关闭。按住拖动只移动宠物，不切换面板。</p>
+<label class="slider-label" for="scale">整体大小 <output id="scale-output">100%</output></label><input id="scale" type="range" min="0.65" max="1.4" step="0.05"><small>空间不足时自动适配屏幕，不裁切Lunelle和面板。</small>
 <label class="slider-label" for="opacity">不透明度 <output id="opacity-output">100%</output></label><input id="opacity" type="range" min="0.4" max="1" step="0.05">
-<label class="toggle-row" for="alwaysOnTop"><span>始终置顶<small>让Xingyue陪在其他窗口上方。</small></span><input id="alwaysOnTop" type="checkbox" role="switch"></label>
+<label class="toggle-row" for="alwaysOnTop"><span>始终置顶<small>固定开启；桌宠与面板不抢走其他软件的焦点。</small></span><input id="alwaysOnTop" disabled type="checkbox" role="switch"></label>
 <p class="note typography-note">小赖：标签与按钮 · 霞鹜漫黑：标题与大百分数<br>悠哉：说明小字 · 975 圆体：数字与信息值</p></section>
 <section id="page-data" role="tabpanel" aria-labelledby="tab-data" class="page" data-paper hidden><h2><span data-icon="cloud"></span>数据与天气</h2>
 <label for="codexPath" class="field-label">Codex 可执行文件</label><div class="input-row"><input id="codexPath" type="text" placeholder="留空自动查找 codex.exe" spellcheck="false"><button id="browse" class="paper-button" data-paper>选择</button></div><small>只调用账号与额度读取接口，不创建对话、不发送推理请求。</small>
@@ -15,7 +15,14 @@
 <form id="city-form"><label class="field-label" for="city">天气城市</label><div class="input-row"><input id="city" type="text" maxlength="60" required aria-describedby="city-feedback"><button type="submit" class="paper-button" data-paper>应用城市</button></div><p id="city-feedback" class="note feedback" role="status"></p></form>
 <p class="note">天气由 Open-Meteo 提供，每 10 分钟缓存一次。服务异常时会标记旧数据，不显示编造的温度。</p></section>
 <section id="page-behavior" role="tabpanel" aria-labelledby="tab-behavior" class="page" data-paper hidden><h2><span data-icon="moon"></span>交互与说明</h2>
-<dl><dt>移动Xingyue</dt><dd>按住桌宠拖动</dd><dt>展开额度</dt><dd>单击宠物 / Enter / Space</dd><dt>收起面板</dt><dd>再次单击宠物 / Escape</dd><dt>显示与隐藏</dt><dd>Ctrl + Alt + X / 托盘图标</dd><dt>打开设置</dt><dd>面板按钮 / 桌宠右键 / 托盘</dd></dl>
-<details><summary>数据口径与隐私</summary><p class="note">5h 与周额度是服务端窗口剩余百分比，不是金额。当前模型和推理强度取最近本机会话元数据，不保证是前台会话。token 汇总涵盖本机可读账号日志，不代表跨设备完整账单；缓存输入已经包含在总 token 内。本周运行是已完成任务时间区间并集，不是纯推理耗时。原始对话不上传，也不写入Xingyue配置。</p></details>
-<p class="note">Xingyue是独立桌面应用，不是 OpenAI 官方产品。图片和字体的授权与项目代码分开记录。</p></section>
-<footer><span class="note">设置保存在Xingyue独立配置目录</span><span id="save-feedback" role="status">已加载</span></footer></main><script src="illustrations.js"></script><script src="settings.js"></script></body></html>
+<label class="toggle-row" for="activityEnabled"><span>自动活动<small>默认关闭；空闲 30～60 秒后活动，鼠标靠近立即停下。</small></span><input id="activityEnabled" type="checkbox" role="switch"></label>
+<label class="field-label" for="activityMode">活动方式</label><select id="activityMode"><option value="still">原地活动</option><option value="roam">全屏散步</option></select>
+<p class="callout note">全屏散步可在当前显示器的整个工作区内走动，不越界、不自动跨屏。面板展开、拖动或打开设置时暂停；散步位置不会覆盖手动保存的位置。</p>
+<p class="callout note" id="activity-status" role="status">正在读取活动状态…</p>
+<button type="button" class="paper-button" id="walk-now" data-paper>开启全屏散步并立即试走</button>
+<small>会收起面板并关闭设置，3 秒后开始；请把鼠标移离宠物。</small>
+<details class="motion-previews"><summary>动作预览</summary><div class="motion-buttons"><button type="button" data-motion="breathe">呼吸</button><button type="button" data-motion="blink">眨眼</button><button type="button" data-motion="tilt">歪头</button><button type="button" data-motion="nod">点头</button><button type="button" data-motion="wave">挥手</button><button type="button" data-motion="drag">拎起与落地</button><button type="button" data-motion="walk">散步姿态</button><button type="button" data-motion="companion">面板陪伴</button></div><p class="note">预览只展示动作，不移动桌宠或打开面板。</p></details>
+<dl><dt>移动Lunelle</dt><dd>按住桌宠拖动</dd><dt>展开额度</dt><dd>单击宠物</dd><dt>收起面板</dt><dd>再次单击宠物或点击面板外</dd><dt>显示与隐藏</dt><dd>Ctrl + Alt + X / 托盘图标</dd><dt>打开设置</dt><dd>面板按钮 / 桌宠右键 / 托盘</dd></dl>
+<details><summary>数据口径与隐私</summary><p class="note">5h 与周额度是服务端窗口剩余百分比，不是金额。当前模型和推理强度取最近本机会话元数据，不保证是前台会话。token 汇总涵盖本机可读账号日志，不代表跨设备完整账单；缓存输入已经包含在总 token 内。本周运行是已完成任务时间区间并集，不是纯推理耗时。原始对话不上传，也不写入Lunelle配置。</p></details>
+<p class="note">Lunelle是独立桌面应用，不是 OpenAI 官方产品。图片和字体的授权与项目代码分开记录。</p></section>
+<footer><span class="note">设置保存在Lunelle独立配置目录</span><span id="save-feedback" role="status">已加载</span></footer></main><script src="illustrations.js"></script><script src="settings.js"></script></body></html>

@@ -6,7 +6,7 @@ const occupied=new Set();
 function fit(){if(layoutScale!==null||fitLocked||performance.now()<suppressFitUntil)return;const ratio=Math.min(innerWidth/1530,innerHeight/990);$('stage').style.left=(500*ratio)+'px';$('stage').style.transform=`scale(${ratio})`;}
 fit();addEventListener('resize',fit);
 function reportPanel(){api.panel({open,rects:['pet','journal','bridge'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})});}
-function visible(value){open=value;$('journal').classList.toggle('open',value);$('journal').inert=!value;$('journal').setAttribute('aria-hidden',String(!value));$('bridge').hidden=!value;requestAnimationFrame(reportPanel);}
+function visible(value){open=value;window.xyPetAnimation.setPanel(value);$('journal').classList.toggle('open',value);$('journal').inert=!value;$('journal').setAttribute('aria-hidden',String(!value));$('bridge').hidden=!value;requestAnimationFrame(reportPanel);}
 api.onDismiss(()=>visible(false));
 addEventListener('resize',()=>requestAnimationFrame(reportPanel));
 document.addEventListener('pointerdown',e=>{if(open&&!e.target.closest('#pet,#journal,#bridge'))visible(false);},true);
@@ -34,20 +34,23 @@ function motionState(value){
   $('stage').style.left='0px';$('stage').style.transform=`scale(${value.scale})`;
   $('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;
   $('journal').style.transform=`translate3d(${value.panelLeft-15}px,${value.panelTop-8}px,0)`;
-  $('pet-image').classList.toggle('faces-left',value.facing==='left');
+  $('pet').classList.toggle('walking-motion',value.activity==='walk'&&!value.dragging);
   $('bridge').hidden=true;
-  if(value.togglePanel)visible(!open);
+  if(value.togglePanel){visible(!open);window.xyPetAnimation.click();}
   if(!value.dragging){dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}
   if(open&&!value.dragging)reportPanel();
 }
 api.onMotion(value=>{
+  window.xyPetAnimation.sync(value);
+  if(value.previewAction)window.xyPetAnimation.preview(value.previewAction);
+  if(value.landed)window.xyPetAnimation.play('land');
   if(value.dragging){fitLocked=true;}
   // Keep activation separate so a subsequent geometry event cannot lose it.
-  if(value.togglePanel)visible(!open);
+  if(value.togglePanel){visible(!open);window.xyPetAnimation.click();}
   pendingMotion={...value,togglePanel:false};
   if(!motionFrame)motionFrame=requestAnimationFrame(()=>{motionFrame=0;const next=pendingMotion;pendingMotion=null;motionState(next);});
 });
-$('pet').addEventListener('click',e=>{if(e.detail===0)visible(!open);});
+$('pet').addEventListener('click',e=>{if(e.detail===0){visible(!open);window.xyPetAnimation.click();}});
 // Open on press: activating a transparent inactive pet window can cancel the
 // subsequent click. Keep detail=0 click for keyboard/accessibility activation.
 $('settings').addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();api.command('settings');});
@@ -60,7 +63,7 @@ function date(t){if(!Number.isFinite(t))return'—';const d=new Date(t);return`$
 function remaining(t,compact=false){if(!Number.isFinite(t))return'—';const seconds=Math.max(0,Math.floor((t-Date.now())/1000)),h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60);return compact?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`:`${h}小时${m}分`;}
 function clocks(){const now=new Date();$('clock').textContent=now.toLocaleString('sv-SE');const q=current?.data.quota?.fiveHour;$('reset-relative').textContent=q?'距重置 '+remaining(q.resetsAt):'距重置 —';$('reset-countdown').textContent=remaining(q?.resetsAt,true);}
 function render(state){current=state;const d=state.data,q=d.quota,five=q?.fiveHour,week=q?.weekly,u=d.usage,w=d.weather;
-  if(state.facing)$('pet-image').classList.toggle('faces-left',state.facing==='left');
+
   $('preview-mark').hidden=!state.preview;$('quota-value').textContent=five?Math.round(five.remaining):'—';$('used-label').textContent=five?`已使用 ${Math.round(100-five.remaining)}%`:'未取得额度';
   $('ring-fill').style.strokeDasharray=`${five?.remaining??0} 100`;if(five)$('quota-meter').setAttribute('aria-valuenow',String(five.remaining));else $('quota-meter').removeAttribute('aria-valuenow');
   $('week-value').textContent=week?Math.round(week.remaining):'—';$('week-fill').style.width=(week?.remaining??0)+'%';$('week-reset').textContent='重置 '+date(week?.resetsAt);$('reset-value').textContent=date(five?.resetsAt);
@@ -75,5 +78,5 @@ function render(state){current=state;const d=state.data,q=d.quota,five=q?.fiveHo
   clocks();
 }
 for(const id of['portrait','pet-image'])$(id).addEventListener('error',()=>{if(!$(id).src.endsWith('moon.svg'))$(id).src='../assets/moon.svg';});
-api.subscribe(render);api.read().then(render).catch(()=>{$('notice').textContent='连接失败，请从托盘重新打开Xingyue';$('notice').hidden=false;});setInterval(clocks,1000);
+api.subscribe(render);api.read().then(render).catch(()=>{$('notice').textContent='连接失败，请从托盘重新打开Lunelle';$('notice').hidden=false;});setInterval(clocks,1000);
 window.xyTest={visible,enter,leave,render,get open(){return open;}};

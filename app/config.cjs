@@ -2,21 +2,23 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const DEFAULTS = Object.freeze({ scale: 1, opacity: 1, alwaysOnTop: true,
-  hoverEnabled: true, collapseMs: 320, refreshSeconds: 60, weatherEnabled: true,
+  activityEnabled: false, activityMode: 'still', hoverEnabled: true, collapseMs: 320, refreshSeconds: 60, weatherEnabled: true,
   city: '中山', codexPath: '', x: null, y: null, petOffset: 0, positionVersion: 1 });
 function normalize(input = {}) {
   const result = { ...DEFAULTS };
-  for (const key of ['alwaysOnTop', 'hoverEnabled', 'weatherEnabled'])
+  for (const key of ['alwaysOnTop', 'hoverEnabled', 'weatherEnabled', 'activityEnabled'])
     if (typeof input[key] === 'boolean') result[key] = input[key];
   for (const [key, min, max] of [['scale', .65, 1.4], ['opacity', .4, 1],
     ['collapseMs', 100, 2000], ['refreshSeconds', 30, 600]]) {
     if (Number.isFinite(input[key])) result[key] = Math.max(min, Math.min(max, input[key]));
   }
+  if(['still','roam'].includes(input.activityMode))result.activityMode=input.activityMode;
   if (typeof input.city === 'string' && input.city.trim()) result.city = input.city.trim().slice(0, 60);
   if (typeof input.codexPath === 'string') result.codexPath = input.codexPath.trim().slice(0, 1000);
   for (const key of ['x', 'y']) if (Number.isFinite(input[key])) result[key] = Math.round(input[key]);
   if(Number.isFinite(input.petOffset))result.petOffset=Math.max(-1000,Math.min(1000,input.petOffset));
   if([2,3].includes(input.positionVersion))result.positionVersion=input.positionVersion;
+  result.alwaysOnTop=true;
   return result;
 }
 function dimensions(scale, area) {

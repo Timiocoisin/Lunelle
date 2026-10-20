@@ -16,8 +16,8 @@ No required notices have been removed from actual reused third-party files.
 Four unmodified official font binaries and their full upstream licenses were
 reused from local download cache. Their release hashes are verified by the
 font downloader. Marker font was extracted from the official release ZIP.
-The owner-provided Xingyue bust was imported from the conversation attachment.
-The full-body owner-selected Xingyue image was retrieved from the earlier local
+The owner-provided Lunelle bust was imported from the conversation attachment.
+The full-body owner-selected Lunelle image was retrieved from the earlier local
 asset cache. Both remain Git-ignored and excluded from default public builds.
 No existing application's mascot/icon assets were knowingly substituted for
 these user-selected images. The project's application mark is newly drawn.

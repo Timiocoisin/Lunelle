@@ -17,3 +17,9 @@ https://developers.openai.com/codex/app-server
 https://www.electronjs.org/docs/latest/tutorial/context-isolation
 https://www.electronjs.org/docs/latest/tutorial/custom-window-styles
 https://open-meteo.com/en/docs
+
+- Koffi 3.3.3 (MIT), https://koffi.dev/ and https://github.com/Koromix/koffi:
+  used only by the main process to handle this application's own Windows
+  non-activation message. Original LICENSE.txt is included in the bundled
+  runtime dependency. The platform-native optional package is bundled and
+  unpacked for Electron loading. No hooks are installed into other processes.

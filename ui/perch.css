@@ -1,4 +1,4 @@
-/* Xingyue rests her hands over the inset top-right paper rim. */
+/* Lunelle rests her hands over the inset top-right paper rim. */
 #journal:before{clip-path:none}
 #portrait{z-index:3;filter:drop-shadow(0 3px 1.5px #58446d35);transform:translateY(0);object-fit:contain}
 #header:after{content:"";position:absolute;right:2px;top:87px;width:125px;height:9px;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 36% 50%,#65507840,transparent 20%),radial-gradient(ellipse at 65% 50%,#65507840,transparent 20%);filter:blur(1px)}

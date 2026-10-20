@@ -14,6 +14,6 @@ if (fs.existsSync(path.join(nsis, 'makensis.cmd'))) {
   env.ELECTRON_BUILDER_NSIS_RESOURCES_DIR = nsis;
 }
 const result = spawnSync(process.execPath, [require.resolve('electron-builder/cli.js'),
-  '--config', 'electron-builder.cjs', '--prepackaged', 'dist/Xingyue-win32-x64',
+  '--config', 'electron-builder.cjs', '--prepackaged', 'dist/Lunelle-win32-x64',
   '--win', 'nsis', '--x64'], { cwd: root, env, stdio: 'inherit', windowsHide: true });
 process.exitCode = result.status ?? 1;
