@@ -6,7 +6,7 @@ Character PNGs in assets/characters are published as application resources,
 but are NOT covered by the code's MIT license. All artwork rights are reserved
 by the project owner; no separate artwork reuse or redistribution license is
 granted here. Contact the repository owner for additional permissions.
-The default build uses the independently drawn moon/star fallback.
+The default build uses the generated anime application icon as its character fallback.
 The owner's character build uses `npm run build -- --with-artwork`.
 
 Font files are original, unmodified upstream releases, redistributed under
@@ -27,6 +27,12 @@ the generated edit and the other character PNGs.
 | Notes | Yozai Medium | https://github.com/lxgw/yozai-font | v0.868 |
 | Numbers, model, information values | LXGW 975 Yuan SC 400W | https://github.com/lxgw/975Yuan | 26.07.26 |
 
-Application moon/star icon and UI doodle SVG paths are newly authored for this
-project and covered by the project code license. No upstream application icon,
+The application icon (assets/icon-source.png, icon.png and icon.ico) was redesigned
+with the built-in image generation tool on 2026-10-20 using assets/characters/pet.png
+as the character identity and illustration style reference. The compact bust
+preserves the pet's pastel lavender curls, heart-eyed skull clip, moon brooch and
+star plush. The silhouette has actual transparency with no background tile or
+white border, and is fitted proportionally for Windows icon sizes.
+The same separate artwork terms above apply to this icon.
+UI doodle SVG paths are newly authored and covered by the project code license. No upstream application icon,
 logo, character, or source files are included in the release allowlist.

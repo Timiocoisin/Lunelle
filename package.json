@@ -1,7 +1,7 @@
 {
   "name": "xingyue-desktop",
   "productName": "Xingyue",
-  "version": "0.1.6",
+  "version": "0.1.11",
   "private": true,
   "description": "A handwritten desktop companion with read-only Codex quota and local usage monitoring.",
   "main": "app/main.cjs",

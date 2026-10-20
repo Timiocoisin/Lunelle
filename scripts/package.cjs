@@ -15,7 +15,7 @@ async function main(){const artwork=process.argv.includes('--with-artwork');cons
     const archive=path.join(root,'.local',`electron-v44.7.2-${process.platform}-${process.arch}.zip`);
     const localZip=await fs.access(archive).then(()=>path.dirname(archive),()=>undefined);
     const output=await packager({dir:stage,name:'Xingyue',executableName:'Xingyue',appBundleId:'io.xingyue.desktop',appCopyright:'Xingyue contributors',platform:process.platform,arch:process.arch,electronVersion:'44.7.2',electronZipDir:localZip,icon:path.join(stage,'assets/icon.ico'),out:path.join(root,'dist'),overwrite:true,asar:true,prune:false,win32metadata:{ProductName:'Xingyue',FileDescription:'Xingyue desktop companion'}});
-    console.log('Built:',output.join('\n'));console.log(artwork?'Contains owner-provided character artwork; review ASSETS.md before redistribution.':'Public-safe build: local character PNGs omitted; moon/star fallback enabled.');
+    console.log('Built:',output.join('\n'));console.log(artwork?'Contains owner-provided character artwork; review ASSETS.md before redistribution.':'Public-safe build: local character PNGs omitted; anime icon fallback enabled.');
   }finally{if(!stage.startsWith(path.join(os.tmpdir(),'xingyue-release-')))throw new Error('Invalid staging directory');await fs.rm(stage,{recursive:true,force:true});}
 }
 main().catch(()=>{console.error('Build failed; check dependency installation and write permissions.');process.exitCode=1;});

@@ -16,13 +16,13 @@ function normalize(input = {}) {
   if (typeof input.codexPath === 'string') result.codexPath = input.codexPath.trim().slice(0, 1000);
   for (const key of ['x', 'y']) if (Number.isFinite(input[key])) result[key] = Math.round(input[key]);
   if(Number.isFinite(input.petOffset))result.petOffset=Math.max(-1000,Math.min(1000,input.petOffset));
-  if(input.positionVersion===2)result.positionVersion=2;
+  if([2,3].includes(input.positionVersion))result.positionVersion=input.positionVersion;
   return result;
 }
 function dimensions(scale, area) {
   const factor = Math.min(.88 * normalize({ scale }).scale, (area.width - 12) / 530, (area.height - 12) / 990);
-  // Permanent transparent side gutters let the panel avoid edges without
-  // moving or resizing the pet window when a drag ends.
+  // Reference design dimensions determine sprite/panel scale only.
+  // The native host covers the work area and is stationary during dragging.
   return { width: Math.round(1530 * factor), height: Math.round(990 * factor) };
 }
 class Preferences {

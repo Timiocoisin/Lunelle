@@ -1,65 +1,63 @@
 'use strict';
-// Drag math uses only host screen-DIP coordinates, never DOM screenX/Y.
-// Bounds come from the pointer-down snapshot, not the last moved window.
-function facingFor(bounds, area, previous = 'right') {
-  const delta = bounds.x + bounds.width / 2 - (area.x + area.width / 2);
-  if (delta < -32) return 'right';
-  if (delta > 32) return 'left';
-  return previous;
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+function facingFor(bounds,area,previous='right'){
+  const delta=bounds.x+bounds.width/2-area.x-area.width/2;
+  return delta < -32 ? 'right' : delta > 32 ? 'left' : previous;
 }
-function dragBounds(start, pointer, area) {
-  const x = start.bounds.x + pointer.x - start.pointer.x;
-  const y = start.bounds.y + pointer.y - start.pointer.y;
-  const scale = Math.min(start.bounds.width / 1530, start.bounds.height / 990);
-  const petLeft = 645 * scale, petWidth = 240 * scale;
-  return { x: Math.round(Math.max(area.x - petLeft, Math.min(area.x + area.width - petLeft - petWidth, x))),
-    y: Math.round(Math.max(area.y, Math.min(area.y + area.height - start.bounds.height, y))),
-    width: start.bounds.width, height: start.bounds.height };
-}
+// All positions are screen DIPs. The transparent host stays stationary while
+// the sprite moves in its compositor layer; native and DOM offsets never mix.
 class PetMotion {
-  constructor({window, cursor, display, notify = () => {}, save = () => {}}) {
-    Object.assign(this, {window, cursor, display, notify, save});
-    this.start = null; this.facing = 'right'; this.petOffset = 0;
+  constructor({window,cursor,display,notify=()=>{},save=()=>{},scale=.88,autoTick=true}){
+    Object.assign(this,{window,cursor,display,notify,save,scale,autoTick});
+    this.start=null;this.facing='right';this.position=null;this.timer=null;this.last=null;
   }
-  get active() { return this.start !== null; }
-  updateFacing(extra={}) {
-    const bounds = this.window.getBounds(),s=Math.min(bounds.width/1530,bounds.height/990);
-    const pet={x:bounds.x+645*s,width:240*s};
-    const area=this.display({x:pet.x+pet.width/2,y:bounds.y+bounds.height-40}).workArea;
-    this.facing = facingFor(pet, area, this.facing);
-    const panelX=bounds.x+515*s,panelWidth=500*s;
-    const safeX=Math.max(area.x+4,Math.min(area.x+area.width-panelWidth-4,panelX));
-    this.notify({dragging:this.active,facing:this.facing,panelShift:(safeX-panelX)/s,...extra});
+  get active(){return this.start!==null;}
+  configure(scale,position=this.position){
+    if(this.active)this.end();
+    this.scale=scale;
+    const b=this.window.getBounds();
+    this.place(position||{x:b.x+b.width-240*scale-16,y:b.y+b.height-232*scale-8});
   }
-  settle() {
-    // Compatibility entry point: geometry notifications only. Never move the
-    // native window and compensate the sprite asynchronously.
+  place(position){
+    const area=this.display({x:Math.round(position.x+120*this.scale),y:Math.round(position.y+116*this.scale)}).workArea;
+    this.area=area;
+    this.position={x:clamp(position.x,area.x,area.x+area.width-240*this.scale),y:clamp(position.y,area.y,area.y+area.height-232*this.scale)};
+    if(!this.hostArea||['x','y','width','height'].some(k=>this.hostArea[k]!==area[k])){this.window.setBounds({...area});this.hostArea={...area};}
     this.updateFacing();
   }
-  begin() {
-    if (this.active) return;
-    this.start = {bounds: {...this.window.getBounds()}, pointer: {...this.cursor()}, petOffset:this.petOffset};
-    this.moved=false;
-    this.window.setIgnoreMouseEvents(false);
-    this.updateFacing();
+  updateFacing(extra={}){
+    if(!this.position)return;
+    const a=this.area,b=this.window.getBounds(),s=this.scale,p=this.position,w=500*s,h=730*s,gap=12*s;
+    if(!this.active)this.facing=facingFor({x:p.x,width:240*s},a,this.facing);
+    let x=p.x-130*s,y=p.y-h-gap;
+    if(y<a.y+4){
+      if(p.y+232*s+gap+h<=a.y+a.height-4)y=p.y+232*s+gap;
+      else {x=p.x+240*s+gap+w<=a.x+a.width-4?p.x+240*s+gap:p.x-w-gap;y=p.y+(232*s-h)/2;}
+    }
+    x=clamp(x,a.x+4,a.x+a.width-w-4);y=clamp(y,a.y+4,a.y+a.height-h-4);
+    const value={dragging:this.active,facing:this.facing,scale:s,petLeft:(p.x-b.x)/s,petTop:(p.y-b.y)/s,panelLeft:(x-b.x)/s,panelTop:(y-b.y)/s,...extra};
+    const serialized=JSON.stringify(value);
+    if(serialized!==this.last){this.last=serialized;this.notify(value);}
   }
-  move() {
-    if (!this.active) return;
-    const pointer = this.cursor(), area = this.display(pointer).workArea;
-    this.moved ||= Math.hypot(pointer.x-this.start.pointer.x,pointer.y-this.start.pointer.y)>4;
-    const next = dragBounds(this.start, pointer, area);
-    // A drag updates position only; repeated size writes can feed DPI rounding
-    // back into renderer layout on Windows.
-    this.window.setPosition(next.x, next.y, false);
-    this.updateFacing();
+  settle(){this.updateFacing();}
+  begin(){
+    if(this.active||!this.position)return;
+    this.start={position:{...this.position},pointer:{...this.cursor()}};this.moved=false;
+    this.window.setIgnoreMouseEvents(false);this.updateFacing();
+    if(this.autoTick){this.timer=setInterval(()=>this.move(),16);this.timer.unref?.();}
   }
-  end(activate=false) {
-    if (!this.active) return;
-    const p=this.cursor();this.moved ||= Math.hypot(p.x-this.start.pointer.x,p.y-this.start.pointer.y)>4;
-    const togglePanel=activate&&!this.moved;
-    this.start = null; this.updateFacing({togglePanel});
-    const b=this.window.getBounds(),s=Math.min(b.width/1530,b.height/990);
-    this.save({x:b.x+645*s,y:b.y,petOffset:0,positionVersion:2});
+  move(){
+    if(!this.active)return;
+    const pointer=this.cursor(),dx=pointer.x-this.start.pointer.x,dy=pointer.y-this.start.pointer.y;
+    this.moved ||= Math.hypot(dx,dy)>4;
+    if(!this.moved)return;
+    this.place({x:this.start.position.x+dx,y:this.start.position.y+dy});
+  }
+  end(activate=false){
+    if(!this.active)return;
+    this.move();clearInterval(this.timer);this.timer=null;
+    const togglePanel=activate&&!this.moved;this.start=null;this.updateFacing({togglePanel});
+    this.save({...this.position,petOffset:0,positionVersion:3});
   }
 }
-module.exports = {facingFor, dragBounds, PetMotion};
+module.exports={facingFor,PetMotion};

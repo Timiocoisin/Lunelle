@@ -1,8 +1,9 @@
 'use strict';
 const api=window.xingyue, $=id=>document.getElementById(id);
+let layoutScale=null;
 let current=null, open=false, collapseTimer=null, dragging=null, lastHit=null, inputMode='pointer', fitLocked=false, suppressFitUntil=0;
 const occupied=new Set();
-function fit(){if(fitLocked||performance.now()<suppressFitUntil)return;const ratio=Math.min(innerWidth/1530,innerHeight/990);$('stage').style.left=(500*ratio)+'px';$('stage').style.transform=`scale(${ratio})`;}
+function fit(){if(layoutScale!==null||fitLocked||performance.now()<suppressFitUntil)return;const ratio=Math.min(innerWidth/1530,innerHeight/990);$('stage').style.left=(500*ratio)+'px';$('stage').style.transform=`scale(${ratio})`;}
 fit();addEventListener('resize',fit);
 function reportPanel(){api.panel({open,rects:['pet','journal','bridge'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})});}
 function visible(value){open=value;$('journal').classList.toggle('open',value);$('journal').inert=!value;$('journal').setAttribute('aria-hidden',String(!value));$('bridge').hidden=!value;requestAnimationFrame(reportPanel);}
@@ -22,13 +23,30 @@ document.addEventListener('pointerleave',()=>{if(!dragging){api.interactive(fals
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){occupied.clear();visible(false);$('pet').blur();}});
 $('pet').addEventListener('contextmenu',e=>{e.preventDefault();api.command('context');});
 $('pet').addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();fitLocked=true;dragging={id:e.pointerId};$('pet').classList.add('dragging');$('pet').setPointerCapture(e.pointerId);api.interactive(true);api.drag('start');});
-$('pet').addEventListener('pointermove',()=>{if(dragging)api.drag('move');});
+
 function endDrag(e){if(!dragging)return;suppressFitUntil=performance.now()+350;api.drag(e?.type==='pointerup'?'release':'end');dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}
 $('pet').addEventListener('pointerup',endDrag);$('pet').addEventListener('pointercancel',endDrag);$('pet').addEventListener('lostpointercapture',endDrag);
 document.addEventListener('dragstart',e=>e.preventDefault());
 for(const id of['pet','pet-image','portrait'])$(id).draggable=false;
-function motionState(value){$('pet-image').classList.toggle('faces-left',value.facing==='left');if(Number.isFinite(value.panelShift))$('journal').style.transform=`translateX(${value.panelShift}px)`;if(value.togglePanel)visible(!open);if(value.dragging){fitLocked=true;}else{if(fitLocked)suppressFitUntil=performance.now()+350;dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}}
-api.onMotion(value=>{motionState(value);if(open)requestAnimationFrame(reportPanel);});
+let pendingMotion=null,motionFrame=0;
+function motionState(value){
+  layoutScale=value.scale;
+  $('stage').style.left='0px';$('stage').style.transform=`scale(${value.scale})`;
+  $('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;
+  $('journal').style.transform=`translate3d(${value.panelLeft-15}px,${value.panelTop-8}px,0)`;
+  $('pet-image').classList.toggle('faces-left',value.facing==='left');
+  $('bridge').hidden=true;
+  if(value.togglePanel)visible(!open);
+  if(!value.dragging){dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}
+  if(open&&!value.dragging)reportPanel();
+}
+api.onMotion(value=>{
+  if(value.dragging){fitLocked=true;}
+  // Keep activation separate so a subsequent geometry event cannot lose it.
+  if(value.togglePanel)visible(!open);
+  pendingMotion={...value,togglePanel:false};
+  if(!motionFrame)motionFrame=requestAnimationFrame(()=>{motionFrame=0;const next=pendingMotion;pendingMotion=null;motionState(next);});
+});
 $('pet').addEventListener('click',e=>{if(e.detail===0)visible(!open);});
 // Open on press: activating a transparent inactive pet window can cancel the
 // subsequent click. Keep detail=0 click for keyboard/accessibility activation.
@@ -57,5 +75,5 @@ function render(state){current=state;const d=state.data,q=d.quota,five=q?.fiveHo
   clocks();
 }
 for(const id of['portrait','pet-image'])$(id).addEventListener('error',()=>{if(!$(id).src.endsWith('moon.svg'))$(id).src='../assets/moon.svg';});
-api.subscribe(render);api.read().then(render).catch(()=>{$('notice').textContent='连接失败，请从托盘重新打开星月';$('notice').hidden=false;});setInterval(clocks,1000);
+api.subscribe(render);api.read().then(render).catch(()=>{$('notice').textContent='连接失败，请从托盘重新打开Xingyue';$('notice').hidden=false;});setInterval(clocks,1000);
 window.xyTest={visible,enter,leave,render,get open(){return open;}};
