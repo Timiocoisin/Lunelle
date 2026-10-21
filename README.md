@@ -16,7 +16,7 @@
 一只浅紫色的桌面伙伴，一本随手展开的 Codex 使用手账。<br />
 剩余额度、重置倒计时、本机 token 统计与天气，轻轻放在桌边。
 
-<img src="assets/characters/pet.png" width="270" alt="Lunelle 原始柔和配色角色" />
+<img src="assets/characters/idle-seated.png" width="270" alt="Lunelle 抱星星并膝坐姿待机形象" />
 
 **[下载安装](https://github.com/Timiocoisin/Lunelle/releases/latest) · [界面预览](#preview) · [使用方式](#controls) · [源码运行](#development) · [反馈问题](https://github.com/Timiocoisin/Lunelle/issues)**
 
@@ -51,7 +51,7 @@
 
 | 平台 | 下载 | 状态 |
 | :--- | :--- | :--- |
-| Windows x64 | **[下载 v0.3.0 安装包](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.0/Lunelle-Setup-0.3.0-x64.exe)** | 已构建并完成本地验证 |
+| Windows x64 | **[下载 v0.3.1 安装包](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.1/Lunelle-Setup-0.3.1-x64.exe)** | 已构建并完成本地验证 |
 | 其他版本 | [查看全部 Releases](https://github.com/Timiocoisin/Lunelle/releases) | 更新说明与安装附件 |
 | macOS / Linux | 暂不提供安装包 | 完整桌面行为尚未验证 |
 
@@ -102,7 +102,7 @@
 
 ## 有一点动作，也懂得安静
 
-待机时轻轻呼吸、偶尔眨眼；单击随机歪头、点头或挥手，仍正常切换面板。
+待机采用下方设计稿中的抱星星、双膝并拢坐姿，轻轻呼吸、偶尔眨眼；单击随机歪头、点头或挥手，仍正常切换面板。
 拖动时切换拎起姿态，松手后轻微回弹。面板展开后停止走动，只保留轻微呼吸。
 
 在 **设置 → 交互与说明 → 自动活动** 开启，默认关闭：
@@ -120,6 +120,12 @@
 <sub>最初的八动作设计稿，保留更名前的 Xingyue 题字。设计图表达动作方向，实际效果以运行截图和应用为准。</sub>
 
 </div>
+
+### 待机，和设计稿保持一致
+
+<table><tr><th>待机坐姿</th><th>同姿态眨眼</th></tr><tr><td align="center"><img src="assets/characters/idle-seated.png" width="260" alt="实际使用的抱星星并膝待机坐姿" /></td><td align="center"><img src="assets/characters/blink-seated.png" width="260" alt="保持相同坐姿的闭眼帧" /></td></tr></table>
+
+待机呼吸使用同一张坐姿图连续轻微起伏，不来回切换两张人物图片。面板展开后保持坐姿，只保留轻微呼吸。
 
 ### 走几步，再陪你坐一会儿
 
@@ -205,17 +211,17 @@ tests/      合成日志、坐标回归、隔离界面与原生窗口检查
 docs/       展示图片、实现与安装验证记录
 ```
 
-## 最近更新 · v0.3.0
+## 最近更新 · v0.3.1
 
 - **正式更名为 Lunelle**：软件、安装包、快捷方式与仓库名称统一，旧仓库链接由 GitHub 重定向。
-- **八组动作与全屏散步**：保留原始柔和待机形象，加入动作预览、活动状态说明和快速试走。
+- **八组动作与全屏散步**：按动作设计稿统一抱星星、并膝坐姿待机形象，加入动作预览、活动状态说明和快速试走。
 - **连续交替步态**：完整腿部在裙摆下重叠，双脚连续交换前后位置；移除整图轮播和屏幕左右翻转。
 - **陪伴不打断**：桌宠及额度面板固定置顶且不抢前台焦点，独立设置窗口可正常输入。
 - **沿用旧版偏好**：保留升级标识与原配置目录，覆盖升级继续使用现有设置。
 
 本版通过 44 项回归测试、9 组缩放与边缘布局检查，以及 60 帧界面位移检查。自动检查不能覆盖每台设备，欢迎附系统缩放比例、显示器配置与复现步骤反馈。
 
-[查看完整发布说明 →](https://github.com/Timiocoisin/Lunelle/releases/tag/v0.3.0)
+[查看完整发布说明 →](https://github.com/Timiocoisin/Lunelle/releases/tag/v0.3.1)
 
 ## 设计、致谢与许可
 

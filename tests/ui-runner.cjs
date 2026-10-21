@@ -32,7 +32,7 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     motion.cursor=cursorSource;
     await js('xyTest.visible(true)');
     assert.equal(await js('xyPetAnimation.state.ready'),true,'all required transparent pose assets loaded');
-    assert.ok((await js('xyPetAnimation.state.pose')).endsWith('/pet.png'),'idle uses original soft pet artwork');
+    assert.ok((await js('xyPetAnimation.state.pose')).endsWith('/idle-seated.png'),'idle uses approved seated breathing design');
     const hitbox=await js("(()=>{const r=document.getElementById('pet').getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}})()");
     for(const action of ['breathe','blink','tilt','nod','wave','drag','walk','companion']){
       await js('xyPetAnimation.preview('+JSON.stringify(action)+')');await pause(45);

@@ -1,7 +1,7 @@
 {
   "name": "lunelle",
   "productName": "Lunelle",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "A handwritten desktop companion with read-only Codex quota and local usage monitoring.",
   "main": "app/main.cjs",

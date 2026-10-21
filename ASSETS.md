@@ -61,3 +61,13 @@ layers, generated from the existing pet references. Source sheet:
 complete upper thighs overlap under the opaque skirt. These replace the
 runtime clipped full-sprite legs. The same artwork terms apply.
 
+## Seated idle alignment (2026-10-21)
+
+`idle-seated.png` and `blink-seated.png` are exported from
+`docs/design/lunelle-seated-idle-atlas-v1.png`, generated with the built-in
+image generation tool from the original eight-action concept sheet.
+Prompt: faithfully reproduce panel 01's pale lavender seated character,
+knees together, cuddling the star pillow; two identically registered frames,
+open eyes and gently closed eyes only; transparent background, no labels,
+borders, arrows or ground shadow. Existing separate artwork rights apply.
+The original pet.png is retained as a historical source, not the active idle.

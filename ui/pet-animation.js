@@ -1,7 +1,7 @@
 'use strict';
 (()=>{
  const pet=document.getElementById('pet'),image=document.getElementById('pet-image'),art=document.getElementById('pet-art');
- const root='../assets/characters/',paths={idle:'pet.png',blink:'motion-blink.png',wave:'motion-wave.png',lift:'motion-lift.png',walkBody:'walk-body.png',walkLeft:'walk-leg-left.png',walkRight:'walk-leg-right.png'};
+ const root='../assets/characters/',paths={idle:'idle-seated.png',blink:'blink-seated.png',wave:'motion-wave.png',lift:'motion-lift.png',walkBody:'walk-body.png',walkLeft:'walk-leg-left.png',walkRight:'walk-leg-right.png'};
  let ready=false,panel=false,drag=false,activity='idle',action=null,animation=null,finishTimer=null,blinkTimer=null;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function pose(name){if(ready){image.src=root+paths[name];pet.classList.toggle('action-pose',name!=='idle'&&name!=='blink');}}
