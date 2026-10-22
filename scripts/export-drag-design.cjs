@@ -1,0 +1,4 @@
+'use strict';
+const{app,nativeImage}=require('electron'),fs=require('fs'),path=require('path');
+app.whenReady().then(()=>{const root=path.resolve(__dirname,'..'),source=nativeImage.createFromPath(path.join(root,'docs/design/lunelle-drag-design-aligned-v1.png')),{width,height}=source.getSize(),half=Math.floor(width/2),S=887;
+for(const[name,x,size,dx,dy]of [['lift-curled-design',0,800,44,0],['landing-seated-design',half,887,0,0]]){const img=source.crop({x,y:0,width:half,height}).resize({width:size,height:size,quality:'best'}),bytes=img.toBitmap(),canvas=Buffer.alloc(S*S*4);for(let y=0;y<size;y++)for(let u=0;u<size;u++){const ox=u+dx,oy=y+dy;if(ox>=0&&ox<S&&oy>=0&&oy<S)bytes.copy(canvas,(oy*S+ox)*4,(y*size+u)*4,(y*size+u+1)*4);}fs.writeFileSync(path.join(root,'assets/characters',name+'.png'),nativeImage.createFromBitmap(canvas,{width:S,height:S}).toPNG());}console.log('Exported curled suspension and seated landing design poses');app.quit();});

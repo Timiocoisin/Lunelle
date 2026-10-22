@@ -18,14 +18,32 @@ const drawings = {
 };
 function icon(name) { return `<svg class="sticker" viewBox="0 0 26 26" aria-hidden="true">${drawings[name] || drawings.star}</svg>`; }
 for (const element of document.querySelectorAll('[data-icon]')) element.innerHTML = icon(element.dataset.icon);
+function notebookEdge(w,h){
+  const inset=8,r=24,right=w-inset,bottom=h-inset;
+  let d=`M${inset+r} ${inset}`;
+  const edge=(start,end,constant,vertical)=>{
+    const count=Math.max(2,Math.round(Math.abs(end-start)/(vertical?150:130)));
+    for(let i=0;i<count;i++){
+      const a=start+(end-start)*i/count,b=start+(end-start)*(i+1)/count,mid=(a+b)/2,curve=constant+(i%2? -10:10);
+      d+=vertical?` Q${curve} ${mid} ${constant} ${b}`:` Q${mid} ${curve} ${b} ${constant}`;
+    }
+  };
+  edge(inset+r,right-r,inset,false);d+=` Q${right} ${inset} ${right} ${inset+r}`;
+  edge(inset+r,bottom-r,right,true);d+=` Q${right} ${bottom} ${right-r} ${bottom}`;
+  edge(right-r,inset+r,bottom,false);d+=` Q${inset} ${bottom} ${inset} ${bottom-r}`;
+  edge(bottom-r,inset+r,inset,true);return d+` Q${inset} ${inset} ${inset+r} ${inset}Z`;
+}
 function sketch(element, index) {
-  // Small non-repeating pen deviation, not a pronounced scalloped edge.
+  // Gentle asymmetric curves keep each paper edge visibly hand drawn.
   const w = Math.max(20, element.clientWidth), h = Math.max(20, element.clientHeight), r = Math.min(19, h / 3), t = index % 3 * .35;
-  const d = `M${r} 2 Q${w*.32} ${1+t} ${w*.51} 2 T${w-r} 2 Q${w-2} 1 ${w-2} ${r} Q${w-1-t} ${h*.53} ${w-2} ${h-r} Q${w-1} ${h-2} ${w-r} ${h-2} Q${w*.52} ${h-3+t} ${r} ${h-2} Q2 ${h-1} 2 ${h-r} Q${3+t} ${h*.45} 2 ${r} Q1 2 ${r} 2Z`;
+  const bend=Math.min(4.5,h*.055), d = element.classList.contains('notebook') ? notebookEdge(w,h) : `M${r} 3 C${w*.23} ${3-bend} ${w*.31} ${3+bend} ${w*.51} 3 S${w*.78} ${3+bend} ${w-r} 3 Q${w-3} 1 ${w-3} ${r} C${w-3-bend} ${h*.3} ${w-3+bend*.5} ${h*.65} ${w-3} ${h-r} Q${w-1} ${h-3} ${w-r} ${h-3} C${w*.75} ${h-3+bend} ${w*.6} ${h-3-bend} ${w*.42} ${h-3} S${w*.2} ${h-3-bend} ${r} ${h-3} Q2 ${h-1} 3 ${h-r} C${3+bend} ${h*.7} ${3-bend*.5} ${h*.3} 3 ${r} Q1 2 ${r} 3Z`;
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.classList.add('outline'); svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
   for (let j=0;j<2;j++){const p=document.createElementNS(svg.namespaceURI,'path');p.setAttribute('d',d);if(j)p.setAttribute('transform',`translate(3 3) scale(${(w-6)/w} ${(h-6)/h})`);svg.append(p);} element.prepend(svg);
 }
-function sketchAll() { document.querySelectorAll('[data-paper]').forEach((el,i)=>{el.querySelector(':scope>.outline')?.remove();sketch(el,i);}); }
+function sketchAll() {
+  const paper=document.getElementById('window-paper');
+  if(paper){const w=innerWidth,h=innerHeight,d=notebookEdge(w,h);paper.setAttribute('viewBox',`0 0 ${w} ${h}`);paper.querySelectorAll('path').forEach(p=>p.setAttribute('d',d));paper.querySelector('.window-ink').setAttribute('transform',`translate(3 3) scale(${(w-6)/w} ${(h-6)/h})`);}
+  document.querySelectorAll('[data-paper]').forEach((el,i)=>{el.querySelector(':scope>.outline')?.remove();sketch(el,i);}); }
 document.fonts.ready.then(sketchAll);
 let sketchTimer; window.addEventListener('resize',()=>{clearTimeout(sketchTimer);sketchTimer=setTimeout(sketchAll,100);});
 window.xyIllustrations = { icon, sketchAll };

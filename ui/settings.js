@@ -1,18 +1,18 @@
 'use strict';
 const api=window.xingyue,$=id=>document.getElementById(id);let state,initialized=false,queue=Promise.resolve();
-const controls=['scale','opacity','alwaysOnTop','weatherEnabled','refreshSeconds','codexPath','city','activityEnabled','activityMode'];
+const controls=['scale','opacity','alwaysOnTop','weatherEnabled','codexPath','city','activityEnabled','activityMode'];
 function feedback(message,error=false){$('save-feedback').textContent=message;$('save-feedback').classList.toggle('feedback-error',error);}
 function write(patch){feedback('保存中…');queue=queue.catch(()=>{}).then(()=>api.configure(patch)).then(value=>{state=value;feedback('已保存');}).catch(()=>feedback('保存失败，请重试',true));return queue;}
 function render(value){state=value;document.querySelector('.version').textContent='v'+value.version;const q=value.data.quota;$('settings-five').textContent=q?.fiveHour?Math.round(q.fiveHour.remaining)+'%':'—';$('settings-week').textContent=q?.weekly?Math.round(q.weekly.remaining)+'%':'—';$('connection-label').textContent=value.preview?'预览模式':q?.stale?'额度数据已过期':q?'Codex 已连接':'尚未取得额度';$('connection-note').textContent=value.data.issues?.map(i=>i.message).join('；')||'额度来自当前登录账号；token 来自本机可读日志。';$('settings-refresh').disabled=value.data.refreshing;
   const a=value.activity;
-  const reasons={disabled:'自动活动已关闭：开启后才会活动。',settings:'打开设置期间暂停；关闭设置后开始空闲计时。',panel:'面板展开期间暂停走动。',drag:'拖动期间暂停自动活动。',cursor:'鼠标靠近宠物，已暂停；请移开鼠标。',walking:'正在当前屏幕内散步。',looking:'正在原地看看四周。',waiting:'等待空闲：约 '+(a?.remaining??0)+' 秒后活动。'};
+  const reasons={disabled:'自动活动已关闭：开启后才会活动。',settings:'打开设置期间暂停；关闭设置后开始空闲计时。',panel:'面板展开期间暂停走动。',drag:'拖动期间暂停自动活动。',walking:'正在当前屏幕内散步。',looking:'正在原地看看四周。',waiting:'等待空闲：约 '+(a?.remaining??0)+' 秒后活动。'};
   $('activity-status').textContent=(a?reasons[a.reason]:'正在读取活动状态…')+(value.preferences.activityMode==='still'?' 当前为原地活动，不会移动位置。':'');
   document.querySelector('.version').textContent='v'+value.version;
   if(!initialized){for(const id of controls){const el=$(id);if(el.type==='checkbox')el.checked=value.preferences[id];else el.value=value.preferences[id];}initialized=true;outputs();}}
 function activityControls(){$('activityMode').disabled=!$('activityEnabled').checked;}
 $('activityEnabled').addEventListener('change',activityControls);
 function outputs(){activityControls();$('scale-output').textContent=Math.round(Number($('scale').value)*100)+'%';$('opacity-output').textContent=Math.round(Number($('opacity').value)*100)+'%';}
-for(const id of controls.filter(id=>id!=='city')){$(id).addEventListener('change',()=>{const el=$(id),value=el.type==='checkbox'?el.checked:['scale','opacity','collapseMs','refreshSeconds'].includes(id)?Number(el.value):el.value;write({[id]:value});});}
+for(const id of controls.filter(id=>id!=='city')){$(id).addEventListener('change',()=>{const el=$(id),value=el.type==='checkbox'?el.checked:['scale','opacity','collapseMs'].includes(id)?Number(el.value):el.value;write({[id]:value});});}
 for(const id of['scale','opacity'])$(id).addEventListener('input',outputs);
 $('city-form').addEventListener('submit',async e=>{e.preventDefault();const city=$('city').value.trim();if(!city){$('city').setAttribute('aria-invalid','true');$('city-feedback').textContent='请输入城市名后重试';return;}$('city').removeAttribute('aria-invalid');await write({city});$('city-feedback').textContent='城市已保存，天气正在更新';});
 $('browse').addEventListener('click',async()=>{try{const file=await api.chooseCodex();if(file){$('codexPath').value=file;await write({codexPath:file});}}catch{feedback('无法选择文件，请手动填写路径',true);}});
@@ -25,3 +25,5 @@ $('settings-portrait').addEventListener('error',()=>{if(!$('settings-portrait').
 for(const button of document.querySelectorAll('[data-motion]'))button.addEventListener('click',()=>api.command('preview-'+button.dataset.motion));
 
 $('walk-now').addEventListener('click',()=>api.command('walk-now'));
+
+for(const [id,command]of [['window-minimize','settings-minimize'],['window-maximize','settings-maximize'],['window-close','settings-close']])$(id).addEventListener('click',()=>api.command(command));

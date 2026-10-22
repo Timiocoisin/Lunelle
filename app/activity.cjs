@@ -1,4 +1,5 @@
 'use strict';
+const gait=require('../ui/walk-timeline.js');
 // Autonomous travel never writes preferences and never selects another display.
 class PetActivity {
   constructor({motion,cursor,now=()=>Date.now(),random=Math.random}){
@@ -9,14 +10,10 @@ class PetActivity {
   interrupt(){this.quickStart=false;this.leg=null;this.motion.setActivity('idle');this.wait();}
   setPanel(value){if(this.panel===value)return;this.panel=value;this.interrupt();}
   suspend(value){if(this.suspended===value)return;this.suspended=value;this.interrupt();}
-  near(){
-    const p=this.motion.position,c=this.cursor(),s=this.motion.scale;if(!p)return true;
-    const dx=Math.max(p.x-c.x,0,c.x-p.x-240*s),dy=Math.max(p.y-c.y,0,c.y-p.y-232*s);
-    return Math.hypot(dx,dy)<100;
-  }
+
   tick(){
     const m=this.motion,t=this.now();
-    if(!m.position||!this.enabled||this.panel||this.suspended||m.active||this.near()){
+    if(!m.position||!this.enabled||this.panel||this.suspended||m.active){
       const quick=this.quickStart&&this.enabled&&!this.panel&&!this.suspended&&!m.active;
       if(this.leg||m.activity!=='idle')this.interrupt();else this.wait();
       if(quick){this.quickStart=true;this.next=t+3000;}return;
@@ -37,12 +34,14 @@ class PetActivity {
     const distance=Math.hypot(target.x-start.x,target.y-start.y);
     if(distance<40){this.wait();return;}
     this.quickStart=false;
-    this.leg={start,target,area:{...a},at:t,duration:distance/(40+this.random()*18)*1000};
+    const cycleSeconds=gait.cycle/1000+this.random()*.15;
+    const speed=gait.stride*232/gait.referenceSize*s/cycleSeconds;
+    this.leg={start,target,area:{...a},at:t,duration:distance/Math.max(8,speed)*1000};
     m.setActivity('walk',target.x<start.x?'left':'right');
   }
   requestWalk(delay=3000){this.interrupt();this.quickStart=true;this.next=this.now()+delay;}
   snapshot(){
-    let reason=!this.enabled?'disabled':this.suspended?'settings':this.panel?'panel':this.motion.active?'drag':this.near()?'cursor':this.leg?'walking':this.motion.activity==='look'?'looking':'waiting';
+    let reason=!this.enabled?'disabled':this.suspended?'settings':this.panel?'panel':this.motion.active?'drag':this.leg?'walking':this.motion.activity==='look'?'looking':'waiting';
     return {reason,mode:this.mode,remaining:Math.max(0,Math.ceil((this.next-this.now())/1000))};
   }
   close(){this.interrupt();}

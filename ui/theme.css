@@ -5,3 +5,12 @@
 *{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button{cursor:pointer;outline:2px solid transparent;outline-offset:3px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline-offset:3px}button:disabled{opacity:.5;cursor:not-allowed}button:active{transform:translateY(1px)}[hidden]{display:none!important}h1,h2{font-family:var(--font-title);font-weight:400}b,strong,output{font-family:var(--font-value);font-weight:400}.note,small{font-family:var(--font-note);color:var(--muted)}.sticker{width:25px;height:25px;fill:var(--lavender);stroke:var(--accent);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}.sticker .cream{fill:var(--cream)}.sticker .blue{fill:var(--wash)}.sticker .detail{fill:none}.outline{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:visible}.outline path:first-child{fill:var(--paper);stroke:var(--line);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.outline path+path{fill:none;stroke:var(--soft-line);stroke-width:.8;opacity:.8}.paper-button{position:relative;isolation:isolate;border:0;background:transparent;min-height:44px;padding:6px 18px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-label)}.paper-button .sticker{width:21px;height:21px}.paper-button[data-status=error]{color:var(--error)}.paper-button[data-status=loading]{cursor:progress}.paper-button[data-status=success]{color:var(--accent)}.error{color:var(--error)}
 @media(hover:hover){.paper-button:hover .outline path:first-child{fill:var(--lavender)}input:hover,select:hover{border-color:var(--accent)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* Rounded lilac scroll thumb on the notebook paper. */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#eee9f5;border-radius:12px}
+::-webkit-scrollbar-thumb{background:#bba6cf;border:3px solid #eee9f5;border-radius:12px;min-height:42px}
+::-webkit-scrollbar-thumb:hover{background:#9c7fb7}
+::-webkit-scrollbar-thumb:active{background:#8768a6}
+::-webkit-scrollbar-button{display:none;width:0;height:0}
+::-webkit-scrollbar-corner{background:transparent}

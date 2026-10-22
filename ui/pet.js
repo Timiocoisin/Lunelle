@@ -29,10 +29,25 @@ $('pet').addEventListener('pointerup',endDrag);$('pet').addEventListener('pointe
 document.addEventListener('dragstart',e=>e.preventDefault());
 for(const id of['pet','pet-image','portrait'])$(id).draggable=false;
 let pendingMotion=null,motionFrame=0;
+let walkSamples=[],walkPositionFrame=0;
+function renderWalkPosition(now){
+  const at=now-40;
+  while(walkSamples.length>2&&walkSamples[1].at<=at)walkSamples.shift();
+  const a=walkSamples[0],b=walkSamples[1]||a;
+  if(!a){walkPositionFrame=0;return;}
+  const t=Math.max(0,Math.min(1,(at-a.at)/Math.max(1,b.at-a.at))),x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;
+  $('pet').style.transform=`translate3d(${x-145}px,${y-750}px,0)`;
+  window.xyPetWalk.sync({activity:'walk',petLeft:x,petTop:y});
+  walkPositionFrame=requestAnimationFrame(renderWalkPosition);
+}
 function motionState(value){
   layoutScale=value.scale;
   $('stage').style.left='0px';$('stage').style.transform=`scale(${value.scale})`;
-  $('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;
+  if(value.activity==='walk'&&!value.dragging){
+    walkSamples.push({x:value.petLeft,y:value.petTop,at:performance.now()});
+    if(!walkPositionFrame)walkPositionFrame=requestAnimationFrame(renderWalkPosition);
+  }else{cancelAnimationFrame(walkPositionFrame);walkPositionFrame=0;walkSamples=[];$('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;}
+
   $('journal').style.transform=`translate3d(${value.panelLeft-15}px,${value.panelTop-8}px,0)`;
   $('pet').classList.toggle('walking-motion',value.activity==='walk'&&!value.dragging);
   $('bridge').hidden=true;
@@ -74,7 +89,7 @@ function render(state){current=state;const d=state.data,q=d.quota,five=q?.fiveHo
   $('runtime-value').textContent=u?`${Math.floor(u.runtimeSeconds/3600)}h${String(Math.floor(u.runtimeSeconds%3600/60)).padStart(2,'0')}m`:'—';
   const stale=q?.stale||q&&Date.now()-q.at>state.preferences.refreshSeconds*2500;
   $('sync-value').textContent=stale?'已过期':q?'已连接':d.refreshing?'读取中':'未连接';$('sync-note').textContent=u?.partial?'部分日志可读':'本机 Codex';$('live-dot').style.opacity=q&&!stale?'1':'.4';
-  $('refresh').disabled=d.refreshing;$('notice').hidden=!d.issues?.length;$('notice').textContent=d.issues?.map(i=>i.message).join('；')||'';
+  $('refresh').disabled=d.refreshing;$('notice').hidden=!d.issues?.length;$('notice').textContent=d.issues?.map(i=>i.message).join('；')||'';$('notice').title=$('notice').textContent;
   clocks();
 }
 for(const id of['portrait','pet-image'])$(id).addEventListener('error',()=>{if(!$(id).src.endsWith('moon.svg'))$(id).src='../assets/moon.svg';});

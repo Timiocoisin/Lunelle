@@ -1,0 +1,16 @@
+{
+  "version": 19,
+  "width": 640,
+  "height": 640,
+  "frames": 216,
+  "frameMs": 30,
+  "cycleFrames": 36,
+  "cycleMs": 1080,
+  "durationMs": 6480,
+  "sourceFrameMs": 20,
+  "speedRatio": 0.6666666666666666,
+  "transparent": true,
+  "removedBackgroundSpeckles": 6420,
+  "whiteCompositeMaxError": 0,
+  "sha256": "c4a4e84b1d40f31b94382fc069a8cd08577aba84f2f84e38015270029c071c46"
+}

@@ -21,7 +21,7 @@ else {
 }
 if (!app.requestSingleInstanceLock()) app.quit();
 else {
-  let pet, settingsWindow, tray, monitor, preferences, timer, topmostTimer, activityTimer, activityStatusTimer, activity, motion, outsideClick, panelRects = [], pendingResize = false, quitting = false, previewSequence = 0, walkAfterSettings = false;
+  let pet, settingsWindow, tray, monitor, preferences, topmostTimer, activityTimer, activityStatusTimer, activity, motion, outsideClick, panelRects = [], pendingResize = false, quitting = false, previewSequence = 0, walkAfterSettings = false;
   const windowOptions = { webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, sandbox: true, nodeIntegration: false, offscreen: test } };
   const fixture = require('../tests/fixture.cjs');
   function state() { return { preferences: preferences.value, data: preview ? fixture() : monitor.snapshot, preview, version: app.getVersion(), facing: motion?.facing || 'right', activity:activity?.snapshot() }; }
@@ -41,7 +41,7 @@ else {
   }
 
   function schedule() {
-    clearInterval(timer); if (!preview) timer = setInterval(() => monitor.refresh().catch(() => {}), preferences.value.refreshSeconds * 1000);
+    if (!preview) monitor.start();
   }
   function tryWalking(){
     pet.showInactive();pet.webContents.send('xy:dismiss');activity.setPanel(false);activity.suspend(false);activity.requestWalk(3000);
@@ -50,7 +50,7 @@ else {
     activity?.suspend(true);
     if (settingsWindow && !settingsWindow.isDestroyed()) { if (settingsWindow.isMinimized()) settingsWindow.restore(); settingsWindow.show(); settingsWindow.moveTop(); settingsWindow.focus(); return; }
     settingsWindow = new BrowserWindow({ ...windowOptions, title: 'Lunelle · 设置手册', width: 700, height: 820, minWidth: 540, minHeight: 600,
-      show: false, autoHideMenuBar: true, backgroundColor: '#f0eef8', icon: path.join(root, 'assets/icon.png') });
+      frame: false, transparent: true, thickFrame: false, hasShadow: false, show: false, autoHideMenuBar: true, backgroundColor: '#00000000', icon: path.join(root, 'assets/icon.png') });
     const target = settingsWindow; let shown = false;
     const reveal = () => { if (shown || target.isDestroyed()) return; shown = true; target.setAlwaysOnTop(preferences.value.alwaysOnTop, 'floating'); target.show(); target.moveTop(); target.focus(); };
     secure(target); target.once('ready-to-show', reveal);
@@ -108,7 +108,7 @@ else {
     ipcMain.handle('xy:refresh', async event => { if (!valid(event)) throw new Error('不受信任窗口'); if (!preview) await monitor.refresh(); broadcast(); return state(); });
     ipcMain.handle('xy:configure', (event, patch) => {
       if (!valid(event) || event.sender.id !== settingsWindow?.webContents.id || !patch || Array.isArray(patch) || typeof patch !== 'object') throw new Error('无效设置请求');
-      const allowed = ['scale', 'opacity', 'alwaysOnTop', 'hoverEnabled', 'collapseMs', 'refreshSeconds', 'weatherEnabled', 'city', 'codexPath', 'activityEnabled', 'activityMode'];
+      const allowed = ['scale', 'opacity', 'alwaysOnTop', 'hoverEnabled', 'collapseMs', 'weatherEnabled', 'city', 'codexPath', 'activityEnabled', 'activityMode'];
       const clean = Object.fromEntries(Object.entries(patch).filter(([key]) => allowed.includes(key)));
       const old = preferences.value; preferences.update(clean); resize(); if(old.activityEnabled!==preferences.value.activityEnabled||old.activityMode!==preferences.value.activityMode)activity.configure(preferences.value);schedule(); broadcast();
       if (!preview && (old.city !== preferences.value.city || old.weatherEnabled !== preferences.value.weatherEnabled || old.codexPath !== preferences.value.codexPath)) monitor.refresh().catch(() => {});
@@ -122,6 +122,14 @@ else {
     ipcMain.on('xy:interactive', (event, active) => { if (valid(event) && event.sender.id === pet.webContents.id && typeof active === 'boolean') !motion.active && pet.setIgnoreMouseEvents(!active, { forward: true }); });
     ipcMain.on('xy:command', (event, name) => {
       if (!valid(event)) return;
+      if(event.sender.id===settingsWindow?.webContents.id){
+        if(name==='settings-minimize')settingsWindow.minimize();
+        if(name==='settings-maximize'){
+          if(settingsWindow.paperRestoreBounds){settingsWindow.setBounds(settingsWindow.paperRestoreBounds);settingsWindow.paperRestoreBounds=null;}
+          else{settingsWindow.paperRestoreBounds=settingsWindow.getBounds();settingsWindow.setBounds(screen.getDisplayMatching(settingsWindow.getBounds()).workArea);}
+        }
+        if(name==='settings-close'){settingsWindow.close();return;}
+      }
       if(typeof name==='string'&&event.sender.id===settingsWindow?.webContents.id&&['breathe','blink','tilt','nod','wave','drag','walk','companion'].some(a=>name==='preview-'+a))motion.updateFacing({previewAction:name.slice(8),previewSequence:++previewSequence});
       if(name==='walk-now'&&event.sender.id===settingsWindow?.webContents.id){preferences.update({activityEnabled:true,activityMode:'roam'});activity.configure(preferences.value);walkAfterSettings=true;settingsWindow.close();}
       if (name === 'settings') openSettings();
@@ -153,6 +161,6 @@ else {
     screen.on('display-metrics-changed', resize);
   }).catch(() => { dialog.showErrorBox('Lunelle启动失败', '请运行 npm test 检查安装，或查看项目 README。'); app.exit(1); });
   app.on('second-instance', () => { pet?.showInactive(); });
-  app.on('before-quit', () => { quitting = true; motion?.end();activity?.close();clearInterval(activityTimer);clearInterval(activityStatusTimer);clearInterval(topmostTimer); outsideClick?.stop(); clearInterval(timer); monitor?.close(); globalShortcut.unregisterAll(); tray?.destroy(); });
+  app.on('before-quit', () => { quitting = true; motion?.end();activity?.close();clearInterval(activityTimer);clearInterval(activityStatusTimer);clearInterval(topmostTimer); outsideClick?.stop(); monitor?.close(); globalShortcut.unregisterAll(); tray?.destroy(); });
   app.on('window-all-closed', () => { if (test) app.quit(); });
 }

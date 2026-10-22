@@ -4,6 +4,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { spawn } = require('node:child_process');
 const { createInterface } = require('node:readline');
+const { EventEmitter } = require('node:events');
 
 async function discover(explicit = '', env = process.env) {
   if (explicit) {
@@ -29,14 +30,16 @@ async function discover(explicit = '', env = process.env) {
 }
 
 // This transport intentionally exposes no thread/turn/login/write methods.
-class ReadOnlyRpc {
-  constructor(binary, timeout = 15000) {
+class ReadOnlyRpc extends EventEmitter {
+  constructor(binary, timeout = 15000, launch = spawn) {
+    super();
     this.pending = new Map(); this.next = 1; this.closed = false; this.timeout = timeout;
-    this.child = spawn(binary, ['app-server', '--stdio'], { windowsHide: true, stdio: ['pipe', 'pipe', 'ignore'] });
+    this.child = launch(binary, ['app-server', '--stdio'], { windowsHide: true, stdio: ['pipe', 'pipe', 'ignore'] });
     this.lines = createInterface({ input: this.child.stdout });
     this.lines.on('line', line => {
       if (line.length > 4 * 1024 * 1024) return;
       let message; try { message = JSON.parse(line); } catch { return; }
+      if (message.id === undefined && message.method === 'account/rateLimits/updated') { this.emit('limits', message.params); return; }
       const item = this.pending.get(message.id);
       if (!item) return;
       clearTimeout(item.timer); this.pending.delete(message.id);
@@ -48,9 +51,10 @@ class ReadOnlyRpc {
     this.child.stdin.on('error', () => this.fail('Codex 读取管道已关闭'));
   }
   fail(message) {
+    if (this.closed) return;
     this.closed = true;
     for (const item of this.pending.values()) { clearTimeout(item.timer); item.reject(new Error(message)); }
-    this.pending.clear();
+    this.pending.clear(); this.emit('disconnect');
   }
   call(method, params = {}) {
     if (!['initialize', 'account/read', 'account/rateLimits/read'].includes(method))
