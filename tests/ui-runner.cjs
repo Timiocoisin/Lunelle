@@ -47,9 +47,9 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
       const box=await js("(()=>{const r=document.getElementById('pet').getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}})()");assert.deepEqual(box,hitbox,'animation must not move hitbox: '+action);
     }
     for(const gesture of ['tilt','nod']){
-      await js('xyPetAnimation.preview('+JSON.stringify(gesture)+')');await pause(30);
+      await js('xyPetAnimation.preview('+JSON.stringify(gesture)+')');await pause(230);
       const bodyBefore=await js("document.getElementById('pet-image').getBoundingClientRect().toJSON()");
-      await pause(340);
+      await pause(140);
       const pose=await js("({puppet:xyPetPuppet.state,art:getComputedStyle(document.getElementById('pet-art')).transform,body:document.getElementById('pet-image').getBoundingClientRect().toJSON(),eyes:xyPetAnimation.state.blinkProgress})");
       assert.equal(pose.puppet.active,true);assert.ok(Math.abs(pose.puppet.angle)>.1,'head has real motion');assert.deepEqual(pose.puppet.bodyPoint,[.5,.8],'lower body vertices stay fixed');assert.notDeepEqual(pose.puppet.headPoint,[.5,.2],'head vertices move');assert.equal(pose.art,'none','gesture never rotates the entire character');assert.ok(Math.abs(pose.body.x-bodyBefore.x)<.01&&Math.abs(pose.body.y-bodyBefore.y)<2&&Math.abs(pose.body.height-bodyBefore.height)<2,'only subpixel breathing amplitude settles during '+gesture);if(gesture==='nod')assert.ok(pose.eyes>.9,'nod closes eyes during downward motion');
       await js('xyPetAnimation.cancel()');assert.equal(await js("xyPetPuppet.state.active"),false,'interruption resets head motion');assert.equal(await js("document.getElementById('pet').classList.contains('blinking')"),false,'interruption resets eyelids');

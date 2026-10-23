@@ -1,0 +1,7 @@
+{
+  "name": "lunelle-setup-ui",
+  "version": "0.3.25",
+  "main": "main.cjs",
+  "productName": "Lunelle Setup",
+  "private": true
+}

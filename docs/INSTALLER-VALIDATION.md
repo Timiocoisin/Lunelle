@@ -1,21 +1,16 @@
-# Windows installer validation · 2026-10-19
+# 安装器验证 · 2026-10-23
 
-- Builder: electron-builder 26.15.3, NSIS 3.12 (official bundle 1.2.1).
-- Target: Windows x64, per-user guided install, app ID `io.xingyue.desktop`.
-- 27 unit tests passed, including installer identity and preservation settings.
-- Silent installation to the dedicated `.local/install-check` directory exited 0.
-- Installed application EXE SHA-256 matched the packaged EXE.
-- Installed application passed isolated UI regression: all four actual custom
-  fonts, four layout sizes, pet/panel ordering, no portrait collision, hover,
-  settings single-click opening and settings persistence.
-- Generated uninstaller exited 0 and removed the installed test application.
-- `%APPDATA%/XingyueDesktop` remained present after test uninstall.
-- Test output: `artifacts/installer/ui-report.json` (test data, no credentials).
-- Installer is unsigned. Successful build output mentioning the signing phase
-  does not mean a signing certificate was applied. Windows may show an unknown
-  publisher or SmartScreen warning.
+当前本地安装包为 v0.3.25，Windows x64，采用六页自定义手账界面及 NSIS 安装引擎。
 
-The former companion was a portable runtime, not a registered installed app.
-Its exact processes were stopped and the runtime was moved to a recoverable
-backup under its own source directory. Its source and user data were preserved.
-Neither the Codex application nor its account/configuration was uninstalled.
+- 55 项自动测试通过；清理后重新运行通过。
+- 六页界面检查通过，含不同人物素材、中文许可、固定操作区及预览禁止安装。
+- 独立测试身份验证过中文及空格路径安装、覆盖升级、文件一致性与卸载。
+- 最终安装包按需提取的引擎与构建引擎哈希一致。
+- 启动不再提取安装引擎；点击安装后才准备引擎，并在进度页反馈。
+- 相同内容的界面运行时缓存复用，避免每次解压。
+
+本机测量：首次显示窗口约 20.96 秒，其中进入引导程序后约 13.81 秒；缓存启动约 1.52 秒，其中进入引导程序后约 0.72 秒。首次准备仍受运行时大小、磁盘和系统启动检查影响，不能保证首次秒开。
+
+详细启动及清理记录保留在 artifacts/maintenance。批准的设计稿与最终界面截图保留在 docs/design，重复测试图片和旧包已清理。
+
+安装包尚未配置代码签名。

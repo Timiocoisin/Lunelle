@@ -1,5 +1,7 @@
 # Lunelle · 桌边画册
 
+[查看六页安装手账的实机图](design/installer-final/README.md) · [批准的安装器角色分镜](design/installer-v2/README.md)
+
 淡紫卷发绕过肩头，星星抱枕停在怀里。角色的表情、动作和手账界面，共同构成 Lunelle 的桌面日常。
 
 [返回 README](../README.md) · [动作与播放说明](ANIMATION.md) · [素材许可](../ASSETS.md)

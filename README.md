@@ -1,28 +1,38 @@
 <div align="center">
 
-<img src="assets/icon.png" width="76" alt="Lunelle" />
+<img src="assets/icon.png" width="64" alt="Lunelle" />
+
+<sub>A DESKTOP COMPANION · 一册桌边手账</sub>
 
 # Lunelle
 
-**一隅月色，片刻从容。**
+**在桌面的一角，留一小片月色。**
 
-淡紫色的桌面伙伴，与一本随手展开的 Codex 使用手账。<br />
-额度、天气与日常，安静地放在桌边。
+Lunelle 抱着星星，坐在你工作的地方。<br />
+点一下，翻开 Codex 额度与日常；再点一下，回到她的小小世界。
 
-<a href="assets/characters/idle-seated.png"><img src="assets/characters/idle-seated.png" width="220" alt="Lunelle：淡紫卷发、月牙扣饰与星星抱枕" /></a>
+<a href="assets/characters/idle-seated.png"><img src="assets/characters/idle-seated.png" width="280" alt="Lunelle：淡紫卷发、月牙扣饰与星星抱枕" /></a>
 
 [![Release](https://img.shields.io/github/v/release/Timiocoisin/Lunelle?style=flat-square&color=8b74b3)](https://github.com/Timiocoisin/Lunelle/releases/latest)
 ![Windows x64](https://img.shields.io/badge/Windows-x64-a6bde6?style=flat-square)
 [![License](https://img.shields.io/badge/code-MIT-c7a0c6?style=flat-square)](LICENSE)
 
-[下载](#download) · [手账](#journal) · [陪伴](#motion) · [设计](#design) · [使用](#controls) · [开发](#development)
+[下载 Windows 版](https://github.com/Timiocoisin/Lunelle/releases/latest) · [翻开手账](#journal) · [看看她的日常](#motion) · [设计画册](#design)
+
+<sub>Windows x64 · 简体中文 · 本地只读数据 · 无需 API key</sub>
 
 </div>
 
-<a id="journal"></a>
-## 把信息留在眼前，把注意力留给创作
+---
 
-单击 Lunelle，手账轻轻展开：剩余额度、重置时间、本机使用记录，以及所在城市的天气。再点一下，收起信息，留下抱着星星的她。
+Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在屏幕边缘，也可以抱着星星散一会儿步。需要查看额度时，单击便能展开面板，读到剩余比例、重置时间和本机用量。
+
+淡紫卷发与层叠裙摆之外，还有一本沿着手绘曲线展开的手账。角色与界面使用相近的颜色，信息有自己的位置，小动作也有自己的节奏。
+
+<a id="journal"></a>
+## 01 / 翻开手账
+
+还剩多少额度，下一次何时重置，今天用了多少 token。几件工作时常想知道的小事，放进同一页里。城市天气也可以一并留下。
 
 <table>
 <tr><th>额度手账</th><th>设置手册</th></tr>
@@ -32,7 +42,7 @@
 </tr>
 </table>
 
-<sub>界面截图使用隔离演示数据，点击可查看完整图片。当前界面为简体中文。</sub>
+<p align="center"><sub>额度页与设置手册 · 点击图片查看高清原图 · 截图使用隔离演示数据</sub></p>
 
 | 信息 | 内容 |
 | :--- | :--- |
@@ -41,23 +51,25 @@
 | 会话 | 最近活动会话的模型、推理强度与套餐信息 |
 | 天气 | 手动选择城市的温度与天气，可随时关闭 |
 
-手绘曲线勾勒纸张，浅蓝与淡紫铺开层次。本地字体、圆角滚动条与无边框设置窗口，让手账融入桌面；读取提示留在固定状态行，操作始终清楚可见。
+纸边略有起伏，装订孔沿左侧排开，浅蓝色信息块落在淡紫底色上。设置窗口延续这套手账样式，连滚动条也收成细细的一笔。读取状态与操作按钮各有位置，翻阅时始终找得到。
+
+额度变化通过本地连接接收，本机会话日志更新也会触发读取。[数据来源与统计口径](#data)在下文单独说明。
 
 <a id="motion"></a>
-## 小动作，自有节奏
+## 02 / 她的桌边日常
 
-她会抱着星星呼吸，偶尔眨眼；与你招呼时歪头、点头或挥手。被轻轻拎起，再随着松手回到坐姿。打开手账，她便停下散步，在旁边安静陪伴。
+大多数时候，她抱着星星坐着，随着呼吸轻轻起伏。偶尔眨眼，歪一下头，或者抬手打个招呼。你把她拎到别处，她便收起双腿，等松手后重新坐好。
 
 | 动作 | 表现 |
 | :--- | :--- |
-| 呼吸与眨眼 | 轻微起伏，眼皮经过半闭、闭合与睁开的过程 |
+| 呼吸与眨眼 | 4.2 秒一轮的舒缓起伏，眼皮经过半闭、闭合与睁开的过程 |
 | 歪头与点头 | 头肩平缓衔接，短暂停留后回正 |
 | 挥手 | 手臂局部摆动，配合眨眼与笑容 |
 | 拖动与落地 | 悬空抱膝，松手后缓冲、回坐 |
 | 散步 | 抱着星星侧向走动，保留发尾、裙摆与抱枕的轻微跟随 |
 | 面板陪伴 | 展开手账时停驻，只保留轻微呼吸 |
 
-### 眨眼之间
+### 一个眨眼的片刻
 
 <table>
 <tr><th>睁眼</th><th>轻轻合眼</th><th>短暂停留</th><th>重新睁开</th></tr>
@@ -69,7 +81,7 @@
 </tr>
 </table>
 
-### 给你一点回应
+### 抬头，回应一下
 
 <table>
 <tr><th>歪头</th><th>点头</th><th>挥手</th></tr>
@@ -80,7 +92,7 @@
 </tr>
 </table>
 
-### 轻轻拎起，稳稳落下
+### 换个地方坐
 
 <table>
 <tr><th>悬空抱膝</th><th>落地回坐</th></tr>
@@ -90,20 +102,20 @@
 </tr>
 </table>
 
-<sub>以上为当前 UI 导出的动作相位图，点击可查看高清原图；单张静态图展示姿势，不代表完整播放过程。</sub>
+<p align="center"><sub>以上为运行界面导出的动作相位。静态图呈现姿势，动画中包含起势与回落。</sub></p>
 
-### 散步，慢一点
+### 抱着星星，走一小段
 
-<p align="center"><a href="docs/images/walk-v19.webp"><img src="docs/images/walk-v19.webp" width="320" alt="当前采用的第 19 版散步，慢速循环预览" /></a></p>
+<p align="center"><a href="docs/images/walk-v19.webp"><img src="docs/images/walk-v19.webp" width="320" alt="Lunelle 抱着星星散步的慢速循环预览" /></a></p>
 
 <p align="center"><sub>散步每轮 1.08 秒。预览保留原版造型与步态；运行素材另含偶发眨眼。</sub></p>
 
-散步朝向随移动方向切换：向左时面向左侧，向右时面向右侧。换向保留步态进度，待机与拖动保持原始朝向。
+开启自动活动后，她会在工作间隙走动一会儿。向左走便朝左，向右走便朝右；鼠标从身边经过，她继续散步。点击她，或翻开手账，她就停下来。
 
-已接入桌宠，使用完整画面播放，保留角色原有比例、裙摆与绘画质感。它由八张腿部关键姿势配合细微动态构成，仍有逐帧动画的节奏感；不把增加播放帧数等同于重新绘制步态。其他散步试作已清理。[动作与播放说明](docs/ANIMATION.md)记录当前实现。
+当前散步保留选定造型的角色比例、裙摆与绘画质感，以完整画面播放。腿部以八张关键姿势为基础，带有逐帧动画的节奏；技术细节见[动作与播放说明](docs/ANIMATION.md)。
 
 <details>
-<summary>展开查看散步的两个相位</summary>
+<summary>查看两个步态相位</summary>
 
 <table>
 <tr><th>相位 A</th><th>相位 B</th></tr>
@@ -115,7 +127,10 @@
 
 </details>
 
-**自动活动默认关闭。** 可在「设置 → 交互与说明」开启原地活动或全屏散步，也可以单独预览动作。
+自动活动默认关闭。在「设置 → 交互与说明」中，可以选择原地活动或全屏散步，也可以先逐个预览动作。
+
+<details>
+<summary>散步与操作如何配合</summary>
 
 | 场景 | 行为 |
 | :--- | :--- |
@@ -126,14 +141,18 @@
 | 展开手账、打开设置或隐藏桌宠 | 暂停走动 |
 | 手动放置之后 | 保存手动位置；临时散步不覆盖它 |
 
-<a id="design"></a>
-## 从一颗星星开始
+</details>
 
-淡紫长卷发、层叠裙摆与小小的月牙扣饰，是 Lunelle 的辨识细节。她总抱着那颗星星；安静坐着、抬手招呼或被拎起时，仍是同一位桌边伙伴。
+<a id="design"></a>
+## 03 / 一颗星星的设计手记
+
+卷发从淡紫渐变到浅蓝，裙摆一层层铺开，鞋扣上留着小小的月牙。那颗紫色星星总在怀里，坐着、走着，或被轻轻拎起时，都能认出她。
+
+动作设计从这些细节出发：坐姿要让裙摆舒展开，悬空时鞋底朝前，落地后回到并膝坐姿。下面的原始概念稿，记录了八个动作最初的模样。
 
 <p align="center"><a href="docs/design/xingyue-motion-concepts-v1.png"><img src="docs/design/xingyue-motion-concepts-v1.png" width="1000" alt="原始八动作设计总览：呼吸、眨眼、歪头、点头、挥手、拖动落地、散步与面板陪伴" /></a></p>
 
-<sub>原始动作概念稿保留了更名前的 Xingyue 题字，展示动作与气质的设计方向；当前运行表现以上方实机图和动图为准。</sub>
+<p align="center"><sub>八动作概念稿 · 保留项目曾用名 Xingyue · 当前表现以上方运行截图与动图为准</sub></p>
 
 <details>
 <summary>展开查看坐姿与拖动落地设计稿</summary>
@@ -148,14 +167,29 @@
 
 </details>
 
-[继续浏览设计图集 →](docs/DESIGN.md)
+[翻阅完整设计画册 →](docs/DESIGN.md)
 
 <a id="download"></a>
-## 与她见面
+## 04 / 邀请她来到桌面
 
-**[下载 Windows x64 发行版](https://github.com/Timiocoisin/Lunelle/releases/latest)** · [查看发布记录](https://github.com/Timiocoisin/Lunelle/releases)
+**[下载 Windows x64 安装包 · v0.3.25](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.25/Lunelle-Setup-0.3.25-x64.exe)** · [查看发布记录](https://github.com/Timiocoisin/Lunelle/releases)
 
-当前开发版为 **v0.3.21**，包含第 19 版散步回归与慢速播放。发行安装包的功能与版本以 Releases 页面为准。
+### 从第一页，与你见面
+
+安装也从一本手账开始。花枝沿着曲线纸边舒展，Lunelle 在左页挥手、阅读或安静等待；右页依次展开许可、安装位置与进度。空白纸面可以拖动，中文条款、路径选择和操作按钮都有各自的位置。
+
+<p align="center"><a href="docs/design/installer-final/01.png"><img src="docs/design/installer-final/01.png" width="1000" alt="Lunelle 手账安装器欢迎页：水彩花枝、曲线纸边与挥手人物" /></a></p>
+
+<details>
+<summary>翻阅安装器的六个页面</summary>
+
+<p align="center"><a href="docs/design/installer-final/overview.png"><img src="docs/design/installer-final/overview.png" width="1100" alt="安装器六页实机总览：欢迎、中文许可、安装范围、位置、进度与完成" /></a></p>
+
+[逐页查看高清界面 →](docs/design/installer-final/README.md)
+
+</details>
+
+**v0.3.25** 包含六页手账安装器、更清楚的呼吸起伏，以及保留原造型的慢速散步与左右朝向切换。安装仅面向当前 Windows 用户，可选择安装目录、桌面和开始菜单快捷方式；升级保留已有偏好设置。
 
 1. 安装并登录 Codex，确认本机可运行其 `app-server`。
 2. 运行 Lunelle 安装向导，选择安装位置。安装包自带运行时，无需额外安装 Node.js。
@@ -163,8 +197,14 @@
 
 覆盖升级保留偏好设置。便携运行需保留完整程序目录，不能单独复制 EXE。当前提供 Windows x64 构建，其他平台的完整桌面交互尚未验证；安装包尚未配置代码签名。
 
+### 关于打开安装包的等待
+
+界面运行时会在首次打开时准备，并按版本与内容缓存；安装引擎等到点击「安装」后才提取，准备过程会显示在进度页。同一台电脑的实测中，首次出现窗口约需 21 秒，再次打开同一安装包约需 1.5 秒。具体时间取决于磁盘及系统检查，首次打开仍需等待。
+
+缓存位于 `%LOCALAPPDATA%/LunelleSetupCache`，与桌宠偏好目录分开。[安装器说明](installer-ui/README.md) · [验证记录](docs/INSTALLER-VALIDATION.md) · [SHA-256 校验文件](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.25/SHA256SUMS-v0.3.25.txt)
+
 <a id="controls"></a>
-## 几个简单的操作
+### 相处的几个小习惯
 
 | 操作 | 效果 |
 | :--- | :--- |
@@ -176,9 +216,10 @@
 | `Ctrl + Alt + X`／单击托盘 | 显示或隐藏桌宠 |
 | 托盘 → 退出 Lunelle | 完全退出应用 |
 
-## 数据，各有来处
+<a id="data"></a>
+## 05 / 每个数字，都有来处
 
-无需 API key，不发送提示词，不发起模型推理调用。**额度来自当前登录账号，token 来自本机可读日志，两者统计范围不同。**
+额度取自当前登录的 Codex 账号，token 取自本机可读会话日志。两者统计范围不同，面板分别呈现。Lunelle 无需 API key；读取过程不发送提示词，也不发起模型推理调用。
 
 | 信息 | 来源与范围 |
 | :--- | :--- |
@@ -204,7 +245,7 @@
 </details>
 
 <a id="development"></a>
-## 从源码开始
+## 06 / 从源码开始
 
 需要 **Node.js 22+**，以及已安装、登录的 Codex。
 
@@ -221,6 +262,8 @@ npm test                         # 数据、配置、交互与动画时间轴检
 npm run test:ui                  # 隔离配置的 Electron 界面检查
 npm run build -- --with-artwork   # 含角色资源的便携版
 npm run installer                # Windows 安装向导
+npm run installer:preview        # 只预览安装手账，不执行安装
+npm run test:installer           # 六页界面、许可与预览隔离检查
 ```
 
 字体与动画资源随仓库提供，本地加载。不带 `--with-artwork` 的构建使用图标回退。打包采用明确文件清单，不包含个人配置、凭据、会话日志或散步试作目录。
@@ -231,6 +274,7 @@ npm run installer                # Windows 安装向导
 ```text
 app/       窗口、拖动、自动活动与只读数据接口
 ui/        手账、设置与角色动画
+installer-ui/ 六页安装手账与安装引擎桥接
 assets/    角色、图标、字体与许可
 scripts/   打包、安装与文档图片导出
 tests/     数据、坐标、交互与隔离界面检查
@@ -246,7 +290,7 @@ node node_modules/electron/cli.js scripts/export-walk-preview.cjs
 
 </details>
 
-## 设计与致谢
+## 字体与作品归属
 
 淡紫、浅蓝与纸张白构成手账底色。小赖用于标签与按钮，霞鹜漫黑用于标题，悠哉用于说明，霞鹜 975 圆体用于日期与信息值；字体均本地加载，并保留 OFL 许可。
 
@@ -259,4 +303,14 @@ node node_modules/electron/cli.js scripts/export-walk-preview.cjs
 
 Lunelle 是独立社区项目，与 OpenAI 无隶属或背书关系。
 
-<div align="center"><sub>月色留在桌边，创作留给你。</sub></div>
+---
+
+<div align="center">
+
+<img src="assets/icon.png" width="36" alt="" />
+
+<sub>Lunelle · 星星抱在怀里，手账留在桌边。</sub>
+
+[下载](https://github.com/Timiocoisin/Lunelle/releases/latest) · [画册](docs/DESIGN.md) · [反馈](https://github.com/Timiocoisin/Lunelle/issues)
+
+</div>

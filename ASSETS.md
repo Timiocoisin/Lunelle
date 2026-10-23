@@ -1,5 +1,22 @@
 # Assets and publication boundary
 
+## Custom installer characters (2026-10-23)
+
+The v0.3.23 installer also uses `assets/installer/paper-master.png`, a built-in
+image-generation edit of the approved welcome concept. Character, text and
+controls were removed to retain a reusable transparent illustrated paper frame,
+flowers, ribbon and watercolor finish. The six pose assets were regenerated
+against the approved six-page storyboard, then segmented without clipping their
+heads or shoes. The same artwork rights apply to these installer-only assets.
+
+`assets/installer/poses/01.png` through `06.png` are six transparent character
+poses generated with the built-in image tool for the owner's approved installer
+storyboard. The original seated desktop pet supplies identity, clothing and paint
+finish. A subsequent edit softens specular hair highlights to match that original.
+The atlas is segmented into six cells, removing tiny disconnected neighbouring
+cell fragments. These assets are for installer pages only; desktop pet artwork
+is unchanged. The same separately reserved artwork rights apply.
+
 The project owner identified the Lunelle character artwork as their own
 generated design (2026-10-19) and authorized publication of this desktop app.
 Character PNGs in assets/characters are published as application resources,
@@ -119,8 +136,9 @@ rig at runtime. Existing separate artwork rights apply.
 
 The owner selected walking study 19 and requested removal of the other walking
 studies. The original character keypose, eight registered leg poses, eye source
-art, prompts, render code and frames are retained together in
-`artifacts/walk-study-v19/` for local provenance and reproduction. Previous
+art, prompts and render code are retained together in
+`artifacts/walk-study-v19/` for local provenance and reproduction. Generated
+frames and duplicate previews can be rebuilt and have been cleaned. Previous
 walking atlases, layer exports and rejected studies have been removed.
 
 Runtime artwork is `assets/characters/walk-v19.webp`, with

@@ -1,7 +1,7 @@
 {
   "name": "lunelle",
   "productName": "Lunelle",
-  "version": "0.3.21",
+  "version": "0.3.25",
   "private": true,
   "description": "A handwritten desktop companion with read-only Codex quota and local usage monitoring.",
   "main": "app/main.cjs",
@@ -15,7 +15,9 @@
     "verify:live": "node scripts/check-live.cjs",
     "assets": "node scripts/fetch-fonts.cjs",
     "build": "node scripts/package.cjs",
-    "installer": "node scripts/installer.cjs"
+    "installer": "node scripts/build-custom-installer.cjs",
+    "installer:preview": "electron installer-ui/main.cjs --preview",
+    "test:installer": "electron installer-ui/main.cjs --design-test"
   },
   "devDependencies": {
     "@electron/packager": "18.3.6",
