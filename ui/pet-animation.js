@@ -114,6 +114,7 @@
  }
  function setPanel(value){if(panel===value)return;panel=value;pet.classList.toggle('panel-mode',value);settle();}
  function sync(value){
+  window.xyPetWalk.setFacing(value.activity==='walk'&&!value.dragging&&!value.dragMoved?value.facing:'right');
   if(value.activity!=='walk'||value.dragging)window.xyPetWalk.sync(value);
   const moving=!!value.dragMoved;
   if(moving&&Number.isFinite(value.petLeft)&&Number.isFinite(value.petTop)){

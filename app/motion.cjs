@@ -24,7 +24,7 @@ class PetMotion {
   updateFacing(extra={}){
     if(!this.position)return;
     const a=this.area,b=this.window.getBounds(),s=this.scale,p=this.position,w=500*s,h=730*s,gap=12*s;
-    // Keep the original orientation everywhere; screen halves never mirror the pet.
+    // Panel placement never changes the character's walking direction.
     let x=p.x-130*s,y=p.y-h-gap;
     if(y<a.y+4){
       if(p.y+232*s+gap+h<=a.y+a.height-4)y=p.y+232*s+gap;
@@ -35,11 +35,11 @@ class PetMotion {
     const serialized=JSON.stringify(value);
     if(serialized!==this.last){this.last=serialized;this.notify(value);}
   }
-  setActivity(name){this.activity=name;this.updateFacing();}
+  setActivity(name,direction='right'){this.activity=name;this.facing=name==='walk'&&direction==='left'?'left':'right';this.updateFacing();}
   settle(){this.updateFacing();}
   begin(){
     if(this.active||!this.position)return;
-    this.start={position:{...this.position},pointer:{...this.cursor()}};this.moved=false;
+    this.start={position:{...this.position},pointer:{...this.cursor()}};this.moved=false;this.facing='right';
     this.window.setIgnoreMouseEvents(false);this.updateFacing();
     if(this.autoTick){this.timer=setInterval(()=>this.move(),16);this.timer.unref?.();}
   }

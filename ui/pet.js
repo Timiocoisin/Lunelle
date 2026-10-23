@@ -37,14 +37,14 @@ function renderWalkPosition(now){
   if(!a){walkPositionFrame=0;return;}
   const t=Math.max(0,Math.min(1,(at-a.at)/Math.max(1,b.at-a.at))),x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;
   $('pet').style.transform=`translate3d(${x-145}px,${y-750}px,0)`;
-  window.xyPetWalk.sync({activity:'walk',petLeft:x,petTop:y});
+  window.xyPetWalk.sync({activity:'walk',petLeft:x,petTop:y,facing:b.facing||a.facing});
   walkPositionFrame=requestAnimationFrame(renderWalkPosition);
 }
 function motionState(value){
   layoutScale=value.scale;
   $('stage').style.left='0px';$('stage').style.transform=`scale(${value.scale})`;
   if(value.activity==='walk'&&!value.dragging){
-    walkSamples.push({x:value.petLeft,y:value.petTop,at:performance.now()});
+    walkSamples.push({x:value.petLeft,y:value.petTop,at:performance.now(),facing:value.facing});
     if(!walkPositionFrame)walkPositionFrame=requestAnimationFrame(renderWalkPosition);
   }else{cancelAnimationFrame(walkPositionFrame);walkPositionFrame=0;walkSamples=[];$('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;}
 

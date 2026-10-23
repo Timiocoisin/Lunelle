@@ -8,9 +8,13 @@ function rig(area={x:0,y:0,width:1920,height:1040},scale=.88){
  motion.configure(scale,{x:400+area.x,y:300+area.y});
  return {motion,events,saves,area,scale,get writes(){return writes;},get bounds(){return bounds;},pointer:p=>{pointer=p;}};
 }
-test('screen halves and walking direction never mirror the character',()=>{
+test('screen position never changes facing; walking follows its travel direction',()=>{
  const r=rig();for(const x of [0,900,1700,50]){r.motion.place({x,y:300});assert.equal(r.motion.facing,'right');}
- r.motion.setActivity('walk','left');assert.equal(r.motion.facing,'right');r.motion.setActivity('idle');assert.equal(r.motion.facing,'right');
+ r.motion.setActivity('walk','left');assert.equal(r.motion.facing,'left');assert.equal(r.events.at(-1).facing,'left');
+ for(const x of [1700,900,50]){r.motion.place({x,y:300});assert.equal(r.motion.facing,'left');}
+ r.motion.setActivity('walk','right');assert.equal(r.motion.facing,'right');
+ r.motion.setActivity('walk','left');r.motion.setActivity('idle');assert.equal(r.motion.facing,'right');
+ r.motion.setActivity('walk','left');r.motion.begin();assert.equal(r.motion.facing,'right');r.motion.end();
 });
 test('downward and rightward moves are monotonic over repeated gestures',()=>{
  const r=rig();
