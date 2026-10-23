@@ -29,7 +29,7 @@ test('all four edges work at different DPI scales and negative screen origins',(
   const r=rig(a,scale);r.motion.begin();
   for(const [px,py,ex,ey]of [[-10000,-10000,a.x,a.y],[10000,10000,a.x+a.width-240*scale,a.y+a.height-232*scale]]){
    r.pointer({x:px,y:py});r.motion.move();assert.equal(r.motion.position.x,ex);assert.equal(r.motion.position.y,ey);
-   const e=r.events.at(-1);assert.ok(e.panelLeft*scale>=0);assert.ok((e.panelLeft+500)*scale<=a.width);assert.ok(e.panelTop*scale>=0);assert.ok((e.panelTop+730)*scale<=a.height);
+   const e=r.events.at(-1);assert.ok(e.panelLeft*scale>=0);assert.ok(e.panelLeft*scale+500*e.panelScale<=a.width);assert.ok(e.panelTop*scale-270*e.panelScale>=0);assert.ok(e.panelTop*scale+730*e.panelScale<=a.height);
   }
   r.motion.end();assert.equal(r.writes,1,'one host placement, never a write per move');
  }

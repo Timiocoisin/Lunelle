@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const DEFAULTS = Object.freeze({ scale: 1, opacity: 1, alwaysOnTop: true,
-  activityEnabled: false, activityMode: 'still', hoverEnabled: true, collapseMs: 320, refreshSeconds: 60, weatherEnabled: true,
+  activityEnabled: true, activityMode: 'roam', interactionVersion: 1, hoverEnabled: true, collapseMs: 320, refreshSeconds: 60, weatherEnabled: true,
   city: '中山', codexPath: '', x: null, y: null, petOffset: 0, positionVersion: 1 });
 function normalize(input = {}) {
   const result = { ...DEFAULTS };
@@ -31,7 +31,7 @@ class Preferences {
   constructor(directory) {
     this.file = path.join(directory, 'preferences.json');
     fs.mkdirSync(directory, { recursive: true });
-    try { this.value = normalize(JSON.parse(fs.readFileSync(this.file, 'utf8'))); }
+    try { const saved=JSON.parse(fs.readFileSync(this.file, 'utf8'));this.value = normalize(saved.interactionVersion===1?saved:{...saved,activityEnabled:true,activityMode:'roam'}); }
     catch { this.value = normalize(); }
   }
   update(patch) {

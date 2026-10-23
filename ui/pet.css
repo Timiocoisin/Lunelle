@@ -57,3 +57,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent}#stage{p
 #notice{position:relative;grid-row:5;grid-column:1;align-self:center;inset:auto;margin:0;padding:0 6px;background:transparent;border:0;border-radius:0;max-height:26px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-size:11px;line-height:13px;color:var(--error);z-index:auto}
 #journal:has(#notice:not([hidden])) .token-note{visibility:hidden}
 .actions{grid-row:6;grid-column:1}
+/* Companion motion keeps the two hands anchored to the same paper rim. */
+#journal{opacity:0;transition:opacity .35s ease,visibility 0s .35s}
+#journal.open{opacity:1;transition:opacity .4s ease,visibility 0s}
+#pet-art{transition:opacity .35s ease}
+.companion-open #pet-art{opacity:0}
+.companion-open #pet{pointer-events:none}
+#companion-canvas{position:absolute;width:360px;height:288px;right:-6px;top:-292px;z-index:3;pointer-events:none;object-fit:contain;filter:drop-shadow(0 3px 1.5px #58446d35)}
+#header{padding-right:0}
+#header:after{right:48px;top:-15px;width:180px}
+#portrait{opacity:0}
+#companion-canvas{pointer-events:auto;cursor:grab;touch-action:none}
+#companion-canvas:active{cursor:grabbing}
+#companion-close{position:absolute;right:-12px;top:-10px;width:22px;height:22px;padding:0;z-index:5;border:1px solid var(--soft-line);border-radius:50%;background:var(--paper);color:var(--accent);font-size:18px;line-height:18px;cursor:pointer}
+#companion-close:hover{background:var(--wash)}
+#companion-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){#journal,#pet-art{transition:none}}

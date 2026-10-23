@@ -10,7 +10,7 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     const a=motion.area;
     for(const scale of [.55,.75,.88])for(const [side,x,y]of [['top-left',a.x,a.y],['bottom-right',a.x+a.width,a.y+a.height],['middle',a.x+a.width/2,a.y+a.height/2]]){
       motion.configure(scale,{x,y});await pause(80);await js('xyTest.visible(true)');await pause(40);
-      const layout=await js(`(()=>{const r=id=>document.getElementById(id).getBoundingClientRect(),p=r('pet'),c=r('journal');return{petVisible:p.left>=-1&&p.top>=-1&&p.right<=innerWidth+1&&p.bottom<=innerHeight+1,panelVisible:c.left>=-1&&c.top>=-1&&c.right<=innerWidth+1&&c.bottom<=innerHeight+1,valuesFit:[...document.querySelectorAll('.details b,.statistics b,.token-note')].every(n=>n.scrollWidth<=n.clientWidth+1)}})()`);
+      const layout=await js(`(()=>{const r=id=>document.getElementById(id).getBoundingClientRect(),p=r('pet'),c=r('journal'),portrait=r('companion-canvas');return{companionVisible:portrait.top>=-1&&portrait.left>=-1&&portrait.right<=innerWidth+1,companionLarge:portrait.width/c.width>.65,handsAtOuterRim:Math.abs(portrait.bottom-c.top-20*c.width/500)<5,petVisible:p.left>=-1&&p.top>=-1&&p.right<=innerWidth+1&&p.bottom<=innerHeight+1,panelVisible:c.left>=-1&&c.top>=-1&&c.right<=innerWidth+1&&c.bottom<=innerHeight+1,valuesFit:[...document.querySelectorAll('.details b,.statistics b,.token-note')].every(n=>n.scrollWidth<=n.clientWidth+1)}})()`);
       layouts.push({scale,side,...layout});for(const[k,v]of Object.entries(layout))assert.equal(v,true,k+' '+JSON.stringify(layout));
     }
     await js("document.getElementById('notice').hidden=false;document.getElementById('notice').textContent='Codex 读取超时，请刷新重试'");
@@ -31,8 +31,12 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     const clickPoint=await js("(()=>{const r=document.getElementById('pet').getBoundingClientRect();return{x:Math.round(r.x+r.width/2),y:Math.round(r.y+r.height/2)}})()");
     // Native synthetic input must not derive drag distance from the user's hardware mouse.
     motion.cursor=()=>({x:a.x+clickPoint.x,y:a.y+clickPoint.y});
-    for(const expected of [true,false]){pet.webContents.sendInputEvent({type:'mouseMove',...clickPoint});pet.webContents.sendInputEvent({type:'mouseDown',...clickPoint,button:'left',clickCount:1});pet.webContents.sendInputEvent({type:'mouseUp',...clickPoint,button:'left',clickCount:1});await pause(100);assert.equal(pet.isFocused(),false,'click never focuses pet');assert.equal(await js('xyTest.open'),expected,'one click toggles exactly once');}
+    for(const expected of [false,false]){pet.webContents.sendInputEvent({type:'mouseMove',...clickPoint});pet.webContents.sendInputEvent({type:'mouseDown',...clickPoint,button:'left',clickCount:1});pet.webContents.sendInputEvent({type:'mouseUp',...clickPoint,button:'left',clickCount:1});await pause(100);assert.equal(pet.isFocused(),false,'click never focuses pet');assert.equal(await js('xyTest.open'),expected,'single click only plays an interaction');}
     motion.cursor=cursorSource;
+    for(const [i,expected]of ['breathe','blink','tilt','nod','wave'].entries()){await js(`(()=>{const random=Math.random;try{Math.random=()=>(${i}+.1)/5;xyPetAnimation.click();}finally{Math.random=random;}})()`);assert.equal(await js('xyPetAnimation.state.action'),expected,'left click selects action '+(i+1));await js('xyPetAnimation.cancel()');}
+    await js("document.getElementById('pet').dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2}))");await pause(500);assert.equal(await js('xyTest.open'),true,'action 8 opens panel');assert.equal(activity.panel,true,'companionship stops autonomous travel');
+    assert.equal(await js('xyCompanion.state.open'),true);
+    await js("document.getElementById('companion-close').click()");assert.equal(await js('xyTest.open'),false,'paper close ends companionship');
     await js('xyTest.visible(true)');
     assert.equal(await js('xyPetAnimation.state.ready'),true,'all required transparent pose assets loaded');
     assert.ok((await js('xyPetAnimation.state.pose')).endsWith('/idle-seated.png'),'idle uses approved seated breathing design');
@@ -108,7 +112,8 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     assert.notEqual(await settings.webContents.executeJavaScript("getComputedStyle(document.querySelector('.page>.outline')).display"),'none','handwritten panel frame restored');
 
     await settings.webContents.executeJavaScript("document.getElementById('tab-behavior').click()");
-    assert.equal(await settings.webContents.executeJavaScript("document.getElementById('activityEnabled').checked"),false,'auto activity off by default');
+    assert.equal(await settings.webContents.executeJavaScript("document.getElementById('activityEnabled').checked"),true,'automatic roaming enabled by default');
+    await settings.webContents.executeJavaScript("document.getElementById('activityEnabled').click()");await pause(100);
     await settings.webContents.executeJavaScript("document.getElementById('activityEnabled').click();document.getElementById('activityMode').value='roam';document.getElementById('activityMode').dispatchEvent(new Event('change'))");await pause(150);
     assert.equal((await settings.webContents.executeJavaScript('window.xingyue.read()')).preferences.activityMode,'roam');
     assert.equal(activity.enabled,true);assert.equal(activity.suspended,true,'settings pause autonomous movement');
@@ -122,6 +127,13 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     assert.ok(await settings.webContents.executeJavaScript("document.getElementById('activity-status').textContent.length>0"),'activity explanation visible');
     await settings.webContents.executeJavaScript("document.getElementById('walk-now').click()");await pause(150);
     assert.equal(getSettings(),null,'trial closes settings');assert.equal(activity.enabled,true);assert.equal(activity.mode,'roam');assert.equal(activity.panel,false);assert.equal(activity.suspended,false);assert.ok(activity.next-Date.now()<=3100,'trial schedules quickly');
+    openSettings();await pause(350);settings=getSettings();
+    await settings.webContents.executeJavaScript("document.querySelector('[data-motion=companion]').click()");await pause(500);
+    assert.equal(getSettings(),null,'action 8 closes settings');assert.equal(await js('xyTest.open'),true,'settings action 8 opens companionship');
+    assert.equal(activity.panel,true);assert.equal(activity.suspended,false);
+    const breathA=await js('xyCompanion.state.breath');await pause(180);assert.notEqual(await js('xyCompanion.state.breath'),breathA,'portrait breathes continuously');
+    assert.equal(await js("getComputedStyle(document.getElementById('pet-art')).opacity"),'0','only one character is visible');
+    await fs.writeFile(path.join(out,'companion.png'),(await pet.webContents.capturePage(await js("(()=>{const r=document.getElementById('journal').getBoundingClientRect(),p=document.getElementById('companion-canvas').getBoundingClientRect();return{x:Math.max(0,Math.floor(r.x-8)),y:Math.max(0,Math.floor(p.y-5)),width:Math.ceil(r.width+16),height:Math.ceil(r.bottom-p.y+13)}})()"))).toPNG());
     await js("xyTest.render({preferences:{hoverEnabled:true,collapseMs:320,refreshSeconds:60,weatherEnabled:false,city:'中山'},data:{quota:null,usage:null,weather:null,issues:[],refreshing:false},preview:true})");assert.equal(await js("document.getElementById('quota-value').textContent"),'—');assert.equal(await js("document.getElementById('sync-value').textContent"),'未连接');report={ok:true,layouts,checks:['sandbox isolation','clicked panel remains open','all four actual custom fonts','settings single click','settings tabs and persistence','handwritten panel, frameless controls and real-time sync','missing data','no portrait overlap','eight actions with fixed hitbox','v19 transparent full-frame walking, bounded cache, distance synchronization and loop closure','non-activating permanently topmost pet','panel cancels autonomous walking','activity settings and preview','60 rendered drag frames track cursor without native moves or direction reversal']};
   }catch(e){report={ok:false,error:e.message,stack:e.stack};}finally{await fs.writeFile(path.join(out,'ui-report.json'),JSON.stringify(report,null,2));clearTimeout(watchdog);console.log(JSON.stringify(report));app.exit(report.ok?0:1);}
 }

@@ -23,7 +23,9 @@ class PetMotion {
   }
   updateFacing(extra={}){
     if(!this.position)return;
-    const a=this.area,b=this.window.getBounds(),s=this.scale,p=this.position,w=500*s,h=730*s,gap=12*s;
+    const a=this.area,b=this.window.getBounds(),s=this.scale,p=this.position;
+    // Reserve the complete above-the-page companion, including on short displays.
+    const panelScale=Math.min(s,(a.height-12)/1000),w=500*panelScale,h=1000*panelScale,gap=12*s;
     // Panel placement never changes the character's walking direction.
     let x=p.x-130*s,y=p.y-h-gap;
     if(y<a.y+4){
@@ -31,7 +33,7 @@ class PetMotion {
       else {x=p.x+240*s+gap+w<=a.x+a.width-4?p.x+240*s+gap:p.x-w-gap;y=p.y+(232*s-h)/2;}
     }
     x=clamp(x,a.x+4,a.x+a.width-w-4);y=clamp(y,a.y+4,a.y+a.height-h-4);
-    const value={activity:this.activity,dragMoved:!!this.moved&&this.active,dragging:this.active,facing:this.facing,scale:s,petLeft:(p.x-b.x)/s,petTop:(p.y-b.y)/s,panelLeft:(x-b.x)/s,panelTop:(y-b.y)/s,...extra};
+    const value={activity:this.activity,dragMoved:!!this.moved&&this.active,dragging:this.active,facing:this.facing,scale:s,panelScale,petLeft:(p.x-b.x)/s,petTop:(p.y-b.y)/s,panelLeft:(x-b.x)/s,panelTop:(y+270*panelScale-b.y)/s,...extra};
     const serialized=JSON.stringify(value);
     if(serialized!==this.last){this.last=serialized;this.notify(value);}
   }

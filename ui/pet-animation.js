@@ -125,7 +125,7 @@
   const next=value.activity||'idle';
   if(next!==activity){activity=next;if(!drag){if(next==='walk'&&!panel)play('walk');else if(next==='look'&&!panel)play('look');else if(action==='walk'||action==='look')settle();}}
  }
- function click(){if(!drag){play(['tilt','nod','wave'][Math.floor(Math.random()*3)]);}}
+ function click(){if(!drag&&!panel)preview(['breathe','blink','tilt','nod','wave'][Math.floor(Math.random()*5)]);}
  function preview(name){if(drag)return;activity='idle';if(name==='drag'){play('lift');finishTimer=setTimeout(()=>play('land'),1100);}else if(name==='walk'){play('walk');finishAfter(window.xyWalkTimeline.cycle*2);}else play(name);}
  Promise.all([window.xyPetPuppet.ready,window.xyPetWalk.ready,...Object.values(paths).map(file=>new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=reject;img.src=root+file;}))]).then(()=>{ready=true;pose('idle');}).catch(()=>{ready=false;});
  idleBlink();

@@ -5,7 +5,7 @@ class PetActivity {
   constructor({motion,cursor,now=()=>Date.now(),random=Math.random}){
     Object.assign(this,{motion,cursor,now,random});this.enabled=false;this.mode='still';this.panel=false;this.suspended=false;this.leg=null;this.wait();
   }
-  wait(){this.next=this.now()+30000+this.random()*30000;}
+  wait(){this.next=this.now()+8000+this.random()*4000;}
   configure({activityEnabled=false,activityMode='still'}){this.enabled=activityEnabled;this.mode=activityMode;this.interrupt();}
   interrupt(){this.quickStart=false;this.leg=null;this.motion.setActivity('idle');this.wait();}
   setPanel(value){if(this.panel===value)return;this.panel=value;this.interrupt();}

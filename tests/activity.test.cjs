@@ -7,8 +7,8 @@ function rig(){
  m.configure(.88,{x:400,y:300});const a=new PetActivity({motion:m,cursor:()=>cursor,now:()=>t,random:()=>.99});
  return {a,m,saves,time:n=>{t=n;},cursor:p=>{cursor=p;},start(){a.configure({activityEnabled:true,activityMode:'roam'});t=60000;a.tick();assert.ok(a.leg);}};
 }
-test('activity is disabled by default and invalid settings are normalized',()=>{
- assert.equal(normalize().activityEnabled,false);assert.equal(normalize({activityMode:'bad'}).activityMode,'still');
+test('roaming is enabled by default and invalid settings are normalized',()=>{
+ assert.equal(normalize().activityEnabled,true);assert.equal(normalize({activityMode:'bad'}).activityMode,'roam');
  const r=rig();r.time(100000);r.a.tick();assert.equal(r.a.leg,null);assert.deepEqual(r.m.position,{x:400,y:300});
 });
 test('roaming targets the entire current work area and never persists its temporary position',()=>{

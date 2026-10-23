@@ -14,6 +14,16 @@
 
 <sub>角色设计稿。点击图片可查看完整尺寸。</sub>
 
+## 趴在纸边，留在你身边
+
+面板陪伴将人物放在手账最上沿。双手搭住外侧纸边，头肩保留轻微呼吸，发梢跟随；收起手账后回到桌面姿态。右键直接进入，左键只随机回应动作 01–05，拖动对应动作 06。
+
+<p align="center"><a href="images/panel-companion-current.png"><img src="images/panel-companion-current.png" width="380" alt="面板陪伴当前实机画面，采用隔离演示数据" /></a></p>
+
+[![面板陪伴设计稿](design/panel-companion/design.png)](design/panel-companion/design.png)
+
+<sub>上方为当前实机画面，下方为设计参考。当前实现包含呼吸、轻微歪头和淡入淡出；设计稿中的独立眨眼尚未接入。</sub>
+
 ## 八个动作，一种气质
 
 从呼吸、眨眼到歪头、挥手，再到拖动落地和散步，最初的概念稿记录了每个动作的方向。

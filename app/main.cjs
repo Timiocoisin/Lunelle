@@ -46,6 +46,10 @@ else {
   function tryWalking(){
     pet.showInactive();pet.webContents.send('xy:dismiss');activity.setPanel(false);activity.suspend(false);activity.requestWalk(3000);
   }
+  function showCompanion() {
+    settingsWindow?.close(); pet.showInactive(); activity.interrupt(); activity.setPanel(true);
+    motion.updateFacing({previewAction:'companion',previewSequence:++previewSequence});
+  }
   function openSettings() {
     activity?.suspend(true);
     if (settingsWindow && !settingsWindow.isDestroyed()) { if (settingsWindow.isMinimized()) settingsWindow.restore(); settingsWindow.show(); settingsWindow.moveTop(); settingsWindow.focus(); return; }
@@ -130,12 +134,12 @@ else {
         }
         if(name==='settings-close'){settingsWindow.close();return;}
       }
-      if(typeof name==='string'&&event.sender.id===settingsWindow?.webContents.id&&['breathe','blink','tilt','nod','wave','drag','walk','companion'].some(a=>name==='preview-'+a))motion.updateFacing({previewAction:name.slice(8),previewSequence:++previewSequence});
+      if(typeof name==='string'&&event.sender.id===settingsWindow?.webContents.id&&['breathe','blink','tilt','nod','wave','drag','walk','companion'].some(a=>name==='preview-'+a)){if(name==='preview-companion')showCompanion();else motion.updateFacing({previewAction:name.slice(8),previewSequence:++previewSequence});}
       if(name==='walk-now'&&event.sender.id===settingsWindow?.webContents.id){preferences.update({activityEnabled:true,activityMode:'roam'});activity.configure(preferences.value);walkAfterSettings=true;settingsWindow.close();}
+      if (name === 'companion') showCompanion();
       if (name === 'settings') openSettings();
       if (name === 'hide') pet.hide();
       if (name === 'close-settings') settingsWindow?.close();
-      if (name === 'context') Menu.buildFromTemplate([{ label: '设置手册', click: openSettings }, { label: '收起桌宠', click: () => pet.hide() }, { type: 'separator' }, { label: '退出Lunelle', click: () => { quitting = true; app.quit(); } }]).popup({ window: pet });
     });
     ipcMain.on('xy:drag', (event, data) => {
       if (!valid(event) || event.sender.id !== pet.webContents.id || !data) return;
@@ -150,7 +154,7 @@ else {
     if (test) { await require('../tests/ui-runner.cjs').run({ pet, openSettings, getSettings: () => settingsWindow, app, root, motion, activity }); return; }
     const icon = nativeImage.createFromPath(path.join(root, 'assets/icon.png'));
     tray = new Tray(icon.resize({ width: 20, height: 20 })); tray.setToolTip('Lunelle · 额度手账');
-    tray.setContextMenu(Menu.buildFromTemplate([{ label: '显示Lunelle', click: () => pet.showInactive() }, { label: '设置手册', click: openSettings },
+    tray.setContextMenu(Menu.buildFromTemplate([{ label: '显示Lunelle', click: () => pet.showInactive() }, { label: '动作 8 · 面板陪伴', click: showCompanion }, { label: '设置手册', click: openSettings },
       { label: '打开Lunelle配置目录', click: () => shell.openPath(app.getPath('userData')) }, { type: 'separator' }, { label: '退出Lunelle', click: () => { quitting = true; app.quit(); } }]));
     tray.on('click', () => pet.isVisible() ? pet.hide() : pet.showInactive());
     globalShortcut.register('CommandOrControl+Alt+X', () => pet.isVisible() ? pet.hide() : pet.showInactive());

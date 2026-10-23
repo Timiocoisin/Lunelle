@@ -5,8 +5,8 @@ let current=null, open=false, collapseTimer=null, dragging=null, lastHit=null, i
 const occupied=new Set();
 function fit(){if(layoutScale!==null||fitLocked||performance.now()<suppressFitUntil)return;const ratio=Math.min(innerWidth/1530,innerHeight/990);$('stage').style.left=(500*ratio)+'px';$('stage').style.transform=`scale(${ratio})`;}
 fit();addEventListener('resize',fit);
-function reportPanel(){api.panel({open,rects:['pet','journal','bridge'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})});}
-function visible(value){open=value;window.xyPetAnimation.setPanel(value);$('journal').classList.toggle('open',value);$('journal').inert=!value;$('journal').setAttribute('aria-hidden',String(!value));$('bridge').hidden=!value;requestAnimationFrame(reportPanel);}
+function reportPanel(){api.panel({open,rects:['pet','journal','companion-canvas'].map(id=>{const r=$(id).getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})});}
+function visible(value){open=value;document.body.classList.toggle('companion-open',value);window.xyCompanion.setOpen(value);window.xyPetAnimation.setPanel(value);$('journal').classList.toggle('open',value);$('journal').inert=!value;$('journal').setAttribute('aria-hidden',String(!value));$('bridge').hidden=!value;requestAnimationFrame(reportPanel);}
 api.onDismiss(()=>visible(false));
 addEventListener('resize',()=>requestAnimationFrame(reportPanel));
 document.addEventListener('pointerdown',e=>{if(open&&!e.target.closest('#pet,#journal,#bridge'))visible(false);},true);
@@ -21,7 +21,7 @@ $('journal').addEventListener('focusout',e=>{if(!$('journal').contains(e.related
 document.addEventListener('pointermove',e=>{const hit=!!(e.target.closest('#pet')||open&&e.target.closest('#journal,#bridge'));if(hit!==lastHit){lastHit=hit;api.interactive(hit);}});
 document.addEventListener('pointerleave',()=>{if(!dragging){api.interactive(false);occupied.clear();leave('window');}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){occupied.clear();visible(false);$('pet').blur();}});
-$('pet').addEventListener('contextmenu',e=>{e.preventDefault();api.command('context');});
+$('pet').addEventListener('contextmenu',e=>{e.preventDefault();api.command('companion');});
 $('pet').addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();fitLocked=true;dragging={id:e.pointerId};$('pet').classList.add('dragging');$('pet').setPointerCapture(e.pointerId);api.interactive(true);api.drag('start');});
 
 function endDrag(e){if(!dragging)return;suppressFitUntil=performance.now()+350;api.drag(e?.type==='pointerup'?'release':'end');dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}
@@ -48,28 +48,36 @@ function motionState(value){
     if(!walkPositionFrame)walkPositionFrame=requestAnimationFrame(renderWalkPosition);
   }else{cancelAnimationFrame(walkPositionFrame);walkPositionFrame=0;walkSamples=[];$('pet').style.transform=`translate3d(${value.petLeft-145}px,${value.petTop-750}px,0)`;}
 
-  $('journal').style.transform=`translate3d(${value.panelLeft-15}px,${value.panelTop-8}px,0)`;
+  $('journal').style.transformOrigin='top left';
+  $('journal').style.transform=`translate3d(${value.panelLeft-15}px,${value.panelTop-8}px,0) scale(${(value.panelScale||value.scale)/value.scale})`;
   $('pet').classList.toggle('walking-motion',value.activity==='walk'&&!value.dragging);
   $('bridge').hidden=true;
-  if(value.togglePanel){visible(!open);window.xyPetAnimation.click();}
+  if(value.togglePanel)window.xyPetAnimation.click();
   if(!value.dragging){dragging=null;fitLocked=false;$('pet').classList.remove('dragging');}
   if(open&&!value.dragging)reportPanel();
 }
 api.onMotion(value=>{
   window.xyPetAnimation.sync(value);
-  if(value.previewAction)window.xyPetAnimation.preview(value.previewAction);
+  if(value.previewAction==='companion')visible(true);else if(value.previewAction)window.xyPetAnimation.preview(value.previewAction);
   if(value.landed)window.xyPetAnimation.play('land');
   if(value.dragging){fitLocked=true;}
   // Keep activation separate so a subsequent geometry event cannot lose it.
-  if(value.togglePanel){visible(!open);window.xyPetAnimation.click();}
+  if(value.togglePanel)window.xyPetAnimation.click();
   pendingMotion={...value,togglePanel:false};
   if(!motionFrame)motionFrame=requestAnimationFrame(()=>{motionFrame=0;const next=pendingMotion;pendingMotion=null;motionState(next);});
 });
-$('pet').addEventListener('click',e=>{if(e.detail===0){visible(!open);window.xyPetAnimation.click();}});
+$('pet').addEventListener('click',e=>{if(e.detail===0)window.xyPetAnimation.click();});
 // Open on press: activating a transparent inactive pet window can cancel the
 // subsequent click. Keep detail=0 click for keyboard/accessibility activation.
 $('settings').addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();api.command('settings');});
 $('settings').addEventListener('click',e=>{if(e.detail===0)api.command('settings');});
+$('companion-close').addEventListener('click',()=>visible(false));
+$('companion-canvas').addEventListener('contextmenu',e=>{e.preventDefault();api.command('companion');});
+$('companion-canvas').addEventListener('pointerdown',e=>{
+  if(e.button!==0)return;e.preventDefault();fitLocked=true;dragging={id:e.pointerId};
+  e.currentTarget.setPointerCapture(e.pointerId);api.interactive(true);api.drag('start');
+});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])$('companion-canvas').addEventListener(event,endDrag);
 $('hide').addEventListener('click',()=>{occupied.clear();visible(false);api.command('hide');});
 $('refresh').addEventListener('click',async()=>{if($('refresh').disabled)return;$('refresh').disabled=true;$('refresh').dataset.status='loading';try{render(await api.refresh());$('refresh').dataset.status='success';}catch{$('notice').textContent='刷新失败，请稍后重试';$('notice').hidden=false;$('refresh').dataset.status='error';}finally{$('refresh').disabled=false;}});
 function shortTokens(n){if(!Number.isFinite(n))return'—';return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);}
