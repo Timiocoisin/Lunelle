@@ -29,22 +29,21 @@ Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在�
 
 淡紫卷发与层叠裙摆之外，还有一本沿着手绘曲线展开的手账。角色与界面使用相近的颜色，信息有自己的位置，小动作也有自己的节奏。
 
-<sub>本文交互与面板陪伴截图对应 main 分支。下方 v0.3.25 安装包为已发布版本，尚未包含本轮陪伴与鼠标交互更新；体验当前实现可从源码运行。</sub>
+<sub>本文截图与交互对应 v0.3.26：左键随机回应，右键翻开陪伴手账，空闲时自在散步。</sub>
 
 <a id="journal"></a>
 ## 01 / 翻开手账
 
-还剩多少额度，下一次何时重置，今天用了多少 token。几件工作时常想知道的小事，放进同一页里。城市天气也可以一并留下。
+还剩多少额度，下一次何时重置，今天用了多少 token，连同城市天气，都安静地放在这一页里。
 
 <table>
-<tr><th>额度手账</th><th>设置手册</th></tr>
+<tr><th>额度手账 · 面板陪伴</th><th>设置手册</th></tr>
 <tr>
-<td align="center" valign="top"><a href="docs/images/quota-panel-restored-hd.png"><img src="docs/images/quota-panel-restored-hd.png" width="340" alt="Lunelle 的 Codex 额度手账" /></a></td>
-<td align="center" valign="top"><a href="docs/images/appearance-settings-restored-hd.png"><img src="docs/images/appearance-settings-restored-hd.png" width="400" alt="淡紫色手账风格的设置手册" /></a></td>
+<td align="center" valign="top"><a href="docs/images/panel-companion-current.png"><img src="docs/images/panel-companion-current.png" width="340" alt="当前额度手账：大半身 Lunelle 趴在最外层纸边，双手搭住上沿" /></a></td>
+<td align="center" valign="middle"><a href="docs/images/appearance-settings-restored-hd.png"><img src="docs/images/appearance-settings-restored-hd.png" width="400" alt="淡紫色手账风格的设置手册" /></a></td>
 </tr>
 </table>
 
-<p align="center"><sub>额度页与设置手册 · 点击图片查看高清原图 · 截图使用隔离演示数据</sub></p>
 
 | 信息 | 内容 |
 | :--- | :--- |
@@ -73,15 +72,7 @@ Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在�
 | 07 散步 | 默认开启；空闲约 8–12 秒后，在当前屏幕内走动 |
 | 08 面板陪伴 | 右键直接触发；双手搭住手账上沿，轻微呼吸、偶尔歪头 |
 
-### 趴在纸边，陪你看一会儿
-
-右键点击她，手账便展开。大半身人物留在最外层纸边上，双手稳稳搭住，头肩轻轻起伏。原来的坐姿会淡出，页面上只留一个 Lunelle。
-
-<p align="center"><a href="docs/images/panel-companion-current.png"><img src="docs/images/panel-companion-current.png" width="380" alt="当前实机面板陪伴：大半身 Lunelle 趴在手账最上沿，双手搭住纸边" /></a></p>
-
-<p align="center"><sub>当前实机截图 · 使用隔离演示数据 · 呼吸与歪头在运行时连续播放</sub></p>
-
-按住趴边人物仍可拖动位置。点击纸边的 ×、按 Esc 或点击面板外，即可收起手账；移开鼠标不会自动关闭。陪伴与设置期间暂停散步，收起后重新开始空闲计时。
+陪伴时，按住趴边人物仍可拖动；点击纸边的 ×、按 Esc 或点击面板外，即可收起手账。移开鼠标不会关闭页面，收起后她会重新开始空闲计时，再继续散步。
 
 ### 一个眨眼的片刻
 
@@ -186,7 +177,7 @@ Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在�
 <a id="download"></a>
 ## 04 / 邀请她来到桌面
 
-**[下载 Windows x64 安装包 · v0.3.25](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.25/Lunelle-Setup-0.3.25-x64.exe)** · [查看发布记录](https://github.com/Timiocoisin/Lunelle/releases)
+**[下载 Windows x64 安装包 · v0.3.26](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.26/Lunelle-Setup-0.3.26-x64.exe)** · [查看发布记录](https://github.com/Timiocoisin/Lunelle/releases)
 
 ### 从第一页，与你见面
 
@@ -203,7 +194,7 @@ Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在�
 
 </details>
 
-**v0.3.25** 包含六页手账安装器、更清楚的呼吸起伏，以及保留原造型的慢速散步与左右朝向切换。安装仅面向当前 Windows 用户，可选择安装目录、桌面和开始菜单快捷方式；升级保留已有偏好设置。
+**v0.3.26** 新增纸边陪伴：右键直接展开手账，Lunelle 双手搭住上沿，轻微呼吸、偶尔歪头。左键随机触发动作 1–5，拖动触发拎起与落地；空闲约 8–12 秒后自动散步。保留六页手账安装器与缓存启动。安装仅面向当前 Windows 用户，可选择安装目录、桌面和开始菜单快捷方式；升级保留已有偏好设置。
 
 1. 安装并登录 Codex，确认本机可运行其 `app-server`。
 2. 运行 Lunelle 安装向导，选择安装位置。安装包自带运行时，无需额外安装 Node.js。
@@ -215,7 +206,7 @@ Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在�
 
 界面运行时会在首次打开时准备，并按版本与内容缓存；安装引擎等到点击「安装」后才提取，准备过程会显示在进度页。同一台电脑的实测中，首次出现窗口约需 21 秒，再次打开同一安装包约需 1.5 秒。具体时间取决于磁盘及系统检查，首次打开仍需等待。
 
-缓存位于 `%LOCALAPPDATA%/LunelleSetupCache`，与桌宠偏好目录分开。[安装器说明](installer-ui/README.md) · [验证记录](docs/INSTALLER-VALIDATION.md) · [SHA-256 校验文件](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.25/SHA256SUMS-v0.3.25.txt)
+缓存位于 `%LOCALAPPDATA%/LunelleSetupCache`，与桌宠偏好目录分开。[安装器说明](installer-ui/README.md) · [验证记录](docs/INSTALLER-VALIDATION.md) · [SHA-256 校验文件](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.26/SHA256SUMS-v0.3.26.txt)
 
 <a id="controls"></a>
 ### 相处的几个小习惯
