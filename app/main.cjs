@@ -136,6 +136,7 @@ else {
       }
       if(typeof name==='string'&&event.sender.id===settingsWindow?.webContents.id&&['breathe','blink','tilt','nod','wave','drag','walk','companion'].some(a=>name==='preview-'+a)){if(name==='preview-companion')showCompanion();else motion.updateFacing({previewAction:name.slice(8),previewSequence:++previewSequence});}
       if(name==='walk-now'&&event.sender.id===settingsWindow?.webContents.id){preferences.update({activityEnabled:true,activityMode:'roam'});activity.configure(preferences.value);walkAfterSettings=true;settingsWindow.close();}
+      if(event.sender.id===pet.webContents.id){const holds={'response-breathe':5690,'response-blink':780,'response-tilt':1940,'response-nod':1540,'response-wave':2290,'response-land':1040};if(Object.hasOwn(holds,name))activity.hold(holds[name]);}
       if (name === 'companion') showCompanion();
       if (name === 'settings') openSettings();
       if (name === 'hide') pet.hide();

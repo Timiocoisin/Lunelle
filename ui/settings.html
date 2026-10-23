@@ -17,7 +17,7 @@
 <form id="city-form"><label class="field-label" for="city">天气城市</label><div class="input-row"><input id="city" type="text" maxlength="60" required aria-describedby="city-feedback"><button type="submit" class="paper-button" data-paper>应用城市</button></div><p id="city-feedback" class="note feedback" role="status"></p></form>
 <p class="note">天气由 Open-Meteo 提供，每 10 分钟缓存一次。服务异常时会标记旧数据，不显示编造的温度。</p></section>
 <section id="page-behavior" role="tabpanel" aria-labelledby="tab-behavior" class="page" data-paper hidden><h2><span data-icon="moon"></span>交互与说明</h2>
-<label class="toggle-row" for="activityEnabled"><span>自动活动<small>默认开启全屏散步；空闲 8～12 秒后活动，鼠标经过不暂停，点击或拖动宠物时暂停。</small></span><input id="activityEnabled" type="checkbox" role="switch"></label>
+<label class="toggle-row" for="activityEnabled"><span>自动活动<small>默认开启全屏散步；空闲 15～25 秒后活动，鼠标经过不暂停，点击或拖动宠物时暂停。</small></span><input id="activityEnabled" type="checkbox" role="switch"></label>
 <label class="field-label" for="activityMode">活动方式</label><select id="activityMode"><option value="still">原地活动</option><option value="roam">全屏散步</option></select>
 <p class="callout note">全屏散步可在当前显示器的整个工作区内走动，不越界、不自动跨屏。面板展开、拖动或打开设置时暂停；散步位置不会覆盖手动保存的位置。</p>
 <p class="callout note" id="activity-status" role="status">正在读取活动状态…</p>

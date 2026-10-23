@@ -4,8 +4,9 @@
  const root='../assets/characters/',paths={idle:'idle-seated.png',blink:'blink-seated.png',wave:'motion-wave.png',lift:'motion-lift.png',halfEye:'eyes-half-natural.png',closedEye:'eyes-closed-natural.png'};
  let ready=false,panel=false,drag=false,activity='idle',action=null,animation=null,finishTimer=null,blinkTimer=null,blinkFrame=null,blinkProgress=0,headAnimation=null,gestureAnimation=null,dragSway=0,dragTarget=0,lastDragSample=null;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ let interactionTimer=null,lastInteraction=null;
  function pose(name){if(ready){const next=root+paths[name==='blink'?'idle':name];if(image.getAttribute('src')!==next)image.src=next;pet.classList.toggle('blinking',name==='blink');pet.classList.toggle('action-pose',name!=='idle'&&name!=='blink');}}
- function cancel(){cancelAnimationFrame(settleFrame);settleFrame=null;gestureAnimation?.cancel();gestureAnimation=null;headAnimation?.cancel();headAnimation=null;window.xyPetPuppet.reset();cancelAnimationFrame(blinkFrame);blinkFrame=null;blinkProgress=0;animation?.cancel();animation=null;clearTimeout(finishTimer);action=null;pet.classList.toggle('panel-mode',panel);pose('idle');pet.dataset.action=panel?'companion':'idle';}
+ function cancel(){clearTimeout(interactionTimer);interactionTimer=null;cancelAnimationFrame(settleFrame);settleFrame=null;gestureAnimation?.cancel();gestureAnimation=null;headAnimation?.cancel();headAnimation=null;window.xyPetPuppet.reset();cancelAnimationFrame(blinkFrame);blinkFrame=null;blinkProgress=0;animation?.cancel();animation=null;clearTimeout(finishTimer);action=null;pet.classList.toggle('panel-mode',panel);pose('idle');pet.dataset.action=panel?'companion':'idle';}
  function animate(frames,options){if(!reduced.matches)animation=art.animate(frames,options);}
  // Capture interruptions before resetting controllers; the visible pose never flashes idle.
  const bridge=document.createElement('canvas');bridge.width=bridge.height=887;bridge.id='pet-transition';art.appendChild(bridge);
@@ -19,6 +20,7 @@
   const current=bridgeAnimation;current.onfinish=()=>{if(bridgeAnimation===current){bridge.style.visibility='hidden';bridgeAnimation=null;current.cancel();}};
  }
  function settle(){
+  if(action==='walk')bridgeFromCurrent();
   const from=window.xyPetPuppet.state,start=performance.now();
   cancel();cancelAnimationFrame(settleFrame);
   if(!from.active)return;
@@ -38,6 +40,7 @@
   cancel();
   if(continuousLanding)window.xyPetPuppet.setGesture('lift',previous);
   action=name;pet.dataset.action=name;
+  if(name==='land')window.xingyue.command('response-land');
   if(name==='blink'){pose('blink');startBlink();}
   else if(name==='wave'){
    startGesture('wave');finishAfter(1850);
@@ -110,7 +113,7 @@
   gestureAnimation={cancel(){stopped=true;cancelAnimationFrame(raf);}};frame(start);
  }
  function idleBlink(){
-  clearTimeout(blinkTimer);blinkTimer=setTimeout(()=>{if(!panel&&!drag&&activity==='idle'&&!action)play('blink');idleBlink();},4000+Math.random()*4000);
+  clearTimeout(blinkTimer);blinkTimer=setTimeout(()=>{if(!panel&&!drag&&activity==='idle'&&!action&&!interactionTimer)play('blink');idleBlink();},4000+Math.random()*4000);
  }
  function setPanel(value){if(panel===value)return;panel=value;pet.classList.toggle('panel-mode',value);settle();}
  function sync(value){
@@ -125,7 +128,15 @@
   const next=value.activity||'idle';
   if(next!==activity){activity=next;if(!drag){if(next==='walk'&&!panel)play('walk');else if(next==='look'&&!panel)play('look');else if(action==='walk'||action==='look')settle();}}
  }
- function click(){if(!drag&&!panel)preview(['breathe','blink','tilt','nod','wave'][Math.floor(Math.random()*5)]);}
+ function click(){
+  if(drag||panel||action==='land')return;
+  const choices=[['breathe',14],['blink',28],['tilt',28],['nod',18],['wave',12]].filter(([name])=>name!==lastInteraction);
+  let roll=Math.random()*choices.reduce((sum,[,weight])=>sum+weight,0),chosen=choices.at(-1)[0];
+  for(const[name,weight]of choices){roll-=weight;if(roll<0){chosen=name;break;}}
+  lastInteraction=chosen;window.xingyue.command('response-'+chosen);settle();
+  // Finish the stop/settle before starting the response. New actions cancel this timer.
+  interactionTimer=setTimeout(()=>{interactionTimer=null;if(!drag&&!panel)preview(chosen);},220);
+ }
  function preview(name){if(drag)return;activity='idle';if(name==='drag'){play('lift');finishTimer=setTimeout(()=>play('land'),1100);}else if(name==='walk'){play('walk');finishAfter(window.xyWalkTimeline.cycle*2);}else play(name);}
  Promise.all([window.xyPetPuppet.ready,window.xyPetWalk.ready,...Object.values(paths).map(file=>new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=reject;img.src=root+file;}))]).then(()=>{ready=true;pose('idle');}).catch(()=>{ready=false;});
  idleBlink();

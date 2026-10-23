@@ -79,13 +79,13 @@ $('companion-canvas').addEventListener('pointerdown',e=>{
 });
 for(const event of ['pointerup','pointercancel','lostpointercapture'])$('companion-canvas').addEventListener(event,endDrag);
 $('hide').addEventListener('click',()=>{occupied.clear();visible(false);api.command('hide');});
-$('refresh').addEventListener('click',async()=>{if($('refresh').disabled)return;$('refresh').disabled=true;$('refresh').dataset.status='loading';try{render(await api.refresh());$('refresh').dataset.status='success';}catch{$('notice').textContent='刷新失败，请稍后重试';$('notice').hidden=false;$('refresh').dataset.status='error';}finally{$('refresh').disabled=false;}});
+$('refresh').addEventListener('click',async()=>{if($('refresh').disabled)return;$('refresh').disabled=true;$('refresh').dataset.status='loading';try{const state=await api.refresh();render(state);if(state.data.issues?.length){$('refresh').dataset.status='error';}else{$('refresh').dataset.status='success';window.xyCompanion.acknowledge();}}catch{$('notice').textContent='刷新失败，请稍后重试';$('notice').hidden=false;$('refresh').dataset.status='error';}finally{$('refresh').disabled=false;}});
 function shortTokens(n){if(!Number.isFinite(n))return'—';return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);}
 function chineseTokens(n){return Number.isFinite(n)?n>=1e4?(n/1e4).toFixed(1)+'万':String(n):'—';}
 function date(t){if(!Number.isFinite(t))return'—';const d=new Date(t);return`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function remaining(t,compact=false){if(!Number.isFinite(t))return'—';const seconds=Math.max(0,Math.floor((t-Date.now())/1000)),h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60);return compact?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`:`${h}小时${m}分`;}
 function clocks(){const now=new Date();$('clock').textContent=now.toLocaleString('sv-SE');const q=current?.data.quota?.fiveHour;$('reset-relative').textContent=q?'距重置 '+remaining(q.resetsAt):'距重置 —';$('reset-countdown').textContent=remaining(q?.resetsAt,true);}
-function render(state){current=state;const d=state.data,q=d.quota,five=q?.fiveHour,week=q?.weekly,u=d.usage,w=d.weather;
+function render(state){if(state.data.issues?.length&&current){const data={...state.data};for(const key of ['quota','usage','weather'])if(!data[key]&&current.data[key])data[key]=key==='quota'?{...current.data[key],stale:true}:current.data[key];state={...state,data};}current=state;const d=state.data,q=d.quota,five=q?.fiveHour,week=q?.weekly,u=d.usage,w=d.weather;
 
   $('preview-mark').hidden=!state.preview;$('quota-value').textContent=five?Math.round(five.remaining):'—';$('used-label').textContent=five?`已使用 ${Math.round(100-five.remaining)}%`:'未取得额度';
   $('ring-fill').style.strokeDasharray=`${five?.remaining??0} 100`;if(five)$('quota-meter').setAttribute('aria-valuenow',String(five.remaining));else $('quota-meter').removeAttribute('aria-valuenow');

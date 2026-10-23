@@ -11,10 +11,10 @@ test('roaming is enabled by default and invalid settings are normalized',()=>{
  assert.equal(normalize().activityEnabled,true);assert.equal(normalize({activityMode:'bad'}).activityMode,'roam');
  const r=rig();r.time(100000);r.a.tick();assert.equal(r.a.leg,null);assert.deepEqual(r.m.position,{x:400,y:300});
 });
-test('roaming targets the entire current work area and never persists its temporary position',()=>{
- const r=rig();r.start();const target={...r.a.leg.target};assert.ok(target.x>1600);assert.ok(target.y>800);
+test('roaming takes full 8–15 second strolls within the work area and never persists its temporary position',()=>{
+ const r=rig();r.start();const target={...r.a.leg.target};assert.ok(target.x>400);assert.ok(target.y>300);assert.ok(r.a.leg.duration>=8000&&r.a.leg.duration<=15000);
  r.time(65000);r.a.tick();assert.ok(r.m.position.x>400);assert.ok(r.m.position.y>300);assert.equal(r.saves.length,0);
- r.time(150000);r.a.tick();assert.deepEqual(r.m.position,target);assert.equal(r.m.activity,'look');assert.equal(r.saves.length,0);
+ r.time(150000);r.a.tick();assert.deepEqual(r.m.position,target);assert.equal(r.m.activity,'idle');assert.equal(r.saves.length,0);
  assert.ok(r.m.position.x+240*r.m.scale<=1920);assert.ok(r.m.position.y+232*r.m.scale<=1040);
 });
 test('panel opening stops travel immediately, keeps position stable and delays restart',()=>{
@@ -60,4 +60,13 @@ test('roam travel matches the same relaxed step cadence at different pet scales'
 test('walking continues beneath the cursor until the pet is pressed',()=>{
  const r=rig();r.start();const leg=r.a.leg;r.cursor({...r.m.position});r.time(61000);r.a.tick();assert.equal(r.a.leg,leg);assert.ok(r.m.position.x>400);assert.equal(r.a.snapshot().reason,'walking');
  r.a.interrupt();r.m.begin();r.time(62000);r.a.tick();assert.equal(r.a.leg,null);assert.equal(r.m.activity,'idle');assert.equal(r.saves.length,0);
+});
+
+
+test('interaction hold prevents walking and starts a fresh seated rest afterward',()=>{
+ const r=rig();r.a.configure({activityEnabled:true,activityMode:'roam'});r.a.hold(6000);
+ r.time(5999);r.a.tick();assert.equal(r.a.leg,null);
+ r.time(6000);r.a.tick();assert.equal(r.a.leg,null);assert.ok(r.a.next-6000>=15000&&r.a.next-6000<=25000);
+ r.time(r.a.next);r.a.tick();assert.ok(r.a.leg);
+ r.time(100000);r.a.tick();assert.equal(r.m.activity,'idle');assert.ok(r.a.next-100000>=15000&&r.a.next-100000<=25000);
 });

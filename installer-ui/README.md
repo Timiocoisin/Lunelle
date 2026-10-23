@@ -12,7 +12,7 @@ npm run test:installer
 node scripts/test-installer-engine.cjs
 ```
 
-`installer` 先构建 electron-builder NSIS 引擎，再封装带本地 Electron 运行时的六页界面，最终输出 `installers/Lunelle-Setup-0.3.26-x64.exe`。启动仅解压界面及其使用的字体；点击安装后再按需解压引擎，准备过程显示在进度页。无需联网安装或另装运行时。
+`installer` 先构建 electron-builder NSIS 引擎，再封装带本地 Electron 运行时的六页界面，最终输出 `installers/Lunelle-Setup-0.3.27-x64.exe`。启动仅解压界面及其使用的字体；点击安装后再按需解压引擎，准备过程显示在进度页。无需联网安装或另装运行时。
 
 界面运行时按版本与内容标识缓存于 `%LOCALAPPDATA%/LunelleSetupCache`，再次打开相同安装包时复用，避免重复解压。缓存不包含账号数据或桌宠偏好；按需提取的引擎在正常关闭安装器时移除。首次打开仍需准备界面运行时，耗时受磁盘与系统扫描影响。
 
