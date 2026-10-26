@@ -1,0 +1,48 @@
+{
+  "version": 23,
+  "view": "right-side-profile",
+  "frames": 72,
+  "frameMs": 20,
+  "cycleMs": 1440,
+  "durationMs": 1440,
+  "width": 768,
+  "height": 768,
+  "gait": "CMU07_04:139-313, shared timing; contact-preserving knee retarget",
+  "thighLength": 76.0,
+  "shinLength": 80.0,
+  "handSides": {
+    "near": "Right",
+    "far": "Left",
+    "separateTextures": true,
+    "projection": "side-profile"
+  },
+  "handTextureSha256": {
+    "Left": "878536c665ae3c08166e9d4a12983b6f369311a15379e22937c2bf2fddf02dd4",
+    "Right": "f162d9190fb2bd5aa9457475a61cc8f1f292868b50cd4495595eda9416f219b4"
+  },
+  "handLength": 35.0,
+  "handWidthScale": 0.10925503469670103,
+  "handScaleRatioRange": [
+    1.0000000212989602,
+    1.0000031100068418
+  ],
+  "handDeterminantRange": {
+    "Left": [
+      0.01193663064567182,
+      0.011936691916868736
+    ],
+    "Right": [
+      0.011936628908683473,
+      0.01193669237082655
+    ]
+  },
+  "sha256": "aaa117df0a3a88e8fe5f78176b0c5dae946803d0027371d96f6c69fc9ab2afe1",
+  "torsoHeightFilter": {
+    "sigmaFrames": 3,
+    "gain": 0.4,
+    "contactPreserving": true
+  },
+  "footView": "orthographic-side",
+  "projectedHipSeparation": 14,
+  "farGroundOffset": -5
+}

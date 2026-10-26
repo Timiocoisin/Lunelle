@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
-const DEFAULTS = Object.freeze({ scale: 1, opacity: 1, alwaysOnTop: true,
+const DEFAULTS = Object.freeze({ character: 'classic', scale: 1, opacity: 1, alwaysOnTop: true,
   activityEnabled: true, activityMode: 'roam', interactionVersion: 1, hoverEnabled: true, collapseMs: 320, refreshSeconds: 60, weatherEnabled: true,
   city: '中山', codexPath: '', x: null, y: null, petOffset: 0, positionVersion: 1 });
 function normalize(input = {}) {
@@ -12,6 +12,7 @@ function normalize(input = {}) {
     ['collapseMs', 100, 2000], ['refreshSeconds', 30, 600]]) {
     if (Number.isFinite(input[key])) result[key] = Math.max(min, Math.min(max, input[key]));
   }
+  if(['classic','queen'].includes(input.character))result.character=input.character;
   if(['still','roam'].includes(input.activityMode))result.activityMode=input.activityMode;
   if (typeof input.city === 'string' && input.city.trim()) result.city = input.city.trim().slice(0, 60);
   if (typeof input.codexPath === 'string') result.codexPath = input.codexPath.trim().slice(0, 1000);

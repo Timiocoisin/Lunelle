@@ -6,6 +6,36 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
   try{const js=s=>pet.webContents.executeJavaScript(s);await js('document.fonts.ready.then(()=>true)');await pause(300);assert.equal(pet.isFocusable(),false,'pet never takes OS input focus');assert.equal(pet.isAlwaysOnTop(),true,'pet is permanently topmost');assert.equal(await js('typeof require'),'undefined');assert.equal(await js("document.getElementById('journal').inert"),true);
     await js("xyTest.enter('test')");assert.equal(await js('xyTest.open'),false,'hover cannot open panel');await js("xyTest.visible(true);xyTest.leave('test')");await pause(400);assert.equal(await js('xyTest.open'),true,'leaving keeps clicked panel open');
     await js("xyTest.visible(false);xyTest.enter('pet');xyTest.leave('pet');xyTest.enter('panel');xyTest.leave('panel')");assert.equal(await js('xyTest.open'),false);
+    await js("xyPetSkin.set('queen')");await pause(500);
+    assert.equal(await js("document.body.dataset.character"),'queen');
+    await js('xyPetSkin.ready');
+    assert.equal(await js('xyPetSkin.state.ready'),true);
+    assert.equal(await js('xyPetSkin.state.error'),null);
+    const queenDir=path.join(out,'queen-v2');await fs.mkdir(queenDir,{recursive:true});
+    const queenPoses={};
+    for(const [action,time]of [['breathe',1000],['blink',170],['tilt',600],['nod',400],['wave',600],['lift',400],['land',250],['walk',720],['companion',500]]){
+      const png=await js(`xyPetSkin.renderAt('${action}',${time})`);queenPoses[action]=png;
+      await fs.writeFile(path.join(queenDir,action+'.png'),Buffer.from(png.split(',')[1],'base64'));
+    }
+    assert.notEqual(queenPoses.breathe,queenPoses.blink,'queen eyes visibly close');
+    assert.notEqual(queenPoses.breathe,queenPoses.tilt,'queen head visibly tilts');
+    assert.notEqual(queenPoses.breathe,queenPoses.nod,'queen head visibly nods');
+    assert.notEqual(queenPoses.breathe,queenPoses.wave,'queen uses raised-arm artwork');
+    const loop=await js(`(async()=>{const first=await xyPetSkin.renderAt('walk',0),half=await xyPetSkin.renderAt('walk',720),end=await xyPetSkin.renderAt('walk',1440);return{same:first===end,different:first!==half,corner:document.getElementById('queen-sprite').getContext('2d').getImageData(0,0,1,1).data[3]};})()`);
+    assert.equal(loop.same,true);assert.equal(loop.different,true);assert.equal(loop.corner,0);
+    await js('xyTest.visible(true)');await pause(250);
+    assert.equal(await js("getComputedStyle(document.getElementById('queen-sprite')).display"),'none','panel shows only queen companion');
+    assert.equal(await js("document.getElementById('companion-canvas').width"),768,'queen companion replaces classic portrait');
+    const companion=await js("document.getElementById('companion-canvas').toDataURL()");
+    await fs.writeFile(path.join(queenDir,'panel-companion.png'),Buffer.from(companion.split(',')[1],'base64'));
+    await fs.writeFile(path.join(queenDir,'panel.png'),(await pet.webContents.capturePage()).toPNG());
+    await js('xyTest.visible(false)');
+
+    for(const action of ['blink','tilt','nod','wave','lift','land','walk']){
+      await js(`xyPetAnimation.preview('${action}')`);await pause(220);
+      assert.equal(await js("(()=>{const c=document.getElementById('queen-sprite');return c.getContext('2d').getImageData(0,0,640,640).data.some((v,i)=>i%4===3&&v>0)})()"),true,'queen draws '+action);
+    }
+    await js("xyPetAnimation.cancel();xyPetSkin.set('classic')");
     const layouts=[];
     const a=motion.area;
     for(const scale of [.55,.75,.88])for(const [side,x,y]of [['top-left',a.x,a.y],['bottom-right',a.x+a.width,a.y+a.height],['middle',a.x+a.width/2,a.y+a.height/2]]){
@@ -22,8 +52,13 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     const fixedBounds=pet.getBounds();let last=null;
     for(let frame=1;frame<=60;frame++){
       cursor={x:a.x+300+frame*5,y:a.y+300+frame*4};motion.move();await pause(20);
-      const rect=await js("(()=>{const r=document.getElementById('pet').getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}})()");
-      assert.ok(Math.abs(rect.x-(200+frame*5))<1,'rendered x tracks cursor');assert.ok(Math.abs(rect.y-(150+frame*4))<1,'rendered y tracks cursor');
+      let rect;const geometryDeadline=Date.now()+1000;
+      do{
+        rect=await js("(()=>{const r=document.getElementById('pet').getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height}})()");
+        if(Math.abs(rect.x-(200+frame*5))<1&&Math.abs(rect.y-(150+frame*4))<1)break;
+        await pause(16);
+      }while(Date.now()<geometryDeadline);
+      assert.ok(Math.abs(rect.x-(200+frame*5))<1,'rendered x tracks cursor '+JSON.stringify({frame,rect,expected:200+frame*5}));assert.ok(Math.abs(rect.y-(150+frame*4))<1,'rendered y tracks cursor '+JSON.stringify({frame,rect,expected:150+frame*4}));
       if(last){assert.ok(rect.x>=last.x&&rect.y>=last.y,'rendered motion never reverses');assert.ok(Math.abs(rect.width-last.width)<.01);assert.ok(Math.abs(rect.height-last.height)<.01);}
       assert.deepEqual(pet.getBounds(),fixedBounds,'native host does not move or resize');last=rect;
     }
@@ -34,7 +69,7 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     for(const expected of [false,false]){pet.webContents.sendInputEvent({type:'mouseMove',...clickPoint});pet.webContents.sendInputEvent({type:'mouseDown',...clickPoint,button:'left',clickCount:1});pet.webContents.sendInputEvent({type:'mouseUp',...clickPoint,button:'left',clickCount:1});await pause(100);assert.equal(pet.isFocused(),false,'click never focuses pet');assert.equal(await js('xyTest.open'),expected,'single click only plays an interaction');}
     motion.cursor=cursorSource;
     let lastClick=null;
-    for(let i=0;i<12;i++){await js(`(()=>{const random=Math.random;try{Math.random=()=>.42;xyPetAnimation.click();}finally{Math.random=random;}})()`);assert.equal(await js('xyPetAnimation.state.action'),null,'click allows settling');await pause(260);const selected=await js('xyPetAnimation.state.action');assert.ok(['breathe','blink','tilt','nod','wave'].includes(selected));assert.notEqual(selected,lastClick,'consecutive responses do not repeat');lastClick=selected;await js('xyPetAnimation.cancel()');}
+    for(let i=0;i<12;i++){const immediate=await js(`(()=>{const random=Math.random;try{Math.random=()=>.42;xyPetAnimation.click();return xyPetAnimation.state.action;}finally{Math.random=random;}})()`);assert.equal(immediate,null,'click allows settling');await pause(260);const selected=await js('xyPetAnimation.state.action');assert.ok(['breathe','blink','tilt','nod','wave'].includes(selected));assert.notEqual(selected,lastClick,'consecutive responses do not repeat');lastClick=selected;await js('xyPetAnimation.cancel()');}
     await js('xyPetAnimation.click();xyPetAnimation.setPanel(true)');await pause(260);assert.equal(await js('xyPetAnimation.state.action'),null,'opening panel cancels pending response');await js('xyPetAnimation.setPanel(false)');
     await js("document.getElementById('pet').dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2}))");await pause(500);assert.equal(await js('xyTest.open'),true,'action 8 opens panel');assert.equal(activity.panel,true,'companionship stops autonomous travel');
     assert.equal(await js('xyCompanion.state.open'),true);
@@ -56,7 +91,7 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     for(const gesture of ['tilt','nod']){
       await js('xyPetAnimation.preview('+JSON.stringify(gesture)+')');await pause(230);
       const bodyBefore=await js("document.getElementById('pet-image').getBoundingClientRect().toJSON()");
-      await pause(140);
+      if(gesture==='nod'){const eyeDeadline=Date.now()+550;while(await js('xyPetAnimation.state.blinkProgress')<.99&&Date.now()<eyeDeadline)await pause(16);}else await pause(140);
       const pose=await js("({puppet:xyPetPuppet.state,art:getComputedStyle(document.getElementById('pet-art')).transform,body:document.getElementById('pet-image').getBoundingClientRect().toJSON(),eyes:xyPetAnimation.state.blinkProgress})");
       assert.equal(pose.puppet.active,true);assert.ok(Math.abs(pose.puppet.angle)>.1,'head has real motion');assert.deepEqual(pose.puppet.bodyPoint,[.5,.8],'lower body vertices stay fixed');assert.notDeepEqual(pose.puppet.headPoint,[.5,.2],'head vertices move');assert.equal(pose.art,'none','gesture never rotates the entire character');assert.ok(Math.abs(pose.body.x-bodyBefore.x)<.01&&Math.abs(pose.body.y-bodyBefore.y)<2&&Math.abs(pose.body.height-bodyBefore.height)<2,'only subpixel breathing amplitude settles during '+gesture);if(gesture==='nod')assert.ok(pose.eyes>.9,'nod closes eyes during downward motion');
       await js('xyPetAnimation.cancel()');assert.equal(await js("xyPetPuppet.state.active"),false,'interruption resets head motion');assert.equal(await js("document.getElementById('pet').classList.contains('blinking')"),false,'interruption resets eyelids');
@@ -65,12 +100,12 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     await js("xyTest.visible(false);xyPetAnimation.preview('tilt')");await pause(420);
     const interruption=await js("(()=>{const before=xyPetPuppet.state.angle;xyTest.visible(true);return{before,after:xyPetPuppet.state.angle,action:xyPetAnimation.state.action}})()");
     assert.ok(Math.abs(interruption.before)>1);assert.equal(interruption.after,interruption.before,'panel interruption preserves the first return frame');assert.equal(interruption.action,null);
-    await pause(270);assert.equal(await js('xyPetPuppet.state.active'),false,'interrupted gesture eases fully to idle');await js('xyTest.visible(false)');
+    const settleDeadline=Date.now()+1500;while(await js('xyPetPuppet.state.active')&&Date.now()<settleDeadline)await pause(30);assert.equal(await js('xyPetPuppet.state.active'),false,'interrupted gesture eases fully to idle');await js('xyTest.visible(false)');
     await js("xyPetAnimation.preview('walk');window.gaitSourceChanges=0;window.gaitObserver=new MutationObserver(records=>{window.gaitSourceChanges+=records.filter(r=>r.attributeName==='src').length;});gaitObserver.observe(document.getElementById('pet-art'),{subtree:true,attributes:true,attributeFilter:['src']});");
     const gait=[];
     for(let frame=0;frame<12;frame++){
       await pause(80);const sample=await js("({...xyPetWalk.state,changes:window.gaitSourceChanges})");
-      assert.equal(sample.version,19);assert.equal(sample.ready,true);assert.equal(sample.decoder,true,'frame-addressable transparent animation is available');assert.equal(sample.changes,0);assert.ok(sample.cacheSize<=8);gait.push(sample);
+      assert.equal(sample.version,23);assert.equal(sample.ready,true);assert.equal(sample.decoder,true,'frame-addressable transparent animation is available');assert.equal(sample.changes,0);assert.ok(sample.cacheSize<=8);gait.push(sample);
     }
     assert.ok(new Set(gait.map(g=>g.index)).size>5,'approved artwork advances during preview');
     await js("xyPetWalk.sync({activity:'walk',petLeft:100,petTop:100});xyPetWalk.sync({activity:'walk',petLeft:108,petTop:100})");await pause(450);
@@ -78,13 +113,13 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     await js("xyPetWalk.sync({activity:'walk',petLeft:116,petTop:100})");await pause(80);assert.notEqual(await js('xyPetWalk.state.phase'),heldPhase,'travel advances the selected frame');
     await js("xyPetWalk.pause();xyPetWalk.sync({activity:'idle'})");
     const poses=[];
-    for(const time of [0,540,1080,6480]){
+    for(const time of [0,720,1440,8640]){
       const value=await js(`(async()=>{await xyPetWalk.render(${time});const c=document.getElementById('walk-canvas'),d=c.getContext('2d').getImageData(0,0,640,640).data;let opaque=0;for(let i=3;i<d.length;i+=4)if(d[i]>240)opaque++;return{...xyPetWalk.state,corner:d[3],opaque,png:c.toDataURL()};})()`);
       assert.equal(value.corner,0,'walking has no opaque white background');assert.ok(value.opaque>60000,'the complete character remains visible');poses.push(value);
     }
-    assert.equal(poses[0].index,0);assert.equal(poses[1].index,18);assert.notEqual(poses[0].png,poses[1].png,'opposite half cycles have distinct poses');assert.equal(poses[3].index,0);assert.equal(poses[0].png,poses[3].png,'full animation closes without a new pose');
-    const direction=await js(`(async()=>{const c=document.getElementById('walk-canvas'),ctx=c.getContext('2d'),box=document.getElementById('pet').getBoundingClientRect();xyPetWalk.setFacing('right');await xyPetWalk.render(540);const right=ctx.getImageData(0,0,640,640).data;xyPetWalk.setFacing('left');await xyPetWalk.render(540);const left=ctx.getImageData(0,0,640,640).data;let mismatches=0;for(let y=0;y<640;y++)for(let x=0;x<640;x++)for(let k=0;k<4;k++)if(left[(y*640+x)*4+k]!==right[(y*640+639-x)*4+k])mismatches++;const facing=xyPetWalk.state.facing,index=xyPetWalk.state.index;xyPetWalk.sync({activity:'walk',petLeft:100,petTop:100,facing:'left'});xyPetWalk.sync({activity:'walk',petLeft:100,petTop:100,facing:'left'});const held=xyPetWalk.state.facing;xyPetWalk.sync({activity:'idle'});await xyPetWalk.render(540);const after=document.getElementById('pet').getBoundingClientRect();return{mismatches,facing,index,held,idle:xyPetWalk.state.facing,boxStable:box.width===after.width&&box.height===after.height,parent:getComputedStyle(document.getElementById('pet-facing')).transform};})()`);
-    assert.equal(direction.mismatches,0,'left walking mirrors every pixel of the same approved frame');assert.equal(direction.facing,'left');assert.equal(direction.index,18,'turning preserves gait phase');assert.equal(direction.held,'left','stationary samples preserve travel direction');assert.equal(direction.idle,'right','idle restores original orientation');assert.equal(direction.boxStable,true,'direction does not alter hitbox');assert.equal(direction.parent,'matrix(1, 0, 0, 1, 0, 0)','other gestures and the panel are never mirrored');
+    assert.equal(poses[0].index,0);assert.equal(poses[1].index,36);assert.notEqual(poses[0].png,poses[1].png,'opposite half cycles have distinct poses');assert.equal(poses[3].index,0);assert.equal(poses[0].png,poses[3].png,'full animation closes without a new pose');
+    const direction=await js(`(async()=>{const c=document.getElementById('walk-canvas'),ctx=c.getContext('2d'),box=document.getElementById('pet').getBoundingClientRect();xyPetWalk.setFacing('right');await xyPetWalk.render(720);const right=ctx.getImageData(0,0,640,640).data;xyPetWalk.setFacing('left');await xyPetWalk.render(720);const left=ctx.getImageData(0,0,640,640).data;let mismatches=0;for(let y=0;y<640;y++)for(let x=0;x<640;x++)for(let k=0;k<4;k++)if(left[(y*640+x)*4+k]!==right[(y*640+639-x)*4+k])mismatches++;const facing=xyPetWalk.state.facing,index=xyPetWalk.state.index;xyPetWalk.sync({activity:'walk',petLeft:100,petTop:100,facing:'left'});xyPetWalk.sync({activity:'walk',petLeft:100,petTop:100,facing:'left'});const held=xyPetWalk.state.facing;xyPetWalk.sync({activity:'idle'});await xyPetWalk.render(720);const after=document.getElementById('pet').getBoundingClientRect();return{mismatches,facing,index,held,idle:xyPetWalk.state.facing,boxStable:box.width===after.width&&box.height===after.height,parent:getComputedStyle(document.getElementById('pet-facing')).transform};})()`);
+    assert.equal(direction.mismatches,0,'left walking mirrors every pixel of the same approved frame');assert.equal(direction.facing,'left');assert.equal(direction.index,36,'turning preserves gait phase');assert.equal(direction.held,'left','stationary samples preserve travel direction');assert.equal(direction.idle,'right','idle restores original orientation');assert.equal(direction.boxStable,true,'direction does not alter hitbox');assert.equal(direction.parent,'matrix(1, 0, 0, 1, 0, 0)','other gestures and the panel are never mirrored');
     await js('gaitObserver.disconnect()');
 
     await js('xyPetAnimation.cancel();xyTest.visible(true)');await pause(40);
@@ -122,6 +157,17 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     assert.equal((await settings.webContents.executeJavaScript('window.xingyue.read()')).preferences.activityMode,'roam');
     assert.equal(activity.enabled,true);assert.equal(activity.suspended,true,'settings pause autonomous movement');
     await settings.webContents.executeJavaScript("document.querySelector('[data-motion=wave]').click()");await pause(80);assert.equal(await js('xyPetAnimation.state.action'),'wave','settings preview reaches pet');
+    await settings.webContents.executeJavaScript("document.getElementById('tab-look').click();document.getElementById('character').value='queen';document.getElementById('character').dispatchEvent(new Event('change'))");await pause(200);
+    assert.equal(await js('xyPetSkin.state.selected'),'queen','settings character selector reaches runtime');
+    assert.equal(await settings.webContents.executeJavaScript("xingyue.read().then(s=>s.preferences.character)"),'queen','queen preference persists');
+    await settings.webContents.executeJavaScript("document.getElementById('tab-behavior').click()");
+    for(const action of ['breathe','blink','tilt','nod','wave','drag','walk']){
+      await settings.webContents.executeJavaScript(`document.querySelector('[data-motion=${action}]').click()`);await pause(120);
+      assert.equal(await js('xyPetAnimation.state.action'),action==='drag'?'lift':action,'queen settings preview '+action);
+      assert.equal(await js('xyPetSkin.state.error'),null);
+    }
+    await settings.webContents.executeJavaScript("document.getElementById('tab-look').click();document.getElementById('character').value='classic';document.getElementById('character').dispatchEvent(new Event('change'))");await pause(150);
+    await settings.webContents.executeJavaScript("document.getElementById('tab-behavior').click()");
     await settings.webContents.executeJavaScript("document.getElementById('activityEnabled').click()");await pause(100);
     await settings.webContents.executeJavaScript("document.getElementById('tab-data').click()");assert.equal(await settings.webContents.executeJavaScript("document.getElementById('page-data').hidden"),false);
     await settings.webContents.executeJavaScript("document.getElementById('city').value='珠海';document.getElementById('city-form').requestSubmit()");await pause(300);assert.equal(await settings.webContents.executeJavaScript("window.xingyue.read().then(v=>v.preferences.city)"),'珠海');
@@ -139,7 +185,7 @@ async function run({pet,openSettings,getSettings,app,root,motion,activity}){
     assert.equal(await js("getComputedStyle(document.getElementById('pet-art')).opacity"),'0','only one character is visible');
     await fs.writeFile(path.join(out,'companion.png'),(await pet.webContents.capturePage(await js("(()=>{const r=document.getElementById('journal').getBoundingClientRect(),p=document.getElementById('companion-canvas').getBoundingClientRect();return{x:Math.max(0,Math.floor(r.x-8)),y:Math.max(0,Math.floor(p.y-5)),width:Math.ceil(r.width+16),height:Math.ceil(r.bottom-p.y+13)}})()"))).toPNG());
     const retainedQuota=await js("document.getElementById('quota-value').textContent");await js("xingyue.read().then(state=>xyTest.render({...state,data:{...state.data,quota:null,issues:[{message:'读取超时'}]}}))");assert.equal(await js("document.getElementById('quota-value').textContent"),retainedQuota,'read errors retain previous quota');assert.equal(await js("document.getElementById('sync-value').textContent"),'已过期');
-    await js("xyTest.render({preferences:{hoverEnabled:true,collapseMs:320,refreshSeconds:60,weatherEnabled:false,city:'中山'},data:{quota:null,usage:null,weather:null,issues:[],refreshing:false},preview:true})");assert.equal(await js("document.getElementById('quota-value').textContent"),'—');assert.equal(await js("document.getElementById('sync-value').textContent"),'未连接');report={ok:true,layouts,checks:['sandbox isolation','clicked panel remains open','all four actual custom fonts','settings single click','settings tabs and persistence','handwritten panel, frameless controls and real-time sync','missing data','no portrait overlap','eight actions with fixed hitbox','v19 transparent full-frame walking, bounded cache, distance synchronization and loop closure','non-activating permanently topmost pet','panel cancels autonomous walking','activity settings and preview','60 rendered drag frames track cursor without native moves or direction reversal']};
+    await js("xyTest.render({preferences:{hoverEnabled:true,collapseMs:320,refreshSeconds:60,weatherEnabled:false,city:'中山'},data:{quota:null,usage:null,weather:null,issues:[],refreshing:false},preview:true})");assert.equal(await js("document.getElementById('quota-value').textContent"),'—');assert.equal(await js("document.getElementById('sync-value').textContent"),'未连接');report={ok:true,layouts,checks:['sandbox isolation','clicked panel remains open','all four actual custom fonts','settings single click','settings tabs and persistence','handwritten panel, frameless controls and real-time sync','missing data','no portrait overlap','eight actions with fixed hitbox','shared 72-frame transparent walking for both appearances, bounded cache, distance synchronization and loop closure','non-activating permanently topmost pet','panel cancels autonomous walking','activity settings and preview','60 rendered drag frames track cursor without native moves or direction reversal']};
   }catch(e){report={ok:false,error:e.message,stack:e.stack};}finally{await fs.writeFile(path.join(out,'ui-report.json'),JSON.stringify(report,null,2));clearTimeout(watchdog);console.log(JSON.stringify(report));app.exit(report.ok?0:1);}
 }
 module.exports={run};

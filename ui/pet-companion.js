@@ -12,6 +12,10 @@
   const t=(now-start)/1000,look=Math.max(0,Math.sin(Math.PI*Math.min(1,(now-lookStart)/1900)));
   breath=reduced.matches?0:Math.sin(t*Math.PI*2/4.6)*.008;
   nod=reduced.matches?0:Math.sin(Math.PI*Math.min(1,Math.max(0,(now-nodStart)/850)));
+  if(window.xyPetSkin?.state.selected==='queen'){
+   window.xyPetSkin.renderCompanion(now,canvas,{nod});raf=requestAnimationFrame(frame);return;
+  }
+  if(canvas.width!==960)ready();
   const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
   for(let y=0;y<h;y+=2){
    const v=y/h,weight=1-smooth((v-.65)/.20);

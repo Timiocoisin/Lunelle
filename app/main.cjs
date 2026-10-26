@@ -112,7 +112,7 @@ else {
     ipcMain.handle('xy:refresh', async event => { if (!valid(event)) throw new Error('不受信任窗口'); if (!preview) await monitor.refresh(); broadcast(); return state(); });
     ipcMain.handle('xy:configure', (event, patch) => {
       if (!valid(event) || event.sender.id !== settingsWindow?.webContents.id || !patch || Array.isArray(patch) || typeof patch !== 'object') throw new Error('无效设置请求');
-      const allowed = ['scale', 'opacity', 'alwaysOnTop', 'hoverEnabled', 'collapseMs', 'weatherEnabled', 'city', 'codexPath', 'activityEnabled', 'activityMode'];
+      const allowed = ['character', 'scale', 'opacity', 'alwaysOnTop', 'hoverEnabled', 'collapseMs', 'weatherEnabled', 'city', 'codexPath', 'activityEnabled', 'activityMode'];
       const clean = Object.fromEntries(Object.entries(patch).filter(([key]) => allowed.includes(key)));
       const old = preferences.value; preferences.update(clean); resize(); if(old.activityEnabled!==preferences.value.activityEnabled||old.activityMode!==preferences.value.activityMode)activity.configure(preferences.value);schedule(); broadcast();
       if (!preview && (old.city !== preferences.value.city || old.weatherEnabled !== preferences.value.weatherEnabled || old.codexPath !== preferences.value.codexPath)) monitor.refresh().catch(() => {});

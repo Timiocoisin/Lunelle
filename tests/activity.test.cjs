@@ -53,7 +53,7 @@ test('activity status explains disabled, in-place, settings and waiting states',
 test('roam travel matches the same relaxed step cadence at different pet scales',()=>{
  const gait=require('../ui/walk-timeline.js');
  for(const scale of [.65,.88,1.4]){const r=rig();r.m.configure(scale,{x:400,y:300});r.start();const leg=r.a.leg,distance=Math.hypot(leg.target.x-leg.start.x,leg.target.y-leg.start.y),speed=distance/(leg.duration/1000),period=gait.stride*232/gait.referenceSize*scale/speed;
-  assert.ok(period>=1.08-1e-8&&period<=1.23+1e-8,'travel and the approved slow animation share one cadence');
+  assert.ok(period>=gait.cycle/1000-1e-8&&period<=gait.cycle/1000+.15+1e-8,'travel and the approved slow animation share one cadence');
  }
 });
 

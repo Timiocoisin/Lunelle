@@ -3,6 +3,8 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
 module.exports=async({win,root})=>{
  const out=path.resolve(process.env.XINGYUE_SETUP_ARTIFACTS||path.join(process.cwd(),'artifacts/installer-final'));await fs.mkdir(out,{recursive:true});
  const js=code=>win.webContents.executeJavaScript(code);
+ const setupState=await js('installer.read()');assert.equal(setupState.version,require('./package.json').version,'wizard version matches package');
+ await js("document.getElementById('directory').value=['D:','Apps','Lunelle'].join(String.fromCharCode(92))");
  await js('document.fonts.ready');await new Promise(r=>setTimeout(r,300));
  assert.equal(await js('document.querySelector(".welcome-note")===null'),true,'welcome card removed');
  assert.equal(await js('document.querySelectorAll(".welcome-story .story-item").length'),2,'welcome paper has two readable illustrated notes');
@@ -18,5 +20,5 @@ module.exports=async({win,root})=>{
  }
  assert.equal(new Set(sources).size,6);
  const blocked=await js(`installer.install({accepted:true,directory:'D:\\NeverInstallFromPreview',desktop:false,menu:false})`);assert.equal(blocked.ok,false);
- await fs.writeFile(path.join(out,'report.json'),JSON.stringify({ok:true,pages:6,uniqueCharacters:6,previewCannotInstall:true},null,2));console.log('Installer six-page design checks passed.');
+ await fs.writeFile(path.join(out,'report.json'),JSON.stringify({ok:true,version:setupState.version,pages:6,uniqueCharacters:6,previewCannotInstall:true},null,2));console.log('Installer six-page design checks passed.');
 };

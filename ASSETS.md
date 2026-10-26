@@ -152,3 +152,113 @@ The README excerpt `docs/images/walk-v19.webp` uses the same frames.
 The original character materials and separate artwork rights continue to apply.
 Neither a new artwork license nor a guarantee of anatomically exact gait is
 implied by this update. No remote interpolation model is required by the app.
+
+## Dark Moon Queen (2026-10-23)
+Adult alternate character generated with the built-in image generation tool from the approved concept sheet. `assets/characters/queen/atlas.png` preserves the generated transparent sheet; numbered PNGs are equal-grid sprite crops. Runtime uses independent full-pose sprites, including four walking key poses.
+
+
+## Dark Moon Queen — eight design actions (2026-10-24)
+
+The approved design board is `docs/design/queen-actions-approved.png`.
+The built-in image generation tool created `queen-v2-neutral-atlas.png` and
+`queen-v2-gesture-atlas.png` in the same directory. Prompt: retain the approved
+adult Dark Moon Queen face, lavender curls, crescent crown and perch, black/plum
+long gown, stockings, opera gloves and celestial jewelry; supply complete
+transparent poses for neutral, closed eyes, head tilt, nod, wave, suspended
+knees, landing and companionship. No chibi proportions, backgrounds or labels.
+`scripts/export-queen-poses.py` exports these into `assets/characters/queen/v2/`.
+Runtime uses the neutral surface for continuous head gestures and a registered
+local closed-eye patch. Waving uses one continuous mesh rather than cut arm
+layers. Drag/landing and companion each have their own full-body texture.
+
+The queen walk is a 72-frame 1.44 s transparent WebP, exported by
+`scripts/export-queen-walk.py` from the locally reviewed continuous-arm render.
+The rendered character art uses the same original adult queen concept. Joint
+motion is retargeted from CMU 07_04 slow walking (frames 139–313), using the
+locally retained source and attribution in `artifacts/queen-walk-mocap/source/`.
+Only exported artwork is loaded by the app; no network or mocap parser is needed
+at runtime. Existing separate character-art rights continue to apply.
+
+
+## Queen walk material consistency (2026-10-24)
+
+The seated queen in `assets/characters/queen/v2/idle.png` is the material reference
+for the walk. The built-in image generation tool repainted all four walk rig
+textures in `docs/design/queen-walk-seated-style/painted/`; prompts and original
+geometry are retained beside them. The new palette and shading replace the
+previous stronger pink/specular/CGI-like rendering. Registration aligns the new
+RGB to the original UVs, retaining every original alpha value and all existing
+joint trajectories. `scripts/export-queen-walk.py` now uses these textures by
+default. Walk frame count, cadence and skeleton are unchanged. The existing
+character-art terms continue to apply.
+
+
+## Classic character retargeted to queen gait (2026-10-26)
+
+The original classic character face, pale lavender hair, skull clip, layered
+lavender/white dress, opaque white tights and moon-buckle Mary Jane shoes are
+retained. The built-in image generation tool supplied rig textures in
+`docs/design/classic-shared-walk/`, referenced to the existing classic walking
+character and seated pose. Prompts requested the unchanged chibi identity and
+pastel rendering, a complete body/head/dress with no pillow or limbs, continuous
+rear curls, one puff-sleeve bare arm and one opaque-white-tights flat-shoe leg.
+
+`scripts/export-classic-shared-walk.py` retargets the exact queen CMU07_04 cycle,
+leg directions, shoulder/head motion and relaxed arm/wrist angles to classic
+body proportions. Both skins now use `ui/walk-timeline.js` for the 72-frame,
+20ms/frame, 1.44s cycle and distance-based phase. Classic runtime art is
+`assets/characters/classic/shared-walk/`. Original v19 files remain available as
+historical reference; they are no longer selected by the classic renderer.
+Existing separate character-art rights continue to apply.
+
+
+### Classic left/right hands and proportional hand mapping (2026-10-26)
+
+The classic arm texture's hand was repainted with softly gathered fingers, using
+the same original chibi art reference. The elbow/wrist anchors now follow the
+actual source anatomy. Hand scaling is isotropic instead of compressing the
+longitudinal axis; left and right use opposite silhouette orientation around
+their own bone axes, with thumb directions distinguished. The visible far arm
+is composed above the rear hair and dress surface. Export checks audit all hand
+transform scale ratios and determinant signs. Existing gait angles are unchanged.
+
+
+## Same character, true side-view classic walk (2026-10-26)
+
+The owner clarified that the queen is the adult form of the classic character,
+and requested true side-view walking for the classic form. The new reference
+and rig artwork are in `docs/design/classic-side-walk/`, with prompts and static
+joint/rest-shape registration. The walk now has a single-eye right-facing face,
+side torso/skirt, trailing curls and proper near/far arm occlusion. Separate
+left/right hand artwork is used for the side projection. Other classic actions
+retain their previous seated artwork. The 72-frame measured queen gait and
+shared travel clock are unchanged. Runtime classic art remains in
+`assets/characters/classic/shared-walk/`, now artwork version 21. Separate
+character-art rights continue to apply.
+
+
+## README editorial cover (2026-10-26)
+
+Classic walk artwork v22 additionally uses the built-in imagegen edit
+`docs/design/classic-side-walk/leg-profile.png`: strict right-facing side shoe,
+preserving the white tights, pastel flat Mary Jane and crescent buckle.
+The complete prompt summary is recorded in that directory's `PROMPTS.md`.
+The original `leg.png` is retained; existing character-art terms still apply.
+
+`docs/images/readme/cover.png` is exported by `scripts/export-readme-cover.cjs`.
+It places the existing classic seated artwork and queen seated artwork on an
+ivory editorial layout; no character pixels or design features are repainted.
+The layout uses the bundled LXGW 975 font and system serif typography rendered
+into the image. Existing character-art terms and bundled font licenses apply.
+
+
+## Complete README action gallery (2026-10-26)
+
+`scripts/export-readme-gallery.cjs` exports both appearances from their production
+canvas renderers with synthetic fixture data. Each appearance has eight documented
+action categories; lift and landing are captured separately. Character snapshots
+retain their native 887px (classic) or 768px (queen) render resolution. Complete
+companion panels, the full settings page and local PNG badges use 3x device
+resolution. These are captures of existing artwork, with no new character design.
+`scripts/preview-shared-walk.py` exports the 1280px-wide lossless walking comparison
+from the current runtime frames. Existing character and font rights still apply.

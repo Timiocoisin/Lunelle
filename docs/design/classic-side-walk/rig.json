@@ -1,0 +1,43 @@
+{
+  "bodyScale": 0.46,
+  "hip": [
+    815.0,
+    900.0
+  ],
+  "chest": [
+    815.0,
+    800.0
+  ],
+  "neck": [
+    850.0,
+    590.0
+  ],
+  "nearShoulder": [
+    815.0,
+    680.0
+  ],
+  "farShoulder": [
+    835.0,
+    675.0
+  ],
+  "chestBlend": [
+    800.0,
+    100.0
+  ],
+  "headBlend": [
+    540.0,
+    120.0
+  ],
+  "hairPivot": [
+    750.0,
+    300.0
+  ],
+  "armFade": [
+    600.0,
+    100.0
+  ],
+  "bodyHemFrom": 900.0,
+  "bodyHemScale": 0.53,
+  "hairTailFrom": 550.0,
+  "hairTailScale": 0.65
+}

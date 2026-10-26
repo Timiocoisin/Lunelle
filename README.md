@@ -1,259 +1,210 @@
 <div align="center">
 
-<img src="assets/icon.png" width="64" alt="Lunelle" />
+<br />
 
-<sub>A DESKTOP COMPANION · 一册桌边手账</sub>
+<img src="assets/icon.png" width="88" alt="Lunelle" />
+
+<br />
+
+<p><sub>A DESKTOP COMPANION · 一册桌边手账</sub></p>
 
 # Lunelle
 
-**在桌面的一角，留一小片月色。**
+### 在桌面的一角，留一小片月色。
 
-Lunelle 抱着星星，坐在你工作的地方。<br />
-左键，回应一个小动作；右键，陪你翻开手账。
+<p>Lunelle 抱着星星，坐在你工作的地方。<br />左键，回应一个小动作；右键，陪你翻开手账。</p>
 
-<a href="assets/characters/idle-seated.png"><img src="assets/characters/idle-seated.png" width="280" alt="Lunelle：淡紫卷发、月牙扣饰与星星抱枕" /></a>
+<img src="assets/characters/idle-seated.png" width="360" alt="抱着星星坐在桌边的 Lunelle：淡紫卷发、白色层叠裙装与月亮鞋" />
 
-[![Release](https://img.shields.io/github/v/release/Timiocoisin/Lunelle?style=flat-square&color=8b74b3)](https://github.com/Timiocoisin/Lunelle/releases/latest)
-![Windows x64](https://img.shields.io/badge/Windows-x64-a6bde6?style=flat-square)
-[![License](https://img.shields.io/badge/code-MIT-c7a0c6?style=flat-square)](LICENSE)
+<br />
 
-[下载 Windows 版](https://github.com/Timiocoisin/Lunelle/releases/latest) · [翻开手账](#journal) · [看看她的日常](#motion) · [设计画册](#design)
+<p><a href="docs/releases/v0.3.32.md"><img src="docs/images/readme/version.png" width="116" height="22" alt="本地构建 v0.3.32" /></a> <a href="#download"><img src="docs/images/readme/platform.png" width="102" height="22" alt="Windows x64" /></a> <a href="LICENSE"><img src="docs/images/readme/license.png" width="81" height="22" alt="code MIT" /></a></p>
+
+**[下载 Windows 版](#download)　·　[翻开手账](#journal)　·　[看看她的日常](#motion)　·　[设计画册](docs/DESIGN.md)**
 
 <sub>Windows x64 · 简体中文 · 本地只读数据 · 无需 API key</sub>
+
+<br /><br />
 
 </div>
 
 ---
 
-Lunelle 是一只带着 Codex 使用手账的 Windows 桌宠。她可以留在屏幕边缘，也可以抱着星星散一会儿步。需要查看额度时，右键点击宠物或从托盘选择「动作 8 · 面板陪伴」便能展开面板，读到剩余比例、重置时间和本机用量。
+工作留在窗口里，陪伴留在桌边。Lunelle 将一只会回应的桌宠与一本 Codex 使用手账放在一起：平时安静坐着，偶尔起身散步；需要时，额度、重置时间与本机用量就在手边。
 
-淡紫卷发与层叠裙摆之外，还有一本沿着手绘曲线展开的手账。角色与界面使用相近的颜色，信息有自己的位置，小动作也有自己的节奏。
+淡紫卷发、层叠裙摆与手绘纸边，延续着同一组颜色。陪伴与信息各有位置，日常操作也只需几次轻点。
 
-<sub>本文交互对应 v0.3.27：坐姿休息 15–25 秒，散步一趟约 8–15 秒；左键回应，右键陪伴。</sub>
+<table>
+<tr>
+<td width="33%" valign="top"><b>同一个她，两个年纪</b><br /><br />从抱着星星的少女，到身着暗月长裙的成年形态；在设置里随时切换。</td>
+<td width="34%" valign="top"><b>一页看清工作日常</b><br /><br />Codex 额度、重置时间、本机用量与城市天气，收在同一本手账里。</td>
+<td width="33%" valign="top"><b>桌边的小小回应</b><br /><br />左键互动，拖动换个位置，右键展开陪伴；安静片刻，她会继续散步。</td>
+</tr>
+</table>
+
+<a id="character"></a>
+## 01 · 同一个她，不同的年纪
+
+星星抱枕、骷髅发饰和月亮鞋，是她年少时的模样；银紫卷发、暗月长裙与月牙座，属于长大后的她。两种外观延续同一个 Lunelle 的角色设定，各自保留服装、配饰与身体比例。
+
+<p align="center"><a href="docs/images/readme/cover.png"><img src="docs/images/readme/cover.png" width="900" alt="Lunelle 双形态画册：经典淡紫少女与成年暗月女王" /></a></p>
+
+<p align="center"><a href="docs/images/ages-side-walk.webp"><img src="docs/images/readme/walk-ages-preview.webp" width="800" alt="两种年龄形态的实际行走画面：经典少女与成年女王均以侧面视角按同一节奏散步" /></a></p>
+
+<p align="center"><sub>从年少到长大，同一个她，走过桌边的一小段路。<br />实际行走展示 · 点击查看原尺寸</sub></p>
+
+| 形态 | 留在桌边的模样 |
+| :--- | :--- |
+| **经典 · 淡紫少女** | 淡紫卷发、骷髅发饰、层叠裙装、白袜与月亮鞋。休息时抱着星星，散步时放下抱枕。 |
+| **御姐 · 暗月女王** | 银紫长卷发、月亮饰物与暗月长裙。休息时坐在月牙座上，展开手账后使用专属陪伴坐姿。 |
+
+在 **「设置手册 → 外观 → 角色形象」** 中选择，立即切换并自动保存。两种形态均支持呼吸、眨眼、歪头、点头、挥手、拖放落地、散步与面板陪伴。
+
+坐下时，各有自己的姿态；走动时，延续同样的节奏。你可以随时切换，选一位陪今天的自己。
 
 <a id="journal"></a>
-## 01 / 翻开手账
+## 02 · 右键，翻开一页手账
 
-还剩多少额度，下一次何时重置，今天用了多少 token，连同城市天气，都安静地放在这一页里。
+还剩多少额度，何时重置，今天用了多少 token——这些工作中的小问题，都可以在同一页里找到答案。经典形态趴在纸边，成年形态坐在月牙座上，陪你读完这一页。
 
 <table>
-<tr><th>额度手账 · 面板陪伴</th><th>设置手册</th></tr>
+<tr><th width="28%">额度手账 · 萝莉</th><th width="28%">额度手账 · 御姐</th><th width="44%">设置手册</th></tr>
 <tr>
-<td align="center" valign="top"><a href="docs/images/panel-companion-current.png"><img src="docs/images/panel-companion-current.png" width="340" alt="当前额度手账：大半身 Lunelle 趴在最外层纸边，双手搭住上沿" /></a></td>
-<td align="center" valign="middle"><a href="docs/images/appearance-settings-restored-hd.png"><img src="docs/images/appearance-settings-restored-hd.png" width="400" alt="淡紫色手账风格的设置手册" /></a></td>
+<td align="center" valign="middle"><a href="docs/images/readme/panel-classic.png"><img src="docs/images/readme/panel-classic.png" width="240" alt="萝莉形态的完整额度手账，点击查看高清原图" /></a></td>
+<td align="center" valign="middle"><a href="docs/images/readme/panel-queen.png"><img src="docs/images/readme/panel-queen.png" width="240" alt="御姐形态的完整额度手账，点击查看高清原图" /></a></td>
+<td align="center" valign="middle"><a href="docs/images/readme/settings-full.png"><img src="docs/images/readme/settings-full.png" width="350" alt="完整设置手册，上下居中展示，点击查看三倍分辨率截图" /></a></td>
 </tr>
 </table>
 
+<p align="center"><sub>两种陪伴姿态，同一本额度手账。设置页完整展示，点击图片可查看高清原图。</sub></p>
 
-| 信息 | 内容 |
+| 一眼可见 | 具体内容 |
 | :--- | :--- |
-| 额度 | 5 小时与每周剩余比例、重置时间与倒计时 |
-| 用量 | 今日、本周与最近一轮 token；已完成任务运行时长 |
-| 会话 | 最近活动会话的模型、推理强度与套餐信息 |
-| 天气 | 手动选择城市的温度与天气，可随时关闭 |
+| **Codex 额度** | 5 小时与每周剩余比例、重置时间和倒计时 |
+| **本机用量** | 今日、本周与最近一轮 token，已完成任务运行时长 |
+| **最近会话** | 模型、推理强度与套餐信息 |
+| **城市天气** | 手动选择城市的温度与天气，可随时关闭 |
 
-纸边略有起伏，装订孔沿左侧排开，浅蓝色信息块落在淡紫底色上。设置窗口延续这套手账样式，连滚动条也收成细细的一笔。读取状态与操作按钮各有位置，翻阅时始终找得到。
+纸边沿着手绘曲线展开，浅蓝色信息块落在淡紫底色上。标题、数字与说明使用不同字迹；读取状态留在固定位置，翻阅时始终找得到操作按钮。
 
-额度变化通过本地连接接收，本机会话日志更新也会触发读取。[数据来源与统计口径](#data)在下文单独说明。
+右键宠物或从托盘选择「动作 8 · 面板陪伴」即可展开。点击纸边的 **×**、按 **Esc** 或点击面板外收起；移开鼠标不会自动合上手账。
 
 <a id="motion"></a>
-## 02 / 她的桌边日常
+## 03 · 她有自己的桌边日常
 
-没有被打扰时，她抱着星星在桌面慢慢散步。左键轻点，她会停下来，随机回应一次呼吸、眨眼、歪头、点头或挥手；按住拖动才会进入拎起动作，松手后轻轻落回坐姿。每次回应会避开上一个动作，眨眼和歪头更常见，挥手则偶尔出现。连续点击先平缓收尾，拖动优先接管；松手会完整播放落地，再重新开始休息计时。片刻安静之后，她再继续溜达。
+轻点一下，她会先停稳，再回应一次小动作。按住拖动，她收起双腿；松手后，裙摆轻轻落回坐姿。每次互动都会重新留出一段安静的休息时间，之后再继续散步。
 
-| 动作 | 如何遇见她 |
+<table>
+<tr><th>动作</th><th width="44%">经典 · 淡紫少女</th><th width="44%">御姐 · 暗月女王</th></tr>
+<tr><td align="center" valign="middle"><b>01</b><br />待机呼吸</td><td align="center" valign="middle"><a href="docs/images/readme/classic-breathe.png"><img src="docs/images/readme/classic-breathe.png" width="300" alt="萝莉01 · 待机呼吸完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-breathe.png"><img src="docs/images/readme/queen-breathe.png" width="300" alt="御姐01 · 待机呼吸完整动作实图" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>02</b><br />眨眼</td><td align="center" valign="middle"><a href="docs/images/readme/classic-blink.png"><img src="docs/images/readme/classic-blink.png" width="300" alt="萝莉02 · 眨眼完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-blink.png"><img src="docs/images/readme/queen-blink.png" width="300" alt="御姐02 · 眨眼完整动作实图" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>03</b><br />歪头</td><td align="center" valign="middle"><a href="docs/images/readme/classic-tilt.png"><img src="docs/images/readme/classic-tilt.png" width="300" alt="萝莉03 · 歪头完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-tilt.png"><img src="docs/images/readme/queen-tilt.png" width="300" alt="御姐03 · 歪头完整动作实图" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>04</b><br />点头</td><td align="center" valign="middle"><a href="docs/images/readme/classic-nod.png"><img src="docs/images/readme/classic-nod.png" width="300" alt="萝莉04 · 点头完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-nod.png"><img src="docs/images/readme/queen-nod.png" width="300" alt="御姐04 · 点头完整动作实图" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>05</b><br />挥手</td><td align="center" valign="middle"><a href="docs/images/readme/classic-wave.png"><img src="docs/images/readme/classic-wave.png" width="300" alt="萝莉05 · 挥手完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-wave.png"><img src="docs/images/readme/queen-wave.png" width="300" alt="御姐05 · 挥手完整动作实图" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>06</b><br />拎起与落地</td><td align="center" valign="middle"><a href="docs/images/readme/classic-lift.png"><img src="docs/images/readme/classic-lift.png" width="145" alt="萝莉拎起完整动作相位" /></a><a href="docs/images/readme/classic-land.png"><img src="docs/images/readme/classic-land.png" width="145" alt="萝莉落地完整动作相位" /></a><br /><sub>拎起 / 落地</sub></td><td align="center" valign="middle"><a href="docs/images/readme/queen-lift.png"><img src="docs/images/readme/queen-lift.png" width="145" alt="御姐拎起完整动作相位" /></a><a href="docs/images/readme/queen-land.png"><img src="docs/images/readme/queen-land.png" width="145" alt="御姐落地完整动作相位" /></a><br /><sub>拎起 / 落地</sub></td></tr>
+<tr><td align="center" valign="middle"><b>07</b><br />附近散步</td><td align="center" valign="middle"><a href="assets/characters/classic/shared-walk/walk.webp"><img src="assets/characters/classic/shared-walk/walk.webp" width="300" alt="萝莉完整72帧行走循环" /></a></td><td align="center" valign="middle"><a href="assets/characters/queen/v2/walk.webp"><img src="assets/characters/queen/v2/walk.webp" width="300" alt="御姐完整72帧行走循环" /></a></td></tr>
+<tr><td align="center" valign="middle"><b>08</b><br />面板陪伴</td><td align="center" valign="middle"><a href="docs/images/readme/classic-companion.png"><img src="docs/images/readme/classic-companion.png" width="300" alt="萝莉08 · 面板陪伴完整动作实图" /></a></td><td align="center" valign="middle"><a href="docs/images/readme/queen-companion.png"><img src="docs/images/readme/queen-companion.png" width="300" alt="御姐08 · 面板陪伴完整动作实图" /></a></td></tr>
+</table>
+
+<p align="center"><sub>两种形态的八类动作完整展开。静态图取自实际渲染器，记录动作相位；散步展示完整循环。点击任一图片查看原尺寸。</sub></p>
+
+她大部分时间坐着陪伴。空闲约 **15–25 秒** 后，会在当前屏幕内散步一趟，约 **8–15 秒**，再回到坐姿。两种年龄形态都采用侧面行走，换腿、落脚与摆臂节奏一致。
+
+鼠标从身边经过，她继续走动；点击、拖动或翻开手账，她便把注意力交还给你。临时散步不会覆盖手动保存的位置。
+
+<details>
+<summary>展开八类动作与触发方式</summary>
+
+| 动作 | 如何触发 |
 | :--- | :--- |
-| 01 呼吸 | 左键随机触发；坐姿也有舒缓起伏 |
-| 02 眨眼 | 左键随机触发；眼皮经过半闭、闭合与睁开 |
-| 03 歪头 | 左键随机触发；头肩平缓倾斜后回正 |
-| 04 点头 | 左键随机触发；轻轻下俯，配合合眼 |
-| 05 挥手 | 左键随机触发；抬手招呼，再缓缓收回 |
-| 06 拎起与落地 | 按住并拖动触发；松手缓冲、回坐 |
-| 07 散步 | 默认开启；空闲约 15–25 秒后，在当前屏幕内走动 |
-| 08 面板陪伴 | 右键直接触发；双手搭住手账上沿，轻微呼吸、偶尔歪头 |
+| 01 · 呼吸 | 左键随机回应；坐姿也有轻微呼吸 |
+| 02 · 眨眼 | 左键随机回应；空闲坐姿也会眨眼 |
+| 03 · 歪头 | 左键随机回应；轻轻倾斜后回正 |
+| 04 · 点头 | 左键随机回应；配合闭眼与回正 |
+| 05 · 挥手 | 左键随机回应；抬手招呼，再收回 |
+| 06 · 拎起与落地 | 按住并拖动；松手缓冲、回坐 |
+| 07 · 附近散步 | 默认开启；空闲后在当前显示器工作区内走动 |
+| 08 · 面板陪伴 | 右键直接展开，也可从托盘或设置进入 |
 
-陪伴时，按住趴边人物仍可拖动；点击纸边的 ×、按 Esc 或点击面板外，即可收起手账。移开鼠标不会关闭页面，收起后她会重新开始空闲计时，再继续散步。
+左键动作会避开上一次回应。连续点击先收尾再接入新动作，拖动优先接管；落地完成后重新开始休息计时。打开手账、设置或隐藏桌宠时暂停走动。
 
-### 一个眨眼的片刻
+在 **「设置 → 交互与说明」** 中可逐项预览动作，也可切换原地活动与全屏散步。
 
-<table>
-<tr><th>睁眼</th><th>轻轻合眼</th><th>短暂停留</th><th>重新睁开</th></tr>
-<tr>
-<td align="center"><a href="docs/images/blink-open-hd.png"><img src="docs/images/blink-open-hd.png" width="170" alt="实机动作：睁眼" /></a></td>
-<td align="center"><a href="docs/images/blink-half-close-hd.png"><img src="docs/images/blink-half-close-hd.png" width="170" alt="实机动作：半闭眼" /></a></td>
-<td align="center"><a href="docs/images/blink-closed-hd.png"><img src="docs/images/blink-closed-hd.png" width="170" alt="实机动作：闭眼短停" /></a></td>
-<td align="center"><a href="docs/images/blink-half-open-hd.png"><img src="docs/images/blink-half-open-hd.png" width="170" alt="实机动作：眼皮抬起" /></a></td>
-</tr>
-</table>
-
-### 抬头，回应一下
-
-<table>
-<tr><th>歪头</th><th>点头</th><th>挥手</th></tr>
-<tr>
-<td align="center"><a href="docs/images/tilt-head-hd.png"><img src="docs/images/tilt-head-hd.png" width="220" alt="实机动作：轻轻歪头" /></a></td>
-<td align="center"><a href="docs/images/nod-head-hd.png"><img src="docs/images/nod-head-hd.png" width="220" alt="实机动作：闭眼点头" /></a></td>
-<td align="center"><a href="docs/images/wave-arm-a-hd.png"><img src="docs/images/wave-arm-a-hd.png" width="220" alt="实机动作：抬手招呼" /></a></td>
-</tr>
-</table>
-
-### 换个地方坐
-
-<table>
-<tr><th>悬空抱膝</th><th>落地回坐</th></tr>
-<tr>
-<td align="center"><a href="docs/images/drag-suspended-design-hd.png"><img src="docs/images/drag-suspended-design-hd.png" width="300" alt="实机动作：抱膝悬空，两只鞋底朝前" /></a></td>
-<td align="center"><a href="docs/images/landing-seated-design-hd.png"><img src="docs/images/landing-seated-design-hd.png" width="300" alt="实机动作：闭眼笑容与并膝坐姿" /></a></td>
-</tr>
-</table>
-
-<p align="center"><sub>以上为运行界面导出的动作相位。静态图呈现姿势，动画中包含起势与回落。</sub></p>
-
-### 抱着星星，走一小段
-
-<p align="center"><a href="docs/images/walk-v19.webp"><img src="docs/images/walk-v19.webp" width="320" alt="Lunelle 抱着星星散步的慢速循环预览" /></a></p>
-
-<p align="center"><sub>散步每轮 1.08 秒。预览保留原版造型与步态；运行素材另含偶发眨眼。</sub></p>
-
-她大部分时间坐着陪伴：休息 15–25 秒后，散步一趟约 8–15 秒，再回到坐姿。每趟按完整步态周期结束，步速保持平稳。向左走便朝左，向右走便朝右；鼠标从身边经过，她继续散步。点击她，或翻开手账，她就停下来。
-
-当前散步保留选定造型的角色比例、裙摆与绘画质感，以完整画面播放。腿部以八张关键姿势为基础，带有逐帧动画的节奏；技术细节见[动作与播放说明](docs/ANIMATION.md)。
-
-<details>
-<summary>查看两个步态相位</summary>
-
-<table>
-<tr><th>相位 A</th><th>相位 B</th></tr>
-<tr>
-<td align="center"><a href="docs/images/walk-v19-phase-a.png"><img src="docs/images/walk-v19-phase-a.png" width="280" alt="第 19 版实机散步相位 A" /></a></td>
-<td align="center"><a href="docs/images/walk-v19-phase-b.png"><img src="docs/images/walk-v19-phase-b.png" width="280" alt="第 19 版实机散步相位 B" /></a></td>
-</tr>
-</table>
+[动作与播放说明](docs/ANIMATION.md) · [完整设计画册](docs/DESIGN.md)
 
 </details>
-
-自动活动默认开启，使用全屏散步。在「设置 → 交互与说明」中，可以选择原地活动或全屏散步，也可以先逐个预览动作。
-
-<details>
-<summary>散步与操作如何配合</summary>
-
-| 场景 | 行为 |
-| :--- | :--- |
-| 空闲约 15～25 秒 | 才可能开始自动活动 |
-| 全屏散步 | 在当前显示器工作区内选取目标，不自行跨屏 |
-| 鼠标经过 | 继续走动 |
-| 点击宠物或开始拖动 | 停止自动活动，交还操作 |
-| 展开手账、打开设置或隐藏桌宠 | 暂停走动 |
-| 手动放置之后 | 保存手动位置；临时散步不覆盖它 |
-
-</details>
-
-<a id="design"></a>
-## 03 / 一颗星星的设计手记
-
-卷发从淡紫渐变到浅蓝，裙摆一层层铺开，鞋扣上留着小小的月牙。那颗紫色星星总在怀里，坐着、走着，或被轻轻拎起时，都能认出她。
-
-动作设计从这些细节出发：坐姿要让裙摆舒展开，悬空时鞋底朝前，落地后回到并膝坐姿。下面的原始概念稿，记录了八个动作最初的模样。
-
-<p align="center"><a href="docs/design/xingyue-motion-concepts-v1.png"><img src="docs/design/xingyue-motion-concepts-v1.png" width="1000" alt="原始八动作设计总览：呼吸、眨眼、歪头、点头、挥手、拖动落地、散步与面板陪伴" /></a></p>
-
-<p align="center"><sub>八动作概念稿 · 保留项目曾用名 Xingyue · 当前表现以上方运行截图与动图为准</sub></p>
-
-<details>
-<summary>展开查看坐姿与拖动落地设计稿</summary>
-
-**抱着星星，睁眼与合眼。**
-
-<a href="docs/design/lunelle-seated-idle-atlas-v1.png"><img src="docs/design/lunelle-seated-idle-atlas-v1.png" width="880" alt="角色坐姿设计稿：相同服饰与比例的睁眼、闭眼状态" /></a>
-
-**悬空时收起双腿，落地后铺开裙摆。**
-
-<a href="docs/design/lunelle-drag-design-aligned-v1.png"><img src="docs/design/lunelle-drag-design-aligned-v1.png" width="880" alt="拖动与落地设计稿：抱膝悬空与闭眼回坐" /></a>
-
-</details>
-
-[翻阅完整设计画册 →](docs/DESIGN.md)
 
 <a id="download"></a>
-## 04 / 邀请她来到桌面
+## 04 · 邀请她来到桌面
 
-**[下载 Windows x64 安装包 · v0.3.27](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.27/Lunelle-Setup-0.3.27-x64.exe)** · [查看发布记录](https://github.com/Timiocoisin/Lunelle/releases)
+**[获取已发布的 Windows x64 安装包 →](https://github.com/Timiocoisin/Lunelle/releases/latest)**
 
-### 从第一页，与你见面
+安装也从一本手账开始。花枝沿着曲线纸边舒展，Lunelle 在左页挥手、阅读或安静等待；右页依次展开许可、安装位置与进度。选好位置，她就可以留在桌边。
 
-安装也从一本手账开始。花枝沿着曲线纸边舒展，Lunelle 在左页挥手、阅读或安静等待；右页依次展开许可、安装位置与进度。空白纸面可以拖动，中文条款、路径选择和操作按钮都有各自的位置。
+<p align="center"><a href="docs/design/installer-final/01.png"><img src="docs/design/installer-final/01.png" width="900" alt="v0.3.32 安装手账欢迎页：水彩花枝、曲线纸边与挥手人物" /></a></p>
 
-<p align="center"><a href="docs/design/installer-final/01.png"><img src="docs/design/installer-final/01.png" width="1000" alt="Lunelle 手账安装器欢迎页：水彩花枝、曲线纸边与挥手人物" /></a></p>
+1. **准备 Codex** — 安装并登录 Codex，确认本机可运行其 `app-server`。
+2. **翻开安装手账** — 选择安装位置与快捷方式。安装包自带运行时，无需另装 Node.js。
+3. **与她见面** — 从桌面或开始菜单打开 Lunelle，右键宠物即可展开额度手账。
+
+覆盖升级保留已有偏好设置。首次打开安装包需要准备界面运行时，后续打开同一安装包会复用缓存。
 
 <details>
-<summary>翻阅安装器的六个页面</summary>
+<summary>版本、校验与安装说明</summary>
 
-<p align="center"><a href="docs/design/installer-final/overview.png"><img src="docs/design/installer-final/overview.png" width="1100" alt="安装器六页实机总览：欢迎、中文许可、安装范围、位置、进度与完成" /></a></p>
+本文与本地构建对应 **v0.3.32**，已发布版本以发布页为准。
 
-[逐页查看高清界面 →](docs/design/installer-final/README.md)
+- 本地安装包：`installers/Lunelle-Setup-0.3.32-x64.exe`
+- [v0.3.32 更新说明](docs/releases/v0.3.32.md) · [SHA-256 清单](docs/releases/SHA256SUMS-v0.3.32.txt)
+- [六页安装界面](docs/design/installer-final/README.md) · [安装器验证记录](docs/INSTALLER-VALIDATION.md)
+- [安装器说明与构建方法](installer-ui/README.md)
+
+安装面向当前 Windows 用户，可选择安装目录、桌面与开始菜单快捷方式。升级时选择原目录，已有偏好设置会保留。便携运行需保留完整程序目录，不能单独复制 EXE。
+
+当前提供 Windows x64 构建；安装包尚未配置代码签名。界面缓存位于 `%LOCALAPPDATA%/LunelleSetupCache`，与桌宠偏好目录分开。
 
 </details>
 
-**v0.3.27** 调整动作节奏与互斥：互动完成后重新休息，连续点击平缓收尾，落地完成前不切换到随机动作；刷新成功点头，失败保留旧数据并标记状态。安装包见上方下载链接。
-
-**沿用 v0.3.26 的陪伴设计** 新增纸边陪伴：右键直接展开手账，Lunelle 双手搭住上沿，轻微呼吸、偶尔歪头。左键随机触发动作 1–5，拖动触发拎起与落地；默认开启自动散步。保留六页手账安装器与缓存启动。安装仅面向当前 Windows 用户，可选择安装目录、桌面和开始菜单快捷方式；升级保留已有偏好设置。
-
-1. 安装并登录 Codex，确认本机可运行其 `app-server`。
-2. 运行 Lunelle 安装向导，选择安装位置。安装包自带运行时，无需额外安装 Node.js。
-3. 从桌面或开始菜单打开 Lunelle，右键宠物展开手账。
-
-覆盖升级保留偏好设置。便携运行需保留完整程序目录，不能单独复制 EXE。当前提供 Windows x64 构建，其他平台的完整桌面交互尚未验证；安装包尚未配置代码签名。
-
-### 关于打开安装包的等待
-
-界面运行时会在首次打开时准备，并按版本与内容缓存；安装引擎等到点击「安装」后才提取，准备过程会显示在进度页。同一台电脑的实测中，首次出现窗口约需 21 秒，再次打开同一安装包约需 1.5 秒。具体时间取决于磁盘及系统检查，首次打开仍需等待。
-
-缓存位于 `%LOCALAPPDATA%/LunelleSetupCache`，与桌宠偏好目录分开。[安装器说明](installer-ui/README.md) · [验证记录](docs/INSTALLER-VALIDATION.md) · [SHA-256 校验文件](https://github.com/Timiocoisin/Lunelle/releases/download/v0.3.27/SHA256SUMS-v0.3.27.txt)
-
-<a id="controls"></a>
 ### 相处的几个小习惯
 
-| 操作 | 效果 |
+| 操作 | 回应 |
 | :--- | :--- |
-| 右键宠物 | 直接进入动作 8，展开陪伴手账，无右键菜单 |
-| 单击宠物 | 随机播放动作 1–5（呼吸、眨眼、歪头、点头、挥手） |
-| 按住并拖动 | 触发动作 6；松手落地并保存位置 |
-| 纸边 ×／Esc／点击面板外 | 收起手账；移开鼠标不会自动收起 |
-| 面板「刷新」 | 手动重新读取数据 |
-| 面板「设置」／托盘 | 打开独立设置手册 |
-| `Ctrl + Alt + X`／单击托盘 | 显示或隐藏桌宠 |
-| 托盘 → 退出 Lunelle | 完全退出应用 |
+| **左键轻点** | 随机播放呼吸、眨眼、歪头、点头或挥手 |
+| **按住拖动** | 移动她的位置，松手后落地并保存 |
+| **右键宠物** | 展开面板陪伴 |
+| **× / Esc / 点击面板外** | 收起手账 |
+| **Ctrl + Alt + X** | 显示或隐藏桌宠 |
+| **托盘菜单** | 显示、设置、陪伴或退出 |
 
 <a id="data"></a>
-## 05 / 每个数字，都有来处
+## 05 · 每个数字，都有来处
 
-额度取自当前登录的 Codex 账号，token 取自本机可读会话日志。两者统计范围不同，面板分别呈现。Lunelle 无需 API key；读取过程不发送提示词，也不发起模型推理调用。
+额度取自当前登录的 Codex 账号，用量取自本机可读的会话日志。Lunelle 无需 API key；读取过程不发送提示词，也不发起模型推理调用。
 
-| 信息 | 来源与范围 |
+| 信息 | 来源与边界 |
 | :--- | :--- |
-| 5h／每周额度 | 官方本地 `app-server` 的只读接口 |
-| token | `CODEX_HOME/sessions` 与 `archived_sessions` 的计数事件；同一会话去重，周统计从本地周一开始 |
-| 模型／推理强度 | 最近活动会话元数据，不保证对应当前前台会话 |
-| 本周运行时长 | 已完成任务时间区间的并集，并非在线时长或纯推理耗时 |
-| 天气 | Open-Meteo，按手动指定城市查询，缓存 10 分钟 |
+| 5h / 每周额度 | 官方本地 `app-server` 的只读接口 |
+| token | 本机 `sessions` 与 `archived_sessions` 日志；同一会话去重，按本地周一统计本周 |
+| 模型 / 推理强度 | 最近活动会话元数据，不保证是前台会话 |
+| 本周运行时长 | 已完成任务时间区间的并集，不等于纯推理耗时 |
+| 天气 | Open-Meteo，按手动选择的城市查询 |
 
-额度通知通过本地只读 JSON-RPC 常驻连接接收，本机会话日志变化也会触发更新。密集事件合并后读取，并每分钟校准一次；断线自动重连。无需另外开放 WebSocket 端口。
+本机日志可能不完整，也可能涵盖多个账号；本机用量不等于完整账号账单。额度通知通过本地连接接收，日志变化也会触发更新；断线后自动重连。
 
 <details>
 <summary>本地数据与隐私</summary>
 
-- 不直接读取或复制 `auth.json`；额度读取使用固定的只读接口白名单。
+- 不直接读取或复制 `auth.json`，额度接口使用只读白名单。
 - 日志在工作线程解析，只提取元数据与计数，不上传原始对话。
 - 天气查询发送所选城市名或坐标，不使用 GPS 或 IP 定位。
-- 本机日志可能不完整，也可能涵盖多个账号，不能作为当前账号账单或跨设备总用量。
-- 面板展开时，Windows 辅助进程检测外部鼠标点击；不监听键盘、不记录点击历史。
-- 为延续旧版设置，偏好目录仍为 `%APPDATA%/XingyueDesktop`；升级不清除它。
+- 面板展开期间，Windows 辅助进程只检测外部鼠标点击，不监听键盘或记录点击历史。
+- 偏好保存在 `%APPDATA%/XingyueDesktop`，升级保留原目录。
 - 提交问题前，请移除账号信息、凭据、个人路径与对话内容。
 
 </details>
 
 <a id="development"></a>
-## 06 / 从源码开始
+## 06 · 从源码开始
 
 需要 **Node.js 22+**，以及已安装、登录的 Codex。
 
@@ -264,43 +215,37 @@ npm ci
 npm start
 ```
 
+<details>
+<summary>构建、验证与项目结构</summary>
+
 ```sh
 npm run preview                  # 演示数据，不访问账号或本机会话
-npm test                         # 数据、配置、交互与动画时间轴检查
+npm test                         # 数据、配置、交互与动画时间轴
 npm run test:ui                  # 隔离配置的 Electron 界面检查
 npm run build -- --with-artwork   # 含角色资源的便携版
-npm run installer                # Windows 安装向导
-npm run installer:preview        # 只预览安装手账，不执行安装
-npm run test:installer           # 六页界面、许可与预览隔离检查
+npm run installer                # Windows 六页安装向导
+npm run test:installer           # 安装界面、许可与预览隔离检查
 ```
 
-字体与动画资源随仓库提供，本地加载。不带 `--with-artwork` 的构建使用图标回退。打包采用明确文件清单，不包含个人配置、凭据、会话日志或散步试作目录。
+| 目录 | 内容 |
+| :--- | :--- |
+| `app/` | 窗口、拖动、自动活动与只读数据接口 |
+| `ui/` | 手账、设置与角色动画 |
+| `installer-ui/` | 六页安装手账与安装引擎桥接 |
+| `assets/` | 角色、图标、字体与许可 |
+| `scripts/` | 构建、素材导出与验证 |
+| `tests/` | 数据、交互、动画与窗口检查 |
+| `docs/` | 设计画册、运行展示与版本记录 |
 
-<details>
-<summary>项目结构与界面截图</summary>
+字体与动画本地加载。打包采用明确文件清单，不包含个人配置、凭据或会话日志。界面截图与预览使用隔离配置及合成演示数据。
 
-```text
-app/       窗口、拖动、自动活动与只读数据接口
-ui/        手账、设置与角色动画
-installer-ui/ 六页安装手账与安装引擎桥接
-assets/    角色、图标、字体与许可
-scripts/   打包、安装与文档图片导出
-tests/     数据、坐标、交互与隔离界面检查
-docs/      当前动作说明与展示图片
-```
-
-```sh
-node node_modules/electron/cli.js scripts/export-readme.cjs
-node node_modules/electron/cli.js scripts/export-walk-preview.cjs
-```
-
-界面导出使用隔离配置与合成演示数据，不访问账号或读取本机会话。
+[素材与生成记录](ASSETS.md) · [动作实现说明](docs/ANIMATION.md) · [安装器构建](installer-ui/README.md)
 
 </details>
 
-## 字体与作品归属
+### 字迹与作品归属
 
-淡紫、浅蓝与纸张白构成手账底色。小赖用于标签与按钮，霞鹜漫黑用于标题，悠哉用于说明，霞鹜 975 圆体用于日期与信息值；字体均本地加载，并保留 OFL 许可。
+小赖写下标签，霞鹜漫黑留下标题，悠哉承接说明，霞鹜 975 圆体呈现数字。四种字迹与淡紫、浅蓝、纸张白，共同构成这册手账。
 
 | 内容 | 许可 |
 | :--- | :--- |
@@ -315,10 +260,10 @@ Lunelle 是独立社区项目，与 OpenAI 无隶属或背书关系。
 
 <div align="center">
 
-<img src="assets/icon.png" width="36" alt="" />
+<img src="assets/icon.png" width="32" alt="" />
 
-<sub>Lunelle · 星星抱在怀里，手账留在桌边。</sub>
+<sub>星星抱在怀里，手账留在桌边。</sub>
 
-[下载](https://github.com/Timiocoisin/Lunelle/releases/latest) · [画册](docs/DESIGN.md) · [反馈](https://github.com/Timiocoisin/Lunelle/issues)
+[下载](#download)　·　[画册](docs/DESIGN.md)　·　[反馈](https://github.com/Timiocoisin/Lunelle/issues)
 
 </div>

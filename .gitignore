@@ -9,3 +9,6 @@ artifacts/
 .env.*
 *.pem
 *.key
+
+__pycache__/
+*.py[cod]

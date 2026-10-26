@@ -30,7 +30,7 @@
 
 [![八动作原始概念稿](design/xingyue-motion-concepts-v1.png)](design/xingyue-motion-concepts-v1.png)
 
-<sub>原稿题字为项目曾用名 Xingyue。此图是设计参考，当前实现以实机截图与第 19 版散步资源为准。</sub>
+<sub>原稿题字为项目曾用名 Xingyue。此图是设计参考，当前实现以实机截图与下方统一侧面散步资源为准。</sub>
 
 ## 悬空与落地
 
@@ -71,13 +71,15 @@
 
 <sub>本节均为运行相位图，静态展示不替代完整动画。</sub>
 
-## 散步，保留选定的模样
+## 同一角色，两种年龄形态
 
-当前使用第 19 版散步，每轮 1.08 秒。人物抱着星星侧向行走，画面保留原版的比例、裙摆和细微起伏。
+萝莉与御姐是同一个 Lunelle 的不同年龄形态。经典形态保留骷髅发饰、白袜与月亮鞋；成年形态使用暗月长裙与月牙座。两者都以完整侧面行走，按相同的换腿、落脚和摆臂节奏播放，72 帧、每轮 1.44 秒。
 
-<p align="center"><a href="images/walk-v19.webp"><img src="images/walk-v19.webp" width="360" alt="当前采用的第 19 版散步动图" /></a></p>
+<p align="center"><a href="images/ages-side-walk.webp"><img src="images/ages-side-walk.webp" width="760" alt="同一角色的萝莉与成年形态侧面行走" /></a></p>
 
-这段动图与桌宠采用相同的画面和慢速节奏。腿部仍以八张关键姿势为基础，具有逐帧动画的节奏感；完整运行素材另含眨眼。
+萝莉散步时放下抱枕，侧脸只露出一只眼睛，肩膀、身体与鞋子朝向一致。左右手使用独立的侧面素材，并按远近关系由头发、身体自然遮挡。坐姿休息与其他动作继续保留原有造型。
+
+旧版第 19 版抱枕散步属于历史素材，不再作为当前经典形态的运行画面。技术与素材位置见[动作与播放说明](ANIMATION.md)。
 
 ## 手账，延续角色的颜色
 
@@ -87,7 +89,7 @@
 <tr><th>额度手账</th><th>设置手册</th></tr>
 <tr>
 <td align="center" valign="top"><a href="images/quota-panel-restored-hd.png"><img src="images/quota-panel-restored-hd.png" width="340" alt="实际额度手账界面，使用演示数据" /></a></td>
-<td align="center" valign="top"><a href="images/appearance-settings-restored-hd.png"><img src="images/appearance-settings-restored-hd.png" width="400" alt="当前无边框设置手册" /></a></td>
+<td align="center" valign="top"><a href="images/appearance-settings-current.png"><img src="images/appearance-settings-current.png" width="400" alt="当前无边框设置手册" /></a></td>
 </tr>
 </table>
 
